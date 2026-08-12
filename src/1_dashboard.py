@@ -3,9 +3,9 @@ import pandas as pd
 import numpy as np
 
 # 페이지 기본 설정
-st.set_page_config(layout="wide", page_title="데이터 분석 대시보드")
+st.set_page_config(layout="wide", page_title="나만의 포트폴리오")
 
-st.title("📊 데이터 분석 대시보드")
+st.title("🚀매출 데이터 분석 리포트")
 st.markdown("---")
 
 # [사이드바] 데이터 업로드 및 설정
@@ -15,6 +15,8 @@ with st.sidebar:
     
     # 차트 옵션 (데이터가 있을 때만 활성화)
     chart_type = st.selectbox("차트 종류 선택", ["Line Chart", "Bar Chart", "Area Chart"])
+
+    prevcnt = st.slider("미리 보기 개수", 5, 50, 10)
 
 # [메인] 데이터 처리 로직
 if uploaded_file is not None:
@@ -33,7 +35,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("📋 데이터 미리보기")
-    st.dataframe(df.head(10)) # 데이터프레임 출력
+    st.dataframe(df.head(prevcnt)) # 데이터프레임 출력
 
 with col2:
     st.subheader("📈 데이터 시각화")
@@ -47,4 +49,5 @@ with col2:
 
 # 통계 요약
 st.subheader("기초 통계")
-st.write(df.describe())
+with st.expander("기초 통계"):
+    st.write(df.describe())
