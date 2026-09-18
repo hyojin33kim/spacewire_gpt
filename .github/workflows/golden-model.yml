@@ -7,6 +7,8 @@ on:
       - "verification/golden/**"
       - "verification/pre_golden/**"
       - "tools/golden_coverage_lint.py"
+      - "tools/golden_invariant_coverage_lint.py"
+      - "tools/golden_invariant_coverage_lint.py"
       - ".github/workflows/golden-model.yml"
   pull_request:
     paths:
@@ -27,3 +29,5 @@ jobs:
         run: python -m unittest discover -s verification/golden -p "test_*.py" -v
       - name: Check pre-Golden vector coverage closure
         run: python tools/golden_coverage_lint.py
+      - name: Check pre-Golden invariant coverage closure
+        run: python tools/golden_invariant_coverage_lint.py
