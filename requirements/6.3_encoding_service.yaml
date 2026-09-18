@@ -1,0 +1,321 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+layer: Encoding service interface
+scope: "6.3"
+status: draft
+
+requirements:
+  - id: SPW-6.3.1.1-a-1
+    source_clause: "6.3.1.1.a.1"
+    normative_level: SHALL
+    subject: encoding_service
+    action: associate_service_primitive
+    result: TX_CHAR.request
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.1-a-2
+    source_clause: "6.3.1.1.a.2"
+    normative_level: SHALL
+    subject: encoding_service
+    action: associate_service_primitive
+    result: TX_ENABLE.request
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.2.1-a
+    source_clause: "6.3.1.2.1.a"
+    normative_level: SHALL
+    subject: TX_CHAR.request
+    action: used_by_data_link_to_send_character_through_output_port
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.2.2-a
+    source_clause: "6.3.1.2.2.a"
+    normative_level: SHALL
+    subject: TX_CHAR.request
+    action: carry_parameters
+    result: ["Character"]
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.2.3-a
+    source_clause: "6.3.1.2.3.a"
+    normative_level: SHALL
+    subject: data_link_layer
+    trigger: wants_to_send_character_through_output_port
+    action: generate_TX_CHAR_request
+    purpose: encode_serialize_and_send
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.2.4-a
+    source_clause: "6.3.1.2.4.a"
+    normative_level: SHALL
+    subject: encoding_layer
+    trigger: receive_TX_CHAR_request
+    action:
+      - encode_character
+      - serialize
+      - data_strobe_encode
+      - pass_to_physical_layer
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.3.1-a
+    source_clause: "6.3.1.3.1.a"
+    normative_level: SHALL
+    subject: TX_ENABLE.request
+    action: used_by_data_link_to_request_output_port_enable
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.3.2-a
+    source_clause: "6.3.1.3.2.a"
+    normative_level: SHALL
+    subject: TX_ENABLE.request
+    action: have_no_parameters
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.3.3-a
+    source_clause: "6.3.1.3.3.a"
+    normative_level: SHALL
+    subject: data_link_layer
+    trigger: wants_to_enable_output_port
+    action: generate_TX_ENABLE_request
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.1.3.4-a
+    source_clause: "6.3.1.3.4.a"
+    normative_level: SHALL
+    subject: encoding_layer
+    trigger: receive_TX_ENABLE_request
+    action: enable_output_port
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.1-a-1
+    source_clause: "6.3.2.1.a.1"
+    normative_level: SHALL
+    subject: decoding_service
+    action: associate_service_primitive
+    result: RX_CHAR.request
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.1-a-2
+    source_clause: "6.3.2.1.a.2"
+    normative_level: SHALL
+    subject: decoding_service
+    action: associate_service_primitive
+    result: RX_ENABLE.request
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.1-a-3
+    source_clause: "6.3.2.1.a.3"
+    normative_level: SHALL
+    subject: decoding_service
+    action: associate_service_primitive
+    result: DISCONNECT.indication
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.1-a-4
+    source_clause: "6.3.2.1.a.4"
+    normative_level: SHALL
+    subject: decoding_service
+    action: associate_service_primitive
+    result: RECEIVE_ERROR.indication
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.1-a-5
+    source_clause: "6.3.2.1.a.5"
+    normative_level: SHALL
+    subject: decoding_service
+    action: associate_service_primitive
+    result: gotNull.indication
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.2.1-a
+    source_clause: "6.3.2.2.1.a"
+    normative_level: SHALL
+    subject: RX_CHAR.request
+    action: used_by_data_link_to_receive_character_through_input_port
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.2.2-a
+    source_clause: "6.3.2.2.2.a"
+    normative_level: SHALL
+    subject: RX_CHAR.request
+    action: preserve_source_semantics
+    source_semantics: "RX_CHAR.request."
+    assumption_status: unresolved_parameter_notation
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.2.3-a
+    source_clause: "6.3.2.2.3.a"
+    normative_level: SHALL
+    subject: data_link_layer
+    trigger: wants_to_read_character_from_input_port
+    action: generate_RX_CHAR_request
+    purpose: read_next_character_received_by_input_port
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.2.4-a
+    source_clause: "6.3.2.2.4.a"
+    normative_level: SHALL
+    subject: encoding_layer
+    trigger: receive_RX_CHAR_request
+    action: pass_received_deserialized_decoded_character_to_data_link
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.3.1-a
+    source_clause: "6.3.2.3.1.a"
+    normative_level: SHALL
+    subject: RX_ENABLE.request
+    action: used_by_data_link_to_enable_input_port_for_characters_and_control_codes
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.3.2-a
+    source_clause: "6.3.2.3.2.a"
+    normative_level: SHALL
+    subject: RX_ENABLE.request
+    action: have_no_parameters
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.3.3-a
+    source_clause: "6.3.2.3.3.a"
+    normative_level: SHALL
+    subject: data_link_layer
+    trigger: wants_to_enable_input_port
+    action: generate_RX_ENABLE_request
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.3.4-a
+    source_clause: "6.3.2.3.4.a"
+    normative_level: SHALL
+    subject: encoding_layer
+    trigger: receive_RX_ENABLE_request
+    action: enable_input_port
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.4.1-a
+    source_clause: "6.3.2.4.1.a"
+    normative_level: SHALL
+    subject: DISCONNECT.indication
+    action: indicate_link_disconnected_to_data_link
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.4.2-a
+    source_clause: "6.3.2.4.2.a"
+    normative_level: SHALL
+    subject: DISCONNECT.indication
+    action: have_no_parameters
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.4.3-a
+    source_clause: "6.3.2.4.3.a"
+    normative_level: SHALL
+    subject: encoding_layer
+    trigger: link_becomes_disconnected
+    action: pass_DISCONNECT_indication_to_data_link
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.4.4-a
+    source_clause: "6.3.2.4.4.a"
+    normative_level: SHALL
+    subject: data_link_layer
+    trigger: receive_DISCONNECT_indication
+    action: move_to_ErrorReset
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.5.1-a
+    source_clause: "6.3.2.5.1.a"
+    normative_level: SHALL
+    subject: RECEIVE_ERROR.indication
+    action: indicate_receiver_error_to_data_link
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.5.2-a
+    source_clause: "6.3.2.5.2.a"
+    normative_level: SHALL
+    subject: RECEIVE_ERROR.indication
+    action: carry_parameters
+    result: ["RX_Error_Flags"]
+    note_evidence: "RX_Error_Flags indicate parity error or ESC error"
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.5.3-a
+    source_clause: "6.3.2.5.3.a"
+    normative_level: SHALL
+    subject: encoding_layer
+    trigger: receive_error_occurs
+    action: pass_RECEIVE_ERROR_indication_to_data_link
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.5.4-a
+    source_clause: "6.3.2.5.4.a"
+    normative_level: SHALL
+    subject: data_link_layer
+    trigger: receive_RECEIVE_ERROR_indication
+    action: move_to_ErrorReset
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.6.1-a
+    source_clause: "6.3.2.6.1.a"
+    normative_level: SHALL
+    subject: gotNull.indication
+    action: indicate_first_Null_received_after_receiver_enabled
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.6.2-a
+    source_clause: "6.3.2.6.2.a"
+    normative_level: SHALL
+    subject: gotNull.indication
+    action: have_no_parameters
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.6.3-a
+    source_clause: "6.3.2.6.3.a"
+    normative_level: SHALL
+    subject: encoding_layer
+    trigger: first_Null_received_without_errors_after_receiver_enabled
+    action: pass_gotNull_indication_to_data_link
+    review_status: draft
+    revision: 1
+
+  - id: SPW-6.3.2.6.4-a
+    source_clause: "6.3.2.6.4.a"
+    normative_level: SHALL
+    subject: data_link_layer
+    trigger: receive_gotNull_indication
+    action: follow_state_machine
+    source_reference: "5.5.6"
+    consistency_issue: CR-ENC-008
+    assumption_status: unresolved_source_cross_reference
+    review_status: draft
+    revision: 1
