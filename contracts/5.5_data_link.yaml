@@ -64,6 +64,11 @@ invariants:
   - "legacy LinkDisabled behavior is not part of this baseline"
 
 requirements:
+  - SPW-DL-5.2.3-a1
+  - SPW-DL-5.2.3-a2
+  - SPW-DL-5.2.3-b
+  - SPW-DL-5.2.3-c
+  - SPW-DL-5.2.3-d
   - SPW-5.5.2-a
   - SPW-5.5.2-b
   - SPW-5.5.2-c
@@ -123,3 +128,23 @@ requirements:
   - SPW-5.5.8.4-a5
   - SPW-5.5.8.4-b
   - SPW-5.5.9-a
+  - SPW-DL-6.2.1.1-a1
+  - SPW-DL-6.2.1.1-a2
+  - SPW-DL-6.2.1.2.1-a
+  - SPW-DL-6.2.1.2.2-a
+  - SPW-DL-6.2.1.2.3-a
+  - SPW-DL-6.2.1.2.4-a
+  - SPW-DL-6.2.1.3.1-a
+  - SPW-DL-6.2.1.3.2-a
+  - SPW-DL-6.2.1.3.3-a
+  - SPW-DL-6.2.1.3.4-a
+  - SPW-DL-6.2.2.1-a1
+  - SPW-DL-6.2.2.1-a2
+  - SPW-DL-6.2.2.2.1-a
+  - SPW-DL-6.2.2.2.2-a
+  - SPW-DL-6.2.2.2.3-a
+  - SPW-DL-6.2.2.2.4-a
+  - SPW-DL-6.2.2.3.1-a
+  - SPW-DL-6.2.2.3.2-a
+  - SPW-DL-6.2.2.3.3-a
+  - SPW-DL-6.2.2.3.4-a
