@@ -108,18 +108,37 @@ physical_DS_interface:
     - transfer_decoded_items_and_events_safely_to_100MHz_core_domain
 
   capture_microarchitecture:
-    value: TBD
-    status: DEFERRED_NOT_BLOCKING_FOR_ARCHITECTURAL_BOUNDARY
-    candidates:
-      - oversampling_or_SelectIO_based_capture
-      - recovered_edge_or_vendor_clocking_primitive_based_capture
-    selection_depends_on:
-      - Zynq_7020_SelectIO_clocking_resources
-      - 200_Mbps_timing_feasibility
+    architecture: recovered_edge_with_programmable_sampling_delay
+    status: ARCHITECTURE_SELECTED_DETAIL_FEASIBILITY_PENDING
+    rationale:
+      - supports_wide_2_to_200_Mbps_input_rate_without_high_ratio_global_oversampling
+      - aligns_with_ECSS_5_3_7_receiver_timing_model_using_edge_recovery_and_receiver_delay
+      - keeps_high_speed_vendor_specific_logic_inside_RX_PHY_boundary
+    conceptual_path:
+      - differential_Data_and_Strobe_inputs
+      - input_buffering
+      - recovered_edge_generation_from_Data_Strobe_transition_information
+      - programmable_sampling_delay
+      - sample_Data_at_delayed_recovered_edge
+      - bit_recovery
+      - deserialisation_and_character_decode
+      - explicit_CDC_or_elastic_buffer_to_100MHz_core_domain
+    programmable_delay:
+      purpose: move_sampling_instant_away_from_Data_Strobe_edge_uncertainty
+      exact_primitive: TBD_Xilinx_7_series_feasibility
+      exact_delay_taps: TBD_from_skew_jitter_budget_and_STA
+      calibration_policy: TBD
+    recovered_edge_clocking:
+      exact_Xilinx_clocking_primitive_path: TBD
+      prohibition:
+        - no_unconstrained_LUT_generated_clock_into_general_fabric
+        - do_not_propagate_recovered_clock_into_DataLink_Router_or_AXI_domains
+    selection_dependencies_remaining:
+      - Zynq_7020_legal_SelectIO_and_clock_routing
+      - 200_Mbps_static_timing_and_input_timing_closure
       - physical_skew_jitter_budget
-      - CDC_and_timing_closure
-    prohibition:
-      - do_not_propagate_recovered_clock_into_DataLink_Router_or_AXI_domains
+      - minimum_tolerated_edge_separation
+      - CDC_and_reset_behavior_when_recovered_edges_stop
 
 tx_state_and_storage:
   required_state:
@@ -237,13 +256,19 @@ resolved_project_inputs:
     value: "100 MHz"
     status: closed
 
+resolved_architecture_decisions:
+  - id: RTL-BLOCK-004A
+    decision: RX_PHY_capture_architecture
+    value: recovered_edge_with_programmable_sampling_delay
+    status: closed
+
 remaining_blocking_decisions_before_review:
-  - id: RTL-BLOCK-004
-    decision: choose_Zynq_7020_RX_PHY_capture_microarchitecture
+  - id: RTL-BLOCK-004B
+    decision: prove_Zynq_7020_recovered_edge_delay_implementation
     reason: >
-      Must prove robust 2..200 Mbps receive capture and CDC/timing closure,
-      but the architecture is already fixed to keep this vendor-specific logic
-      behind the RX PHY boundary.
+      Exact Xilinx 7-series input-delay and clock-routing primitive choices,
+      delay range/taps, edge-separation tolerance, and 200 Mbps timing closure
+      must be demonstrated before RTL Contract review can close.
   - id: RTL-BLOCK-005
     decision: define_AXI4_Lite_clock_and_register_CDC_contract
     reason: >
@@ -253,6 +278,6 @@ remaining_blocking_decisions_before_review:
 hard_gate:
   RTL_implementation_allowed: false
   becomes_true_when:
-    - RTL-BLOCK-004_closed
+    - RTL-BLOCK-004B_closed
     - RTL-BLOCK-005_closed
     - contract_status_reviewed
