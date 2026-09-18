@@ -189,4 +189,253 @@ entities:
     kind: management_layer
     source: ["5.2.6"]
 
-review_status: draft
+
+  - id: NETWORK_LAYER
+    canonical_name: Network layer
+    kind: protocol_layer
+    source: ["3.2.76", "5.2.2", "5.6.1"]
+
+  - id: N_CHAR
+    canonical_name: N-Char
+    kind: network_character
+    members: [DATA_CHARACTER, EOP, EEP]
+    source: ["3.2.75", "3.2.78"]
+
+  - id: LINK_STATE_MACHINE
+    canonical_name: Link state machine
+    kind: state_machine
+    source: ["5.5.7", "Figure 5-19"]
+
+  - id: ERROR_WAIT_STATE
+    canonical_name: ErrorWait
+    kind: data_link_state
+    source: ["5.5.7.3"]
+
+  - id: READY_STATE
+    canonical_name: Ready
+    kind: data_link_state
+    source: ["5.5.7.4"]
+
+  - id: STARTED_STATE
+    canonical_name: Started
+    kind: data_link_state
+    source: ["5.5.7.5"]
+
+  - id: CONNECTING_STATE
+    canonical_name: Connecting
+    kind: data_link_state
+    source: ["5.5.7.6"]
+
+  - id: RUN_STATE
+    canonical_name: Run
+    kind: data_link_state
+    source: ["5.5.7.7"]
+
+  - id: LINK_ERROR_RECOVERY_STATE_MACHINE
+    canonical_name: Link Error Recovery state machine
+    kind: state_machine
+    source: ["5.5.8", "Figure 5-20"]
+
+  - id: NORMAL_STATE
+    canonical_name: Normal
+    kind: error_recovery_state
+    source: ["5.5.8.3"]
+
+  - id: RECOVERY_STATE
+    canonical_name: Recovery
+    kind: error_recovery_state
+    source: ["5.5.8.4"]
+
+  - id: TRANSMIT_CREDIT_COUNT
+    canonical_name: transmit credit count
+    kind: flow_control_state
+    maximum: 56
+    source: ["5.5.4.e", "5.5.4.h"]
+
+  - id: RECEIVE_CREDIT_COUNT
+    canonical_name: receive credit count
+    kind: flow_control_state
+    maximum: 56
+    source: ["5.5.4.l", "5.5.4.n"]
+
+  - id: CREDIT_ERROR
+    canonical_name: credit error
+    kind: link_error
+    source: ["5.5.5"]
+
+  - id: LINK_ERROR
+    canonical_name: link error
+    kind: error_class
+    members: [DISCONNECT, PARITY_ERROR, ESC_ERROR, CREDIT_ERROR]
+    source: ["3.2.66"]
+
+  - id: PORT_RESET
+    canonical_name: PortReset
+    kind: management_parameter
+    source: ["3.2.85", "5.5.3.a.1"]
+
+  - id: LINK_DISABLED
+    canonical_name: LinkDisabled
+    kind: management_parameter
+    source: ["3.2.65", "5.5.3.a.2"]
+
+  - id: LINK_START
+    canonical_name: LinkStart
+    kind: management_parameter
+    source: ["3.2.68", "5.5.3.a.3"]
+
+  - id: AUTO_START
+    canonical_name: AutoStart
+    kind: management_parameter
+    source: ["3.2.4", "5.5.3.a.4"]
+
+  - id: TRANSMIT_FIFO
+    canonical_name: transmit FIFO
+    kind: buffer
+    source: ["3.2.112", "5.2.8.b"]
+
+  - id: RECEIVE_FIFO
+    canonical_name: receive FIFO
+    kind: buffer
+    source: ["3.2.87", "5.2.8.c"]
+
+  - id: PACKET
+    canonical_name: SpaceWire packet
+    kind: network_transfer_unit
+    source: ["3.2.81", "5.6.2"]
+
+  - id: DESTINATION_ADDRESS
+    canonical_name: destination address
+    kind: packet_field
+    source: ["3.2.26", "5.6.2.1.e"]
+
+  - id: CARGO
+    canonical_name: cargo
+    kind: packet_field
+    source: ["3.2.9", "5.6.2.1.f"]
+
+  - id: TIME_CODE
+    canonical_name: time-code
+    kind: broadcast_code
+    broadcast_type: "0b00"
+    source: ["3.2.106", "5.6.3.a", "5.6.4"]
+
+  - id: DISTRIBUTED_INTERRUPT_CODE
+    canonical_name: distributed interrupt code
+    kind: broadcast_code
+    broadcast_type: "0b10"
+    source: ["3.2.30", "5.6.3.b", "5.6.5"]
+
+  - id: INTERRUPT_CODE
+    canonical_name: interrupt code
+    kind: distributed_interrupt_code
+    source: ["3.2.52", "5.6.5.2"]
+
+  - id: INTERRUPT_ACKNOWLEDGEMENT_CODE
+    canonical_name: interrupt acknowledgement code
+    kind: distributed_interrupt_code
+    source: ["3.2.51", "5.6.5.3"]
+
+  - id: INTERRUPT_IDENTIFIER
+    canonical_name: interrupt identifier
+    kind: field
+    width_bits: 5
+    source: ["3.2.55", "5.6.5.2.b"]
+
+  - id: TIME_CODE_REGISTER
+    canonical_name: time-code register
+    kind: state_register
+    width_bits: 6
+    source: ["3.2.109", "5.6.4.3"]
+
+  - id: END_POINT
+    canonical_name: end-point
+    kind: network_component
+    source: ["3.2.35", "5.6.6"]
+
+  - id: NODE
+    canonical_name: SpaceWire node
+    kind: network_component
+    source: ["3.2.77", "5.6.6"]
+
+  - id: PORT
+    canonical_name: port
+    kind: interface_component
+    source: ["3.2.84"]
+
+  - id: INPUT_PORT
+    canonical_name: input port
+    kind: port_direction
+    source: ["3.2.50"]
+
+  - id: OUTPUT_PORT
+    canonical_name: output port
+    kind: port_direction
+    source: ["3.2.80"]
+
+  - id: ROUTING_SWITCH
+    canonical_name: routing switch
+    aliases: [router]
+    kind: network_component
+    source: ["3.2.92", "3.2.93", "5.6.8"]
+
+  - id: SWITCH_MATRIX
+    canonical_name: switch matrix
+    kind: router_component
+    source: ["3.2.104", "5.6.8.1"]
+
+  - id: ROUTING_TABLE
+    canonical_name: routing table
+    kind: router_component
+    source: ["3.2.94", "5.6.8.1"]
+
+  - id: CONFIGURATION_PORT
+    canonical_name: configuration port
+    kind: port
+    port_number: 0
+    source: ["3.2.12", "5.6.8.1", "5.6.8.2"]
+
+  - id: CONFIGURATION_NODE
+    canonical_name: configuration node
+    kind: node
+    source: ["3.2.13", "5.6.8.1"]
+
+  - id: PATH_ADDRESS
+    canonical_name: path address
+    kind: destination_address
+    value_range: [0, 31]
+    source: ["3.2.82", "5.6.8.3"]
+
+  - id: LOGICAL_ADDRESS
+    canonical_name: logical address
+    kind: destination_address
+    value_range: [32, 254]
+    source: ["3.2.70", "5.6.8.4"]
+
+  - id: GROUP_ADAPTIVE_ROUTING
+    canonical_name: group adaptive routing
+    kind: routing_capability
+    source: ["3.2.47", "5.6.8.9"]
+
+  - id: MULTICAST
+    canonical_name: multicast
+    kind: routing_capability
+    source: ["3.2.73", "5.6.8.10"]
+
+  - id: MULTICAST_SET
+    canonical_name: multicast set
+    kind: output_port_set
+    source: ["3.2.74", "5.6.8.10"]
+
+  - id: PORT_TIMEOUT
+    canonical_name: port time-out
+    kind: router_management_parameter
+    source: ["5.6.8.12", "5.6.9.d"]
+
+  - id: INTERRUPT_RELAY_REGISTER
+    canonical_name: interrupt relay register
+    kind: router_state_register
+    width_bits: 32
+    source: ["3.2.56", "5.6.5.5"]
+
+review_status: reviewed
