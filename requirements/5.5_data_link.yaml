@@ -1,0 +1,73 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+layer: Data Link
+scope: ["5.2.3", "5.5", "6.2"]
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: reviewed
+
+requirements:
+  - {id: SPW-5.5.2-a, clause: "5.5.2.a", level: SHALL, behavior: receive_NChars_and_broadcast_codes_from_network}
+  - {id: SPW-5.5.2-b, clause: "5.5.2.b", level: SHALL, behavior: pass_data_control_characters_and_codes_to_encoding}
+  - {id: SPW-5.5.2-c, clause: "5.5.2.c", level: SHALL, behavior: receive_data_control_characters_and_codes_from_encoding}
+  - {id: SPW-5.5.2-d, clause: "5.5.2.d", level: SHALL, behavior: pass_NChars_and_broadcast_codes_to_network}
+  - {id: SPW-5.5.2-e, clause: "5.5.2.e", level: SHALL, behavior: indicate_network_when_NChar_can_be_accepted_for_TX}
+  - {id: SPW-5.5.2-f, clause: "5.5.2.f", level: SHALL, behavior: indicate_network_when_received_NChar_available}
+  - {id: SPW-5.5.2-g, clause: "5.5.2.g", level: SHALL, behavior: indicate_network_when_broadcast_code_available}
+  - {id: SPW-5.5.2-h, clause: "5.5.2.h", level: SHALL, behavior: control_encoding_with_TX_ENABLE_RX_ENABLE}
+  - {id: SPW-5.5.2-i, clause: "5.5.2.i", level: SHALL, behavior: respond_to_encoding_gotNull_receive_error_disconnect}
+
+  - {id: SPW-5.5.3-a1, clause: "5.5.3.a.1", level: SHALL, behavior: PortReset_resets_specified_port}
+  - {id: SPW-5.5.3-a2, clause: "5.5.3.a.2", level: SHALL, behavior: LinkDisabled_controls_port_enable}
+  - {id: SPW-5.5.3-a3, clause: "5.5.3.a.3", level: SHALL, behavior: LinkStart_requests_start_if_enabled}
+  - {id: SPW-5.5.3-a4, clause: "5.5.3.a.4", level: SHALL, behavior: AutoStart_starts_on_Null_if_enabled}
+  - {id: SPW-5.5.3-b, clause: "5.5.3.b", level: SHOULD, behavior: expose_link_state_error_flags_and_credit_counters, selected: true}
+
+  - {id: SPW-5.5.4-a, clause: "5.5.4.a", level: SHALL, behavior: NChar_flow_controlled_by_FCT}
+  - {id: SPW-5.5.4-b, clause: "5.5.4.b", level: SHALL, behavior: each_FCT_authorizes_8_NChars}
+  - {id: SPW-5.5.4-c, clause: "5.5.4.c", level: SHALL, behavior: send_FCT_when_ready_for_8_more_NChars}
+  - {id: SPW-5.5.4-d, clause: "5.5.4.d", level: SHALL, behavior: do_not_send_NChar_without_transmit_credit}
+  - {id: SPW-5.5.4-e1, clause: "5.5.4.e.1", level: SHALL, behavior: RX_FCT_increments_TX_credit_by_8}
+  - {id: SPW-5.5.4-e2, clause: "5.5.4.e.2", level: SHALL, behavior: TX_NChar_decrements_TX_credit_by_1}
+  - {id: SPW-5.5.4-f, clause: "5.5.4.f", level: SHALL, behavior: stop_NChars_at_zero_TX_credit}
+  - {id: SPW-5.5.4-g, clause: "5.5.4.g", level: SHALL, behavior: ErrorReset_clears_TX_credit}
+  - {id: SPW-5.5.4-h, clause: "5.5.4.h", level: SHALL, behavior: TX_credit_max_56}
+  - {id: SPW-5.5.4-i, clause: "5.5.4.i", level: SHALL, behavior: max_7_outstanding_FCTs}
+  - {id: SPW-5.5.4-j, clause: "5.5.4.j", level: SHALL, behavior: over_max_TX_credit_raises_credit_error}
+  - {id: SPW-5.5.4-k, clause: "5.5.4.k", level: SHALL, behavior: initialization_sends_one_FCT_per_8_RX_FIFO_slots_up_to_7}
+  - {id: SPW-5.5.4-l1, clause: "5.5.4.l.1", level: SHALL, behavior: sent_FCT_increments_RX_credit_by_8}
+  - {id: SPW-5.5.4-l2, clause: "5.5.4.l.2", level: SHALL, behavior: received_NChar_decrements_RX_credit_by_1}
+  - {id: SPW-5.5.4-m, clause: "5.5.4.m", level: SHALL, behavior: ErrorReset_clears_RX_credit}
+  - {id: SPW-5.5.4-n, clause: "5.5.4.n", level: SHALL, behavior: RX_credit_max_56}
+  - {id: SPW-5.5.4-o, clause: "5.5.4.o", level: MAY, behavior: smaller_RX_credit_max_if_capacity_below_56, selected: false}
+  - {id: SPW-5.5.4-p, clause: "5.5.4.p", level: SHALL, behavior: FCT_only_if_8_slots_and_credit_headroom}
+
+  - {id: SPW-5.5.5-a1, clause: "5.5.5.a.1", level: SHALL, behavior: NChar_with_zero_RX_credit_is_credit_error}
+  - {id: SPW-5.5.5-a2, clause: "5.5.5.a.2", level: SHALL, behavior: FCT_causing_TX_credit_overflow_is_credit_error}
+
+  - {id: SPW-5.5.6-a, clause: "5.5.6.a", level: SHALL, behavior: priority_BC_then_FCT_then_NChar_then_Null}
+  - {id: SPW-5.5.6-b, clause: "5.5.6.b", level: SHALL, behavior: Run_BC_sent_after_current_item}
+  - {id: SPW-5.5.6-c, clause: "5.5.6.c", level: SHALL, behavior: FCT_sent_after_current_if_no_BC}
+  - {id: SPW-5.5.6-d, clause: "5.5.6.d", level: SHALL, behavior: Run_NChar_sent_if_no_BC_no_FCT_and_credit_positive}
+  - {id: SPW-5.5.6-e, clause: "5.5.6.e", level: SHALL, behavior: send_Null_when_nothing_else_ready}
+
+  - {id: SPW-5.5.7-c, clause: "5.5.7.1.c", level: SHALL, behavior: ErrorReset_delay_range_us_5_82_to_7_22}
+  - {id: SPW-5.5.7-d, clause: "5.5.7.1.d", level: SHALL, behavior: timeout_delay_range_us_11_64_to_14_33}
+  - {id: SPW-5.5.7-e, clause: "5.5.7.1.e", level: SHALL, behavior: PortReset_clears_FIFOs_and_enters_ErrorReset}
+  - {id: SPW-5.5.7.2-a, clause: "5.5.7.2.a", level: SHALL, behavior: ErrorReset_disable_TX_RX_clear_credits_gotFCT_start_6_4us_timer}
+  - {id: SPW-5.5.7.2-b, clause: "5.5.7.2.b", level: SHOULD, behavior: ErrorReset_discard_pending_broadcast, selected: true}
+  - {id: SPW-5.5.7.2-c, clause: "5.5.7.2.c", level: SHALL, behavior: ErrorReset_to_ErrorWait_after_timer_if_not_disabled}
+  - {id: SPW-5.5.7.3, clause: "5.5.7.3", level: SHALL, behavior: ErrorWait_RX_only_reject_data_then_timeout_to_Ready_and_errors_to_ErrorReset}
+  - {id: SPW-5.5.7.4, clause: "5.5.7.4", level: SHALL, behavior: Ready_RX_only_start_on_LinkStart_or_AutoStart_and_gotNull}
+  - {id: SPW-5.5.7.5, clause: "5.5.7.5", level: SHALL, behavior: Started_send_Nulls_then_connect_on_sentNull_and_gotNull_else_errors_or_timeout}
+  - {id: SPW-5.5.7.6, clause: "5.5.7.6", level: SHALL, behavior: Connecting_send_FCTs_Nulls_then_Run_on_sentFCT_and_gotFCT_else_errors_or_timeout}
+  - {id: SPW-5.5.7.7, clause: "5.5.7.7", level: SHALL, behavior: Run_send_all_classes_receive_and_forward_then_ErrorReset_on_link_errors}
+  - {id: SPW-5.5.7.8, clause: "5.5.7.8", level: MAY, behavior: legacy_LinkDisabled_behavior, selected: false}
+
+  - {id: SPW-5.5.8.2, clause: "5.5.8.2", level: SHALL, behavior: PortReset_sets_error_recovery_Normal}
+  - {id: SPW-5.5.8.3, clause: "5.5.8.3", level: SHALL, behavior: Normal_to_Recovery_on_Run_error_or_LinkDisabled}
+  - {id: SPW-5.5.8.4-a1, clause: "5.5.8.4.a.1", level: SHALL, behavior: Recovery_discard_unsent_remainder_of_TX_packet}
+  - {id: SPW-5.5.8.4-a2, clause: "5.5.8.4.a.2", level: SHALL, behavior: Recovery_append_EEP_if_RX_packet_open}
+  - {id: SPW-5.5.8.4-a4, clause: "5.5.8.4.a.4", level: SHALL, behavior: wait_for_RX_FIFO_space_if_EEP_pending}
+  - {id: SPW-5.5.8.4-a5, clause: "5.5.8.4.a.5", level: SHALL, behavior: record_error_cause}
+  - {id: SPW-5.5.8.4-b, clause: "5.5.8.4.b", level: SHALL, behavior: Recovery_to_Normal_after_actions_complete}
+  - {id: SPW-5.5.9-a, clause: "5.5.9.a", level: SHOULD, behavior: discard_broadcast_for_TX_unless_Run, selected: true}
