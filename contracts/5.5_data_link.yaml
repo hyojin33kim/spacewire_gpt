@@ -62,3 +62,64 @@ invariants:
   - "Run exit on Disconnect/Parity/ESC/Credit error is ErrorReset"
   - "credit counters are zero in ErrorReset"
   - "legacy LinkDisabled behavior is not part of this baseline"
+
+requirements:
+  - SPW-5.5.2-a
+  - SPW-5.5.2-b
+  - SPW-5.5.2-c
+  - SPW-5.5.2-d
+  - SPW-5.5.2-e
+  - SPW-5.5.2-f
+  - SPW-5.5.2-g
+  - SPW-5.5.2-h
+  - SPW-5.5.2-i
+  - SPW-5.5.3-a1
+  - SPW-5.5.3-a2
+  - SPW-5.5.3-a3
+  - SPW-5.5.3-a4
+  - SPW-5.5.3-b
+  - SPW-5.5.4-a
+  - SPW-5.5.4-b
+  - SPW-5.5.4-c
+  - SPW-5.5.4-d
+  - SPW-5.5.4-e1
+  - SPW-5.5.4-e2
+  - SPW-5.5.4-f
+  - SPW-5.5.4-g
+  - SPW-5.5.4-h
+  - SPW-5.5.4-i
+  - SPW-5.5.4-j
+  - SPW-5.5.4-k
+  - SPW-5.5.4-l1
+  - SPW-5.5.4-l2
+  - SPW-5.5.4-m
+  - SPW-5.5.4-n
+  - SPW-5.5.4-o
+  - SPW-5.5.4-p
+  - SPW-5.5.5-a1
+  - SPW-5.5.5-a2
+  - SPW-5.5.6-a
+  - SPW-5.5.6-b
+  - SPW-5.5.6-c
+  - SPW-5.5.6-d
+  - SPW-5.5.6-e
+  - SPW-5.5.7-c
+  - SPW-5.5.7-d
+  - SPW-5.5.7-e
+  - SPW-5.5.7.2-a
+  - SPW-5.5.7.2-b
+  - SPW-5.5.7.2-c
+  - SPW-5.5.7.3
+  - SPW-5.5.7.4
+  - SPW-5.5.7.5
+  - SPW-5.5.7.6
+  - SPW-5.5.7.7
+  - SPW-5.5.7.8
+  - SPW-5.5.8.2
+  - SPW-5.5.8.3
+  - SPW-5.5.8.4-a1
+  - SPW-5.5.8.4-a2
+  - SPW-5.5.8.4-a4
+  - SPW-5.5.8.4-a5
+  - SPW-5.5.8.4-b
+  - SPW-5.5.9-a
