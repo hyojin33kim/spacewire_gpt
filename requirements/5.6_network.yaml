@@ -1,0 +1,74 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+layer: Network
+scope: ["5.2.2", "5.6.2-5.6.7", "5.6.10", "6.1"]
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: reviewed
+note: "Routing-switch-specific clauses 5.6.8-5.6.9 are frozen separately as semantic-router-v0.1."
+
+requirements:
+  - {id: SPW-5.2.2-a1, clause: "5.2.2.a.1", level: SHALL, behavior: provide_packet_service}
+  - {id: SPW-5.2.2-a2, clause: "5.2.2.a.2", level: SHALL, behavior: provide_time_code_service}
+  - {id: SPW-5.2.2-a3, clause: "5.2.2.a.3", level: SHALL, behavior: provide_distributed_interrupt_service}
+  - {id: SPW-5.2.2-b, clause: "5.2.2.b", level: SHALL, behavior: packet_mandatory_timecode_interrupt_optional, selected: {time_code: true, distributed_interrupt: true}}
+  - {id: SPW-5.2.2-c, clause: "5.2.2.c", level: SHALL, behavior: accept_service_requests_from_user}
+  - {id: SPW-5.2.2-d, clause: "5.2.2.d", level: SHALL, behavior: transfer_packets_timecodes_interrupts_over_network}
+  - {id: SPW-5.2.2-e, clause: "5.2.2.e", level: SHALL, behavior: use_data_link_services}
+
+  - {id: SPW-5.6.2.1-a, clause: "5.6.2.1.a", level: SHALL, behavior: packet_is_data_characters_followed_by_EOP_or_EEP}
+  - {id: SPW-5.6.2.1-b, clause: "5.6.2.1.b", level: SHALL, behavior: packet_start_first_data_after_init_or_after_previous_EOP_EEP}
+  - {id: SPW-5.6.2.1-c, clause: "5.6.2.1.c", level: SHALL, behavior: packet_end_EOP_or_EEP}
+  - {id: SPW-5.6.2.1-d, clause: "5.6.2.1.d", level: SHALL, behavior: packet_may_have_zero_data_characters}
+  - {id: SPW-5.6.2.1-e, clause: "5.6.2.1.e", level: SHALL, behavior: leading_zero_or_more_data_characters_form_destination_address}
+  - {id: SPW-5.6.2.1-f, clause: "5.6.2.1.f", level: SHALL, behavior: remaining_data_characters_form_cargo}
+  - {id: SPW-5.6.2.2-a, clause: "5.6.2.2.a", level: SHALL, behavior: packet_NChars_not_interleaved_with_other_packet_NChars}
+
+  - {id: SPW-5.6.3-a, clause: "5.6.3.a", level: SHALL, behavior: time_code_broadcast_type_00}
+  - {id: SPW-5.6.3-b, clause: "5.6.3.b", level: SHALL, behavior: distributed_interrupt_broadcast_type_10}
+
+  - {id: SPW-5.6.4.1-a, clause: "5.6.4.1.a", level: SHALL, behavior: timecodes_optional_in_nodes_and_routers, selected: true}
+  - {id: SPW-5.6.4.1-b, clause: "5.6.4.1.b", level: SHOULD, behavior: unsupported_timecodes_ignored, selected: false_as_not_applicable}
+  - {id: SPW-5.6.4.2-a, clause: "5.6.4.2.a", level: SHALL, behavior: time_code_value_is_6_bits_0_to_63}
+  - {id: SPW-5.6.4.3-a, clause: "5.6.4.3.a", level: SHALL, behavior: node_supporting_timecode_has_one_or_more_registers}
+  - {id: SPW-5.6.4.3-b, clause: "5.6.4.3.b", level: SHALL, behavior: register_holds_last_timecode_value}
+  - {id: SPW-5.6.4.3-c, clause: "5.6.4.3.c", level: SHALL, behavior: router_supporting_timecode_has_one_register}
+  - {id: SPW-5.6.4.3-d, clause: "5.6.4.3.d", level: SHALL, behavior: port_reset_initializes_timecode_register_as_specified}
+  - {id: SPW-5.6.4.4-a, clause: "5.6.4.4.a", level: SHALL, behavior: timecode_network_has_single_timecode_master}
+  - {id: SPW-5.6.4.4-b, clause: "5.6.4.4.b", level: SHALL, behavior: master_passes_timecodes_to_one_or_more_endpoints}
+  - {id: SPW-5.6.4.5-a, clause: "5.6.4.5.a", level: SHALL, behavior: compare_received_timecode_to_register}
+  - {id: SPW-5.6.4.5-b, clause: "5.6.4.5.b", level: SHALL, behavior: valid_if_received_equals_register_plus_one_mod64}
+  - {id: SPW-5.6.4.5-c, clause: "5.6.4.5.c", level: SHALL, behavior: otherwise_invalid}
+  - {id: SPW-5.6.4.8-a, clause: "5.6.4.8.a", level: SHALL, behavior: node_valid_timecode_indicates_host_and_updates_register}
+  - {id: SPW-5.6.4.9-a, clause: "5.6.4.9.a", level: SHALL, behavior: node_invalid_timecode_updates_register_without_valid_indication}
+
+  - {id: SPW-5.6.5.1-a, clause: "5.6.5.1.a", level: SHALL, behavior: distributed_interrupt_optional, selected: true}
+  - {id: SPW-5.6.5.1-c, clause: "5.6.5.1.c", level: SHALL, behavior: interrupt_modes_interrupt_and_interrupt_with_ack}
+  - {id: SPW-5.6.5.1-d, clause: "5.6.5.1.d", level: SHALL, behavior: supporting_entity_operates_in_one_or_configurable_modes, selected: both_configurable}
+  - {id: SPW-5.6.5.1-e, clause: "5.6.5.1.e", level: SHALL, behavior: ack_mode_has_one_source_and_one_acknowledger_per_interrupt}
+  - {id: SPW-5.6.5.2-a, clause: "5.6.5.2.a", level: SHALL, behavior: interrupt_code_broadcasts_interrupt}
+  - {id: SPW-5.6.5.2-b, clause: "5.6.5.2.b", level: SHALL, behavior: IID_bits_0_4_range_0_31}
+  - {id: SPW-5.6.5.2-c, clause: "5.6.5.2.c", level: SHALL, behavior: interrupt_value_bit5_zero}
+  - {id: SPW-5.6.5.3-a, clause: "5.6.5.3.a", level: SHALL, behavior: ack_code_returns_interrupt_ack}
+  - {id: SPW-5.6.5.3-b, clause: "5.6.5.3.b", level: SHALL, behavior: ack_IID_bits_0_4_range_0_31}
+  - {id: SPW-5.6.5.3-c, clause: "5.6.5.3.c", level: SHALL, behavior: ack_value_bit5_one}
+  - {id: SPW-5.6.5.3-d, clause: "5.6.5.3.d", level: SHALL, behavior: ack_IID_matches_interrupt_IID}
+  - {id: SPW-5.6.5.4-a, clause: "5.6.5.4.a", level: SHALL, behavior: node_may_send_receive_or_both_interrupt_codes}
+  - {id: SPW-5.6.5.4-b, clause: "5.6.5.4.b", level: SHALL, behavior: host_send_request_emits_matching_interrupt_code}
+  - {id: SPW-5.6.5.4-c, clause: "5.6.5.4.c", level: SHOULD, behavior: interrupt_mode_repeat_interval_exceeds_network_propagation, selected: true}
+  - {id: SPW-5.6.5.4-d, clause: "5.6.5.4.d", level: SHALL, behavior: ack_mode_repeat_interval_exceeds_round_trip_plus_ack_generation}
+  - {id: SPW-5.6.5.6-b, clause: "5.6.5.6.b", level: SHALL, behavior: ack_mode_node_support_send_receive_or_both_ack_codes}
+  - {id: SPW-5.6.5.6-c, clause: "5.6.5.6.c", level: SHALL, behavior: host_ack_request_emits_matching_ack_code}
+  - {id: SPW-5.6.5.6-e, clause: "5.6.5.6.e", level: SHALL, behavior: ack_generated_after_interrupt_has_propagated_network}
+  - {id: SPW-5.6.5.6-f, clause: "5.6.5.6.f", level: SHALL, behavior: ack_generation_before_router_defined_maximum}
+  - {id: SPW-5.6.5.6-g, clause: "5.6.5.6.g", level: SHALL, behavior: received_ack_informs_host_matching_IID}
+
+  - {id: SPW-5.6.6-a, clause: "5.6.6.a", level: SHALL, behavior: node_acts_as_source_destination_or_both}
+  - {id: SPW-5.6.6-b, clause: "5.6.6.b", level: SHALL, behavior: node_comprises_one_or_more_endpoints_and_optional_configuration_port}
+  - {id: SPW-5.6.6-d, clause: "5.6.6.d", level: SHALL, behavior: endpoint_accepts_host_packets_for_send}
+  - {id: SPW-5.6.6-e, clause: "5.6.6.e", level: SHALL, behavior: endpoint_passes_received_packets_to_host}
+  - {id: SPW-5.6.6-f, clause: "5.6.6.f", level: SHALL, behavior: timecode_master_endpoint_accepts_host_timecodes}
+  - {id: SPW-5.6.6-g, clause: "5.6.6.g", level: SHALL, behavior: timecode_endpoint_passes_received_timecodes_to_host}
+  - {id: SPW-5.6.6-h, clause: "5.6.6.h", level: SHALL_OPTIONAL, behavior: endpoint_optional_timecode_register, selected: true}
+  - {id: SPW-5.6.6-i, clause: "5.6.6.i", level: SHALL, behavior: interrupt_endpoint_passes_received_interrupts_to_host}
+  - {id: SPW-5.6.6-j, clause: "5.6.6.j", level: SHALL, behavior: interrupt_endpoint_accepts_interrupt_and_ack_codes_from_host}
+  - {id: SPW-5.6.10-a, clause: "5.6.10.a", level: SHALL, behavior: network_has_one_or_more_nodes_zero_or_more_routing_switches}
