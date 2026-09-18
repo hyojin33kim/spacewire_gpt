@@ -1,0 +1,64 @@
+schema_version: 1
+id: BC-DL-V0.1
+name: Data Link semantic behavior contract
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: frozen
+requirements_source: requirements/5.5_data_link.yaml
+
+state:
+  link_state: [ErrorReset, ErrorWait, Ready, Started, Connecting, Run]
+  recovery_state: [Normal, Recovery]
+  tx_credit: {min: 0, max: 56, quantum: 8}
+  rx_credit: {min: 0, max: 56, quantum: 8}
+  gotFCT: boolean
+  sentNull: boolean
+  sentFCT: boolean
+  tx_packet_open: boolean
+  rx_packet_open: boolean
+
+observable_contract:
+  priority: [BROADCAST_CODE, FCT, NCHAR, NULL]
+  credit:
+    received_FCT: "tx_credit += 8; overflow => CreditError"
+    transmitted_NChar: "tx_credit -= 1"
+    transmitted_FCT: "rx_credit += 8"
+    received_NChar: "rx_credit -= 1; if zero before receipt => CreditError"
+    ErrorReset: "tx_credit=0; rx_credit=0"
+  fct_issue:
+    allowed_when: "RX free space >= 8 AND rx_credit <= max-8"
+  timers:
+    ErrorReset_nominal_us: 6.4
+    ErrorReset_allowed_us: [5.82, 7.22]
+    state_timeout_nominal_us: 12.8
+    state_timeout_allowed_us: [11.64, 14.33]
+  link_initialization:
+    ErrorReset: "TX off, RX off; after timer and not LinkDisabled -> ErrorWait"
+    ErrorWait: "TX off, RX on; timeout -> Ready; protocol/error input -> ErrorReset"
+    Ready: "TX off, RX on; LinkStart or AutoStart&gotNull -> Started"
+    Started: "TX on Null-only, RX on; sentNull&gotNull -> Connecting"
+    Connecting: "TX on FCT/Null only, RX on; sentFCT&gotFCT -> Run"
+    Run: "TX/RX on; BC/FCT/NChar/Null priority; errors -> ErrorReset"
+  recovery:
+    trigger: "while Run: LinkDisabled or Disconnect/Parity/ESC/Credit error"
+    actions:
+      - discard_unsent_remainder_of_current_TX_packet
+      - terminate_open_RX_packet_with_EEP_when_required
+      - wait_for_RX_FIFO_space_if_EEP_pending
+      - record_error_cause
+    completion: "Recovery -> Normal"
+  optional_decisions:
+    legacy_LinkDisabled_behavior: disabled
+    recommended_status: enabled
+    discard_pending_BC_in_ErrorReset: enabled
+    discard_BC_request_unless_Run: enabled
+
+invariants:
+  - "0 <= tx_credit <= 56"
+  - "0 <= rx_credit <= 56"
+  - "NCHAR transmission implies tx_credit_before > 0"
+  - "FCT issue implies at least 8 receive slots and credit headroom"
+  - "priority BC > FCT > NCHAR > NULL at item boundary"
+  - "Run exit on Disconnect/Parity/ESC/Credit error is ErrorReset"
+  - "credit counters are zero in ErrorReset"
+  - "legacy LinkDisabled behavior is not part of this baseline"
