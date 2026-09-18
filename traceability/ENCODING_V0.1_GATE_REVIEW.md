@@ -17,6 +17,8 @@ Scope: Encoding architecture §5.2.4, Encoding §5.4, relevant service interface
 - CR-ENC-011: DS_RX.request parameter notation is incomplete in the rendered source.
 - CR-ENC-013: §5.4.2.d points to §5.4.5 although gotNull set/clear behavior is in §5.4.6.
 - CR-ENC-014: §5.4.10.2 NOTE points to §5.4.7 although disconnect is in §5.4.8.
+- CR-ENC-015: TX_CHAR.request parameterization does not explicitly represent control-code transfer required by §5.4.2/§5.5.2.
+- CR-ENC-016: RX_CHAR.request wording/parameterization does not explicitly represent control-code transfer required by §5.4.2/§5.5.2.
 
 These issues are retained as evidence and must not be silently edited in source-derived artifacts.
 
