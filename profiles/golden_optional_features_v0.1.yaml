@@ -23,6 +23,9 @@ network:
   distributed_interrupt_modes_supported: [interrupt, interrupt_with_acknowledgement]
   endpoint_time_code_register: true
   source_node_packet_multicast: true
+  test_port_loopback_capability: true
+  unsupported_timecode_behavior: not_applicable_feature_enabled
+  unsupported_interrupt_behavior: not_applicable_feature_enabled
 
 router:
   path_addressing: true
@@ -36,6 +39,11 @@ router:
   invalid_address_error_registration: true
   time_code_relay: true
   distributed_interrupt_relay: true
+  interrupt_relay_register_bits: 32
+  per_port_interrupt_rx_enable: true
+  per_port_interrupt_tx_enable: true
+  per_port_ack_rx_enable: true
+  per_port_ack_tx_enable: true
   arbitration_semantic: fair
   reference_trace_scheduler: round_robin
   note: >
