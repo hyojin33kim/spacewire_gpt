@@ -1,0 +1,70 @@
+schema_version: 1
+id: BC-ENC-CHAR-001
+name: Character and control-code encoding
+spec: ECSS-E-ST-50-12C-Rev.1
+scope: ["5.4.3.1", "5.4.3.2", "5.4.3.3", "5.4.3.4"]
+status: draft
+
+inputs:
+  - data_character
+  - control_character
+  - control_code
+
+outputs:
+  - data_symbol
+  - control_symbol
+  - serialized_symbol_sequence
+
+behavior:
+  data_character:
+    symbol_width_bits: 10
+    data_control_flag: 0
+    data_order: LSB_first
+
+  control_character:
+    symbol_width_bits: 4
+    data_control_flag: 1
+    types:
+      FCT: "0b00"
+      EOP: "0b10"
+      EEP: "0b01"
+      ESC: "0b11"
+
+  control_code:
+    first_character: ESC
+    sequences:
+      NULL: [ESC, FCT]
+      BROADCAST_CODE: [ESC, DATA_CHARACTER]
+
+  parity:
+    kind: odd
+    dependency: previous_encoded_character_payload_plus_current_parity_and_data_control_flag
+
+invariants:
+  - data_character_has_exactly_8_data_bits
+  - control_code_starts_with_ESC
+  - total_ones_in_each_parity_coverage_field_is_odd
+
+requirements:
+  - SPW-5.4.3.1-a
+  - SPW-5.4.3.1-b
+  - SPW-5.4.3.1-c
+  - SPW-5.4.3.2-a
+  - SPW-5.4.3.2-b
+  - SPW-5.4.3.2-c
+  - SPW-5.4.3.2-d
+  - SPW-5.4.3.2-e
+  - SPW-5.4.3.2-f
+  - SPW-5.4.3.3-a
+  - SPW-5.4.3.3-b
+  - SPW-5.4.3.3-c
+  - SPW-5.4.3.3-d-1
+  - SPW-5.4.3.3-d-2
+  - SPW-5.4.3.4-a
+  - SPW-5.4.3.4-b
+  - SPW-5.4.3.4-c
+
+open_questions:
+  - id: OQ-ENC-001
+    issue: "Parity is history-dependent; Golden Model must retain the prior encoded character payload required by Figure 5-15 / 5.4.3.4."
+    classification: model_state_requirement
