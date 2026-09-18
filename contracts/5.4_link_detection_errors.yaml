@@ -1,0 +1,85 @@
+schema_version: 1
+id: BC-ENC-RXERR-001
+name: First Null, Null detection, parity/disconnect/ESC error behavior
+spec: ECSS-E-ST-50-12C-Rev.1
+scope: ["5.4.5", "5.4.6", "5.4.7", "5.4.8", "5.4.9"]
+status: draft
+
+inputs:
+  - TX_ENABLE
+  - RX_ENABLE
+  - received_data_strobe_edges
+  - decoded_characters
+  - link_state
+
+state:
+  - gotNull
+  - previous_character_context
+  - time_since_last_data_or_strobe_transition
+  - disconnect_detection_enabled
+
+outputs:
+  - gotNull
+  - parity_error
+  - disconnect
+  - ESC_error
+
+behavior:
+  first_null_tx:
+    when: first_Null_after_TX_ENABLE_asserted
+    first_bit: parity_zero
+    consequence: first_transition_on_Strobe
+
+  null_detection:
+    enabled_when: RX_ENABLE_asserted
+    gotNull_clear_condition: RX_ENABLE_deasserted
+    first_null_detection_must_include: three_related_parity_bits
+    on_valid_first_null: assert_gotNull
+
+  parity_error:
+    enabled_when:
+      - RX_ENABLE_asserted
+      - gotNull_asserted
+    detect_when: parity_not_odd
+
+  disconnect:
+    detection_armed_after:
+      - link_state_machine_leaves_ErrorReset
+      - first_Data_or_Strobe_edge_detected
+    assert_when_elapsed_since_last_edge_exceeds_selected_threshold: true
+    allowed_threshold_range:
+      lower_bound_exclusive: "727 ns"
+      upper_bound: "1 us"
+
+  esc_error:
+    enabled_when: gotNull_asserted
+    invalid_sequences:
+      - [ESC, ESC]
+      - [ESC, EOP]
+      - [ESC, EEP]
+
+invariants:
+  - gotNull_persists_until_RX_ENABLE_deasserted
+  - parity_and_ESC_error_detection_are_gated_by_gotNull
+  - disconnect_detection_is_not_active_before_first_DS_edge_after_ErrorReset
+  - ESC_followed_by_FCT_is_not_ESC_error
+  - ESC_followed_by_data_character_is_not_ESC_error
+
+requirements:
+  - SPW-5.4.5-a
+  - SPW-5.4.6-a
+  - SPW-5.4.6-b
+  - SPW-5.4.6-c
+  - SPW-5.4.6-d
+  - SPW-5.4.7-a
+  - SPW-5.4.7-b
+  - SPW-5.4.8-a
+  - SPW-5.4.8-b
+  - SPW-5.4.8-c
+  - SPW-5.4.9-a
+  - SPW-5.4.9-b
+
+open_questions:
+  - id: OQ-ENC-DISC-001
+    issue: "5.4.8.c defines an allowed disconnect timeout range rather than one exact threshold. Exact counter/clock implementation belongs in the RTL contract."
+    classification: rtl_contract_boundary
