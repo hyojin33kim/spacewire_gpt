@@ -31,6 +31,8 @@ class RouterModel:
     interrupt_active: set[int] = field(default_factory=set)
     interrupt_timer_running: set[int] = field(default_factory=set)
     timecode_register: int = 0
+    legacy_path_adaptive_supported: bool = False
+    configuration_port_path_only: bool = True
 
     interrupt_rx_enabled: set[int] | None = None
     interrupt_tx_enabled: set[int] | None = None
@@ -180,6 +182,7 @@ class RouterModel:
         return {
             "stuck": stuck,
             "discard": stuck,
+            "send_EEP": stuck,
             "send_EEP_to_output_port": stuck,
             "error": stuck,
         }
