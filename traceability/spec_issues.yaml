@@ -86,3 +86,35 @@ issues:
     decision_required: false
     blocking: false
     status: documented_interface_mismatch
+
+  - id: CR-DL-001
+    source_clauses: ["5.5.2.c", "5.5.2.d", "5.5.7.7.a.3", "5.5.7.7.a.4"]
+    source_statement_summary: >
+      5.5.2.c says the Data Link layer receives characters/control codes from Encoding;
+      5.5.2.d says it passes N-Chars and broadcast codes to Network. However 5.5.7.7.a.3
+      says in Run to pass received N-Chars and broadcast codes to the Encoding Layer,
+      while 5.5.7.7.a.4 separately says pass received broadcast codes to Network.
+    observed_conflict: >
+      Literal 5.5.7.7.a.3 creates a receive-path loop back toward Encoding and conflicts
+      with the architecture/interface requirements in 5.5.2. The intended destination
+      of received N-Chars in Run therefore requires an explicit interpretation.
+    candidate_interpretation: >
+      Treat "Encoding Layer" in 5.5.7.7.a.3 as an editorial error for the receive path:
+      received N-Chars are passed to the Network Layer in accordance with 5.5.2.d;
+      received broadcast codes are passed to the Network Layer in accordance with
+      5.5.2.d and 5.5.7.7.a.4. Preserve the original wording as evidence.
+    decision_required: true
+    blocking: true
+    status: awaiting_user_decision
+
+  - id: CR-DL-002
+    source_clause: "5.5.8.4.b.1"
+    source_statement_summary: >
+      Recovery exits when all error recovery actions "listed in 5.5.8.4.b" are complete,
+      although the action list immediately preceding it is in 5.5.8.4.a; the phrase
+      "move to the Normal state" is also duplicated.
+    observed_conflict: editorial_self_reference_and_duplicate_phrase
+    handling: preserve_source_wording_and_use_the_immediately_preceding_5.5.8.4.a_action_list
+    decision_required: false
+    blocking: false
+    status: documented_source_issue
