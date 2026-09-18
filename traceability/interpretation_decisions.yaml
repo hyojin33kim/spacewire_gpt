@@ -1,0 +1,23 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+artifact: interpretation decisions
+status: active
+
+decisions:
+  - id: DEC-ENC-001
+    date: "2026-09-18"
+    issue: CR-ENC-008
+    source_clause: "6.3.2.6.4"
+    source_text_reference: "state machine of clause 5.5.6"
+    observation:
+      - "5.5.6 is Sending priority."
+      - "Link initialisation behaviour/state machine is 5.5.7 / Figure 5-19."
+    decision: >
+      Interpret the intended behavioral reference for gotNull.indication as
+      clause 5.5.7 / Figure 5-19. Preserve the original 6.3.2.6.4 wording in
+      evidence and record this as an explicit interpretation; do not silently
+      rewrite the source standard.
+    approved_by: user
+    effect_on_golden_model: gotNull_event_follows_link_initialisation_behavior_boundary
+    effect_on_rtl_contract: no_direct_cycle_semantics_implied
+    status: accepted
