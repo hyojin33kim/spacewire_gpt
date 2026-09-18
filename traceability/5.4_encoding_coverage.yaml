@@ -1,0 +1,154 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+artifact: Encoding semantic coverage matrix
+scope: "5.4 with supporting evidence from 3.x, 5.2.4, 6.3 and 6.4"
+status: draft
+atomic_requirement_count_5_4: 56
+
+coverage:
+  - clause: "5.4.1"
+    title: Introduction
+    normative_atomic_requirements: []
+    status: descriptive_context
+    contracts: []
+    ontology: [ENCODING_LAYER]
+
+  - clause: "5.4.2"
+    title: Serialisation and de-serialisation
+    requirement_ids:
+      - SPW-5.4.2-a
+      - SPW-5.4.2-b
+      - SPW-5.4.2-c
+      - SPW-5.4.2-d
+      - SPW-5.4.2-e-1
+      - SPW-5.4.2-e-2
+      - SPW-5.4.2-f-1
+      - SPW-5.4.2-f-2
+      - SPW-5.4.2-f-3
+    contracts: [BC-ENC-PIPE-001, BC-ENC-IF-001]
+    ontology: [ENCODING_LAYER, TX_ENABLE, RX_ENABLE, GOT_NULL, DISCONNECT, RECEIVE_ERROR]
+    evidence: [text, "5.2.4", "6.3"]
+    status: covered_draft
+
+  - clause: "5.4.3"
+    title: Character and control code encoding
+    requirement_range:
+      - "SPW-5.4.3.1-a .. SPW-5.4.3.1-c"
+      - "SPW-5.4.3.2-a .. SPW-5.4.3.2-f"
+      - "SPW-5.4.3.3-a .. SPW-5.4.3.3-d-2"
+      - "SPW-5.4.3.4-a .. SPW-5.4.3.4-c"
+    atomic_count: 17
+    contracts: [BC-ENC-CHAR-001]
+    ontology:
+      - DATA_CHARACTER
+      - CONTROL_CHARACTER
+      - DATA_SYMBOL
+      - CONTROL_SYMBOL
+      - FCT
+      - EOP
+      - EEP
+      - ESC
+      - NULL
+      - BROADCAST_CODE
+      - PARITY_BIT
+      - DATA_CONTROL_FLAG
+    figures: ["5-11", "5-12", "5-13", "5-14", "5-15"]
+    status: covered_draft
+
+  - clause: "5.4.4"
+    title: Data strobe encoding and decoding
+    requirement_ids:
+      - SPW-5.4.4-a-1
+      - SPW-5.4.4-a-2
+      - SPW-5.4.4-b
+      - SPW-5.4.4-c
+      - SPW-5.4.4-d
+      - SPW-5.4.4-e
+      - SPW-5.4.4-f
+    contracts: [BC-ENC-DS-001]
+    ontology: [SERIAL_BIT_STREAM, DATA_SIGNAL, STROBE_SIGNAL, ERROR_RESET_STATE]
+    figures: ["5-16"]
+    evidence: [text, "5.5.7.2"]
+    status: covered_draft
+
+  - clause: "5.4.5"
+    title: First Null
+    requirement_ids: [SPW-5.4.5-a]
+    contracts: [BC-ENC-RXERR-001]
+    ontology: [FIRST_NULL, NULL, TX_ENABLE, STROBE_SIGNAL]
+    figures: ["5-17"]
+    status: covered_draft
+
+  - clause: "5.4.6"
+    title: Null detection
+    requirement_ids: [SPW-5.4.6-a, SPW-5.4.6-b, SPW-5.4.6-c, SPW-5.4.6-d]
+    contracts: [BC-ENC-RXERR-001]
+    ontology: [FIRST_NULL, GOT_NULL, RX_ENABLE, NULL]
+    figures: ["5-18"]
+    status: covered_draft
+
+  - clause: "5.4.7"
+    title: Parity error
+    requirement_ids: [SPW-5.4.7-a, SPW-5.4.7-b]
+    contracts: [BC-ENC-RXERR-001, BC-ENC-CHAR-001]
+    ontology: [PARITY_ERROR, PARITY_BIT, GOT_NULL, RX_ENABLE]
+    status: covered_draft
+
+  - clause: "5.4.8"
+    title: Disconnect
+    requirement_ids: [SPW-5.4.8-a, SPW-5.4.8-b, SPW-5.4.8-c]
+    contracts: [BC-ENC-RXERR-001]
+    ontology: [DISCONNECT, DISCONNECT_DETECTION, DATA_SIGNAL, STROBE_SIGNAL, ERROR_RESET_STATE]
+    status: covered_draft
+    rtl_contract_boundary: exact_disconnect_threshold_and_counter_clock_mapping
+
+  - clause: "5.4.9"
+    title: ESC error
+    requirement_ids: [SPW-5.4.9-a, SPW-5.4.9-b]
+    contracts: [BC-ENC-RXERR-001]
+    ontology: [ESC_ERROR, ESC, EOP, EEP, FCT, DATA_CHARACTER, GOT_NULL]
+    status: covered_draft
+
+  - clause: "5.4.10"
+    title: Data signalling rate
+    requirement_range:
+      - "SPW-5.4.10.1-a .. SPW-5.4.10.1-b"
+      - "SPW-5.4.10.2-a .. SPW-5.4.10.2-b"
+      - "SPW-5.4.10.3-a .. SPW-5.4.10.3-d"
+      - "SPW-5.4.10.4-a .. SPW-5.4.10.4-b"
+    atomic_count: 10
+    contracts: [BC-ENC-RATE-001]
+    ontology: [DATA_SIGNALLING_RATE, LINK_SPEED]
+    status: covered_draft
+    system_contract_boundary: maximum_rate_depends_on_attenuation_skew_jitter_and_implementation
+
+  - clause: "5.4.11"
+    title: Encoding layer management parameters
+    requirement_ids: [SPW-5.4.11-a-1]
+    contracts: [BC-ENC-RATE-001]
+    ontology: [LINK_SPEED]
+    normative_level: SHOULD
+    status: covered_draft
+
+supporting_context:
+  - source: "3.2"
+    role: canonical_definitions
+    status: partially_extracted_into_ontology
+  - source: "3.4.3"
+    role: bit_order_convention
+    status: represented_in_contract
+  - source: "5.2.4"
+    role: encoding_layer_architecture_and_service_ownership
+    status: referenced_not_yet_atomic_extracted
+  - source: "6.3"
+    role: data_link_encoding_service_primitives
+    status: referenced_not_yet_atomic_extracted
+  - source: "6.4"
+    role: encoding_physical_DS_service_primitives
+    status: newly_identified_cross_clause_dependency_not_yet_atomic_extracted
+
+closure_gate_before_golden_model:
+  - all_5_4_atomic_requirements_have_contract_mapping
+  - all_figures_5_11_through_5_18_are_interpreted_as_evidence
+  - cross_clause_6_3_and_6_4_interfaces_are_atomic_extracted_or_explicitly_abstracted
+  - consistency_review_open_items_are_dispositioned
