@@ -1,0 +1,23 @@
+name: Golden Model Validation
+
+on:
+  push:
+    paths:
+      - "golden_model/**"
+      - "verification/golden/**"
+      - ".github/workflows/golden-model.yml"
+  pull_request:
+    paths:
+      - "golden_model/**"
+      - "verification/golden/**"
+
+jobs:
+  encoding-golden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run frozen-baseline Golden Model tests
+        run: python -m unittest discover -s verification/golden -p "test_*.py" -v
