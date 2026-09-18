@@ -1,0 +1,12 @@
+schema_version: 1
+baseline: semantic-datalink-v0.1
+status: frozen
+invariants:
+  - {id: INV-DL-001, rule: "0 <= tx_credit <= 56", source: ["5.5.4.e","5.5.4.h"]}
+  - {id: INV-DL-002, rule: "0 <= rx_credit <= 56", source: ["5.5.4.l","5.5.4.n"]}
+  - {id: INV-DL-003, rule: "N-Char transmission requires positive transmit credit", source: ["5.5.4.d","5.5.4.f"]}
+  - {id: INV-DL-004, rule: "FCT transmission requires room for eight N-Chars and receive-credit headroom", source: ["5.5.4.p"]}
+  - {id: INV-DL-005, rule: "Run send priority is Broadcast Code > FCT > N-Char > Null", source: ["5.5.6"]}
+  - {id: INV-DL-006, rule: "ErrorReset clears both credit counters", source: ["5.5.4.g","5.5.4.m","5.5.7.2"]}
+  - {id: INV-DL-007, rule: "Network-originated N-Chars/BC travel toward Encoding; Encoding-originated N-Chars/BC travel toward Network", source: ["5.5.2","6.2"], issue_ref: CR-DL-001}
+  - {id: INV-DL-008, rule: "Disconnect, parity, ESC or credit error in Run causes transition to ErrorReset and Recovery processing", source: ["5.5.7.7","5.5.8.3"]}
