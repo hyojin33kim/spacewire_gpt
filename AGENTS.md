@@ -11,9 +11,11 @@ Build a traceable SpaceWire Golden Model and FPGA RTL from ECSS-E-ST-50-12C Rev.
 5. Never silently resolve specification ambiguity.
 6. Requirement/contract changes must identify affected model/tests/RTL.
 7. Generated SQLite/HTML is not the source of truth.
+8. Figures/tables/state diagrams are specification evidence, not decoration.
+9. Cross-clause dependencies must be explicit before Golden Model implementation.
 
 ## Preferred flow
-Spec evidence -> semantic relation -> atomic requirement -> behavior contract -> Golden Model -> tests/invariants -> RTL contract -> RTL.
+Spec evidence -> ontology -> atomic requirement -> behavior contract -> Golden Model -> tests/invariants -> RTL contract -> RTL.
 
 ## Current priority
-Pilot the Data Link layer (§5.5), then expand after traceability and validation rules are stable.
+Build the full understanding baseline from Encoding layer (§5.4) first, then extend the same schema to Data Link (§5.5) and Network/Router (§5.6).
