@@ -26,3 +26,21 @@ vectors:
   - {id: TV-DL-022, stimulus: {rx_fifo_free: 7, rx_credit: 0}, expect: {FCT_allowed: false}}
   - {id: TV-DL-023, stimulus: {broadcast_request: true, state: Ready}, expect: {accepted_for_later_TX: false}}
   - {id: TV-DL-024, stimulus: {recovery: true, rx_packet_open: true}, expect: {append_EEP: true}}
+  - {id: TV-DL-025, stimulus: {direction: network_to_data_link, kind: NCHAR, state: Run, tx_credit: 1, value: 85}, expect: {direction: network_to_encoding, tx_credit: 0}}
+  - {id: TV-DL-026, stimulus: {direction: encoding_to_data_link, kind: NCHAR, state: Run, rx_credit: 1, value: 85}, expect: {direction: encoding_to_network, rx_credit: 0}}
+  - {id: TV-DL-027, stimulus: {direction: network_to_data_link, kind: BROADCAST_CODE, state: Run, value: 7}, expect: {direction: network_to_encoding}}
+  - {id: TV-DL-028, stimulus: {direction: encoding_to_data_link, kind: BROADCAST_CODE, state: Run, value: 7}, expect: {direction: encoding_to_network}}
+  - {id: TV-DL-029, stimulus: {state: ErrorWait, gotFCT: true}, expect: {state: ErrorReset}}
+  - {id: TV-DL-030, stimulus: {state: Ready, gotNChar: true}, expect: {state: ErrorReset}}
+  - {id: TV-DL-031, stimulus: {state: Started, gotBC: true}, expect: {state: ErrorReset}}
+  - {id: TV-DL-032, stimulus: {state: Connecting, gotNChar: true}, expect: {state: ErrorReset}}
+  - {id: TV-DL-033, stimulus: {error_reset_delay_us: 5.82}, expect: {valid: true}}
+  - {id: TV-DL-034, stimulus: {error_reset_delay_us: 7.23}, expect: {valid: false}}
+  - {id: TV-DL-035, stimulus: {state_timeout_us: 14.33}, expect: {valid: true}}
+  - {id: TV-DL-036, stimulus: {state_timeout_us: 14.34}, expect: {valid: false}}
+  - {id: TV-DL-037, stimulus: {state: ErrorReset, pending_broadcast: 3}, expect: {pending_broadcast: null}}
+  - {id: TV-DL-038, stimulus: {state: Ready, broadcast_request: true}, expect: {accepted: false}}
+  - {id: TV-DL-039, stimulus: {state: Run, broadcast_request: true}, expect: {accepted: true}}
+  - {id: TV-DL-040, stimulus: {state: Started, candidates: [FCT,NCHAR,BROADCAST_CODE]}, expect: {selected: NULL}}
+  - {id: TV-DL-041, stimulus: {state: Connecting, candidates: [FCT,NCHAR,BROADCAST_CODE]}, expect: {selected: FCT}}
+  - {id: TV-DL-042, stimulus: {recovery: true, last_rx_was_EOP: true}, expect: {extra_EEP_allowed: true, reference_trace_extra_EEP: false}}
