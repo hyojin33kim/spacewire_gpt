@@ -52,7 +52,7 @@ service_contract:
     - DISTRIBUTED_INTERRUPT_ACK.indication
 
 source_conflicts:
-  - id: CR-NET-001
+  - issue_ref: CR-NET-001
     selected_semantics: zero_data_character_packet_is_syntactically_valid_and_first_router_discards
 
 invariants:
