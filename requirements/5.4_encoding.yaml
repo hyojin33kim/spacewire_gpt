@@ -1,7 +1,7 @@
 schema_version: 1
 spec: ECSS-E-ST-50-12C-Rev.1
 layer: Encoding
-scope: "5.4.2 through 5.4.4 initial baseline"
+scope: "5.4.2 through 5.4.11"
 status: draft
 
 requirements:
@@ -375,6 +375,267 @@ requirements:
     subject: receiver
     trigger: simultaneous_data_strobe_transition
     action: tolerate_without_lockup
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+
+  - id: SPW-5.4.5-a
+    source_clause: "5.4.5.a"
+    normative_level: SHALL
+    subject: FIRST_NULL
+    trigger: first_Null_after_TX_ENABLE_asserted
+    action: set_first_bit_parity_to_zero
+    result: first_transition_on_strobe
+    evidence: ["text", "Figure 5-17"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.6-a
+    source_clause: "5.4.6.a"
+    normative_level: SHALL
+    subject: null_detection
+    precondition: receiver_enabled
+    action: enable
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.6-b
+    source_clause: "5.4.6.b"
+    normative_level: SHALL
+    subject: GOT_NULL
+    action: clear_only_when_RX_ENABLE_deasserted
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.6-c
+    source_clause: "5.4.6.c"
+    normative_level: SHALL
+    subject: first_Null_detection
+    trigger: first_Null_after_receiver_enabled
+    action: include_all_three_Null_related_parity_bits
+    evidence: ["text", "Figure 5-18"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.6-d
+    source_clause: "5.4.6.d"
+    normative_level: SHALL
+    subject: GOT_NULL
+    trigger: first_Null_after_receiver_enabled_detected
+    action: assert
+    evidence: ["text", "Figure 5-18"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.7-a
+    source_clause: "5.4.7.a"
+    normative_level: SHALL
+    subject: parity_detection
+    precondition:
+      - receiver_enabled
+      - gotNull_asserted
+    action: enable
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.7-b
+    source_clause: "5.4.7.b"
+    normative_level: SHALL
+    subject: PARITY_ERROR
+    trigger: parity_check
+    precondition: parity_is_not_odd
+    action: detect
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.8-a
+    source_clause: "5.4.8.a"
+    normative_level: SHALL
+    subject: SpaceWire_input_port
+    action: detect_disconnect
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.8-b
+    source_clause: "5.4.8.b"
+    normative_level: SHALL
+    subject: DISCONNECT_DETECTION
+    trigger:
+      - link_state_machine_leaves_ErrorReset
+      - first_edge_detected_on_Data_or_Strobe
+    action: enable
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.8-c
+    source_clause: "5.4.8.c"
+    normative_level: SHALL
+    subject: DISCONNECT
+    trigger: elapsed_time_since_last_Data_or_Strobe_transition
+    constraint:
+      threshold_lower_bound: "727 ns"
+      threshold_upper_bound: "1 us"
+    action: assert_disconnect_when_timeout_exceeded
+    evidence: text
+    assumption_status: "threshold represented as allowed implementation range; exact implementation threshold deferred"
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.9-a
+    source_clause: "5.4.9.a"
+    normative_level: SHALL
+    subject: ESC_ERROR
+    trigger: ESC_received
+    precondition: next_character_in_[ESC,EOP,EEP]
+    action: assert_ESC_error
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.9-b
+    source_clause: "5.4.9.b"
+    normative_level: SHALL
+    subject: ESC_error_detection
+    precondition: gotNull_asserted
+    action: enable
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.1-a
+    source_clause: "5.4.10.1.a"
+    normative_level: SHALL
+    subject: output_port
+    trigger: [reset, disconnect]
+    action: start_operating
+    result: "10 ±1 Mb/s"
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.1-b
+    source_clause: "5.4.10.1.b"
+    normative_level: SHALL
+    subject: output_port
+    precondition: no_new_rate_command
+    action: remain_at_initial_rate
+    result: "10 ±1 Mb/s"
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.2-a
+    source_clause: "5.4.10.2.a"
+    normative_level: SHALL
+    subject: output_port
+    constraint: minimum_supported_data_signalling_rate
+    result: "2 Mbps"
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.2-b
+    source_clause: "5.4.10.2.b"
+    normative_level: MAY
+    subject: output_port
+    precondition: operation_as_low_as_2_Mbps_not_required
+    permission: minimum_rate_may_be_above_2_Mbps
+    constraint: "minimum_rate <= 10 Mbps + 10%"
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.3-a
+    source_clause: "5.4.10.3.a"
+    normative_level: SHALL
+    subject: maximum_data_signalling_rate
+    action: determine_highest_operable_rate
+    factors: [signal_attenuation, skew, jitter]
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.3-b
+    source_clause: "5.4.10.3.b"
+    normative_level: SHALL
+    subject: maximum_data_signalling_rate
+    action: specify_per_implementation
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.3-c
+    source_clause: "5.4.10.3.c"
+    normative_level: SHALL
+    subject: maximum_data_signalling_rate
+    constraint: fastest_rate_with_correct_received_bit_decoding
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.3-d
+    source_clause: "5.4.10.3.d"
+    normative_level: SHALL
+    subject: maximum_data_signalling_rate
+    constraint: not_less_than_initial_operating_rate
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.4-a
+    source_clause: "5.4.10.4.a"
+    normative_level: SHALL
+    subject: opposite_output_ports_of_same_link
+    capability: operate_at_different_data_signalling_rates
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.10.4-b
+    source_clause: "5.4.10.4.b"
+    normative_level: SHALL
+    subject: output_ports_within_network
+    capability: operate_at_different_data_signalling_rates
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.11-a-1
+    source_clause: "5.4.11.a.1"
+    normative_level: SHOULD
+    subject: LINK_SPEED
+    action: provide_management_parameter
+    parameter: "Link speed(port)"
+    effect: controls_operational_data_signalling_rate_of_specified_port
     evidence: text
     assumption_status: none
     review_status: draft
