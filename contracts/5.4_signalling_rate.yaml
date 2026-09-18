@@ -1,0 +1,72 @@
+schema_version: 1
+id: BC-ENC-RATE-001
+name: Encoding data signalling rate behavior
+spec: ECSS-E-ST-50-12C-Rev.1
+scope: ["5.4.10", "5.4.11"]
+status: draft
+
+inputs:
+  - reset
+  - disconnect
+  - link_speed_management_parameter
+  - implementation_capability
+  - physical_link_constraints
+
+state:
+  - configured_output_rate
+
+outputs:
+  - operational_output_rate
+
+behavior:
+  initialization:
+    on: [reset, disconnect]
+    rate: "10 ±1 Mb/s"
+    hold_until_reconfigured: true
+
+  minimum_rate:
+    mandatory: "2 Mbps"
+    tailoring_permission:
+      condition: operation_as_low_as_2_Mbps_not_required
+      permitted_minimum: "> 2 Mbps"
+      upper_limit: "10 Mbps + 10%"
+
+  maximum_rate:
+    determine_from:
+      - signal_attenuation
+      - skew
+      - jitter
+      - correct_received_bit_decoding
+    implementation_specific: true
+    minimum_constraint: ">= initial operating rate"
+
+  asymmetry:
+    opposite_directions_same_link_may_use_different_rates: true
+    different_ports_in_network_may_use_different_rates: true
+
+management:
+  parameter: "Link speed(port)"
+  normative_level: SHOULD
+  effect: control_operational_data_signalling_rate
+
+invariants:
+  - after_reset_or_disconnect_output_rate_is_initial_rate
+  - maximum_rate_is_not_less_than_initial_rate
+
+requirements:
+  - SPW-5.4.10.1-a
+  - SPW-5.4.10.1-b
+  - SPW-5.4.10.2-a
+  - SPW-5.4.10.2-b
+  - SPW-5.4.10.3-a
+  - SPW-5.4.10.3-b
+  - SPW-5.4.10.3-c
+  - SPW-5.4.10.3-d
+  - SPW-5.4.10.4-a
+  - SPW-5.4.10.4-b
+  - SPW-5.4.11-a-1
+
+open_questions:
+  - id: OQ-ENC-RATE-001
+    issue: "Maximum signalling rate is not a protocol constant; it depends on implementation and physical-layer constraints."
+    classification: system_rtl_contract_boundary
