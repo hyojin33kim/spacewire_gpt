@@ -1,2 +1,26 @@
 schema_version: 1
-relations: []
+spec: ECSS-E-ST-50-12C-Rev.1
+
+relations:
+  - {subject: DATA_CHARACTER, predicate: encoded_as, object: DATA_SYMBOL, source: "5.4.3.1"}
+  - {subject: CONTROL_CHARACTER, predicate: encoded_as, object: CONTROL_SYMBOL, source: "5.4.3.2"}
+  - {subject: NULL, predicate: composed_of, object: "[ESC,FCT]", source: "5.4.3.3.b"}
+  - {subject: BROADCAST_CODE, predicate: composed_of, object: "[ESC,DATA_CHARACTER]", source: "5.4.3.3.c"}
+  - {subject: PARITY_BIT, predicate: enforces, object: odd_parity, source: "5.4.3.4.c"}
+  - {subject: DATA_CHARACTER, predicate: serialized_order, object: LSB_first, source: "5.4.3.1.c"}
+  - {subject: SERIAL_BIT_STREAM, predicate: encoded_to, object: "[DATA_SIGNAL,STROBE_SIGNAL]", source: "5.4.4.a"}
+  - {subject: STROBE_SIGNAL, predicate: toggles_when, object: consecutive_data_bits_equal, source: "5.4.4.a.2"}
+  - {subject: GOT_NULL, predicate: gates_delivery_to, object: DATA_LINK_LAYER, source: "5.4.2.d"}
+  - {subject: RX_ENABLE, predicate: enables, object: null_detection, source: "5.4.6.a"}
+  - {subject: RX_ENABLE, predicate: deassertion_clears, object: GOT_NULL, source: "5.4.6.b"}
+  - {subject: GOT_NULL, predicate: enables, object: parity_detection, source: "5.4.7.a"}
+  - {subject: GOT_NULL, predicate: enables, object: ESC_ERROR_detection, source: "5.4.9.b"}
+  - {subject: DISCONNECT, predicate: reported_to, object: DATA_LINK_LAYER, source: "5.4.2.f.1"}
+  - {subject: RECEIVE_ERROR, predicate: reported_to, object: DATA_LINK_LAYER, source: "5.4.2.f.2"}
+  - {subject: GOT_NULL, predicate: reported_to, object: DATA_LINK_LAYER, source: "5.4.2.f.3"}
+  - {subject: TX_ENABLE, predicate: controls, object: transmitter_chain, source: "5.4.2.e.1"}
+  - {subject: RX_ENABLE, predicate: controls, object: receiver_chain, source: "5.4.2.e.2"}
+  - {subject: DISCONNECT, predicate: timeout_since, object: last_data_or_strobe_transition, source: "5.4.8.c"}
+  - {subject: DATA_SIGNALLING_RATE, predicate: initial_value, object: "10±1 Mbps", source: "5.4.10.1"}
+  - {subject: DATA_SIGNALLING_RATE, predicate: minimum_value, object: "2 Mbps", source: "5.4.10.2"}
+review_status: draft
