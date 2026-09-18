@@ -2,29 +2,44 @@ schema_version: 1
 baseline_id: semantic-router-v0.1
 spec: ECSS-E-ST-50-12C-Rev.1
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
-status: freeze_candidate_pending_DL_interface_closure
+status: frozen
 date: "2026-09-18"
-scope: ["3.2.92-3.2.94","5.6.4.6-5.6.4.7","5.6.5.5","5.6.5.7","5.6.8","5.6.9"]
+semantic_content_commit: c2519e4b55a89db2e8c2b5a74b654180002e3977
+scope: ["3.2.92-3.2.94", "5.6.4.6-5.6.4.7", "5.6.5.5", "5.6.5.7", "5.6.8-5.6.9"]
+
+artifacts:
+  ontology: [ontology/entities.yaml, ontology/relations.yaml]
+  requirements: [requirements/5.6_router.yaml]
+  contract: contracts/5.6_router.yaml
+  pre_golden_vectors: verification/pre_golden/5.6_router_vectors.yaml
+  pre_golden_invariants: verification/pre_golden/5.6_router_invariants.yaml
+  golden_model: golden_model/router/model.py
+
+counts:
+  atomic_requirements: 101
+  concrete_pre_golden_vectors: 34
+  pre_golden_invariants: 9
+
 freeze_gate:
-  scope_closure: PASS
-  semantic_closure: PASS
-  figure_closure: PASS
-  state_boundary_ownership: PASS
-  ambiguity_closure: PASS
-  pre_golden_verification_closure: PASS
-independent_challenge: PASS
+  G1_structural_integrity: PASS
+  G2_spec_fidelity: PASS
+  G3_executability_pre_golden: PASS
+  G4_boundary_ownership: PASS
+  G5_independent_challenge: PASS
+
 selected_optionals:
-  group_adaptive_logical: true
-  legacy_group_adaptive_path: false
-  multicast: true
+  logical_group_adaptive_routing: true
+  legacy_path_adaptive_routing: false
+  packet_multicast: true
   port_timeout: true
   per_port_timeout: true
   timecode_relay: true
   distributed_interrupt_relay: true
-arbitration:
-  normative: fair
-  reference_trace_only: round_robin
-golden_model: golden_model/router/model.py
-validation: pending_CI
+  interrupt_relay_register_bits: 32
+  per_port_interrupt_and_ack_enables: true
+  arbitration_semantic: fair
+  deterministic_reference_trace_scheduler: round_robin
 
-blocking_issue: CR-DL-001
+known_nonblocking_source_issues: [CR-RTR-001]
+golden_model_authorized: true
+rtl_contract_authorized: false
