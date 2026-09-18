@@ -1,0 +1,11 @@
+schema_version: 1
+baseline: semantic-network-v0.1
+status: frozen
+invariants:
+  - {id: INV-NET-001, rule: "N-Chars from different packets are not interleaved", source: ["5.6.2.2"]}
+  - {id: INV-NET-002, rule: "Time-code value is six bits", source: ["5.6.4.2"]}
+  - {id: INV-NET-003, rule: "A valid time-code equals previous register plus one modulo 64", source: ["5.6.4.5"]}
+  - {id: INV-NET-004, rule: "An invalid received time-code updates the register but does not generate a valid host indication", source: ["5.6.4.9","6.1.2.3"]}
+  - {id: INV-NET-005, rule: "Network broadcast priority is Time-code > Interrupt ACK > Interrupt", source: ["5.6.3.d"]}
+  - {id: INV-NET-006, rule: "Interrupt and ACK identifiers are in 0..31 and an ACK preserves the interrupt IID", source: ["5.6.5.2","5.6.5.3"]}
+  - {id: INV-NET-007, rule: "Broadcast types 01 and 11 are never forwarded by routing switches and are discarded by nodes", source: ["5.6.3.e","5.6.3.f"]}
