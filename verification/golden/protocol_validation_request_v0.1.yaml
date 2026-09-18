@@ -1,0 +1,19 @@
+schema_version: 1
+artifact_id: PROTOCOL-GOLDEN-VALIDATION-REQUEST-V0.1
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+semantic_baselines:
+  - semantic-encoding-v0.1
+  - semantic-datalink-v0.1
+  - semantic-network-v0.1
+  - semantic-router-v0.1
+semantic_content_commit: c2519e4b55a89db2e8c2b5a74b654180002e3977
+expected_closure:
+  atomic_requirements_total: 470
+  concrete_pre_golden_vectors_total: 150
+  pre_golden_invariants_total: 36
+  data_link_vectors: 42
+  network_vectors: 29
+  router_vectors: 34
+  protocol_invariants_excluding_encoding: 24
+status: validation_requested
