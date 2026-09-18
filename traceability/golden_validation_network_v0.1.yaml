@@ -1,0 +1,34 @@
+schema_version: 1
+artifact: Network Golden Model validation result
+semantic_baseline: semantic-network-v0.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+validated_repo_commit: "34f6406014560045d0ec35e61381c7011f6a8c51"
+github_actions_golden_run_id: 35360571671
+github_actions_semantic_run_id: 35360571669
+status: PASS
+
+results:
+  atomic_requirements: 123
+  unittest_behavior_methods: 5
+  pre_golden_vectors_total: 29
+  pre_golden_vectors_mapped: 29
+  pre_golden_invariants_total: 7
+  mapping_closure: "29/29 vectors"
+  structural_lint: PASS
+  protocol_invariant_suite: PASS
+
+validated_behavior_groups:
+  - packet_and_terminator_semantics
+  - no_packet_NChar_interleaving
+  - time_code_validation_and_resynchronisation
+  - distributed_interrupt_and_acknowledgement_semantics
+  - broadcast_priority_and_reserved_types
+  - network_service_primitives
+  - selected_source_multicast_and_loopback_capabilities
+
+known_nonblocking_source_issues: [CR-NET-001]
+
+authorization:
+  RTL_contract_creation: true
+  RTL_implementation: false
+  RTL_implementation_condition: reviewed_Network_or_system_boundary_contract
