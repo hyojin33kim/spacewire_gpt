@@ -1,0 +1,47 @@
+schema_version: 1
+baseline: semantic-router-v0.1
+artifact: Golden Model validation coverage
+status: validated
+mapping:
+  test_path_and_logical_vectors:
+    - TV-RTR-001
+    - TV-RTR-002
+    - TV-RTR-003
+    - TV-RTR-004
+    - TV-RTR-005
+    - TV-RTR-006
+    - TV-RTR-008
+    - TV-RTR-031
+  test_adaptive_and_multicast_vectors:
+    - TV-RTR-007
+    - TV-RTR-009
+    - TV-RTR-010
+    - TV-RTR-011
+  test_reset_vectors:
+    - TV-RTR-012
+    - TV-RTR-029
+  test_timeout_vectors:
+    - TV-RTR-013
+    - TV-RTR-033
+    - TV-RTR-034
+  test_timecode_vectors:
+    - TV-RTR-014
+    - TV-RTR-015
+    - TV-RTR-030
+  test_interrupt_vectors:
+    - TV-RTR-016
+    - TV-RTR-017
+    - TV-RTR-018
+    - TV-RTR-024
+    - TV-RTR-025
+    - TV-RTR-026
+    - TV-RTR-027
+    - TV-RTR-028
+  test_wormhole_vectors:
+    - TV-RTR-019
+    - TV-RTR-020
+    - TV-RTR-021
+    - TV-RTR-022
+    - TV-RTR-023
+  test_fair_reference_scheduler:
+    - TV-RTR-032
