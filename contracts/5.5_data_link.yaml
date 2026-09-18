@@ -3,7 +3,7 @@ id: BC-DL-V0.1
 name: Data Link semantic behavior contract
 spec: ECSS-E-ST-50-12C-Rev.1
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
-status: frozen
+status: review_blocked_CR-DL-001
 requirements_source: requirements/5.5_data_link.yaml
 
 state:
