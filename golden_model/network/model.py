@@ -34,6 +34,11 @@ def packets_interleaved(stream_packet_ids: list[int]) -> bool:
     return False
 
 
+def first_router_packet_action(packet: Packet) -> str:
+    # 5.6.2.1.d NOTE: empty packets are discarded by the first routing switch.
+    return "DISCARD" if len(packet.data) == 0 else "ROUTE"
+
+
 class BroadcastKind(str, Enum):
     TIME_CODE = "TIME_CODE"
     INTERRUPT_ACK = "INTERRUPT_ACK"
