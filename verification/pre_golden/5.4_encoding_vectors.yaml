@@ -1,0 +1,197 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+artifact: Encoding pre-Golden test vectors and invariants
+status: draft
+purpose: >
+  Independent expected behavior derived from specification/contracts before
+  executable Golden Model implementation. These vectors are not generated
+  from Golden Model code.
+
+test_groups:
+  - id: TV-ENC-CHAR
+    contract: BC-ENC-CHAR-001
+    vectors:
+      - id: TV-ENC-CHAR-001
+        stimulus: {kind: data_character, value: "0x00"}
+        expect:
+          symbol_width_bits: 10
+          data_control_flag: 0
+          data_order: LSB_first
+      - id: TV-ENC-CHAR-002
+        stimulus: {kind: data_character, value: "0xA5"}
+        expect:
+          symbol_width_bits: 10
+          data_control_flag: 0
+          data_order: LSB_first
+      - id: TV-ENC-CTRL-001
+        stimulus: {kind: control_character, value: FCT}
+        expect: {symbol_width_bits: 4, data_control_flag: 1, control_type: "0b00"}
+      - id: TV-ENC-CTRL-002
+        stimulus: {kind: control_character, value: EOP}
+        expect: {symbol_width_bits: 4, data_control_flag: 1, control_type: "0b10"}
+      - id: TV-ENC-CTRL-003
+        stimulus: {kind: control_character, value: EEP}
+        expect: {symbol_width_bits: 4, data_control_flag: 1, control_type: "0b01"}
+      - id: TV-ENC-CTRL-004
+        stimulus: {kind: control_character, value: ESC}
+        expect: {symbol_width_bits: 4, data_control_flag: 1, control_type: "0b11"}
+      - id: TV-ENC-CODE-001
+        stimulus: {kind: control_code, value: NULL}
+        expect: {sequence: [ESC, FCT]}
+      - id: TV-ENC-CODE-002
+        stimulus: {kind: broadcast_code, value: "0b10101101"}
+        expect:
+          sequence: [ESC, DATA_CHARACTER]
+          type_field: "B7:B6"
+          value_field: "B5:B0"
+
+  - id: TV-ENC-PARITY
+    contract: BC-ENC-CHAR-001
+    vectors:
+      - id: TV-ENC-PARITY-001
+        stimulus: sequence_from_figure_5_15_example
+        expect:
+          property: odd_parity_for_each_defined_coverage_window
+          evidence: "Figure 5-15"
+      - id: TV-ENC-PARITY-002
+        stimulus: flip_one_bit_inside_parity_coverage
+        expect: {parity_error: true}
+      - id: TV-ENC-PARITY-003
+        stimulus: same_current_character_with_different_previous_character_context
+        expect:
+          property: parity_may_differ
+          reason: parity_is_history_dependent
+
+  - id: TV-ENC-DS
+    contract: BC-ENC-DS-001
+    vectors:
+      - id: TV-ENC-DS-001
+        stimulus: {serial_bits: [0,1,0,0,1,1,0,1,1,0]}
+        expect:
+          data_follows_bitstream: true
+          strobe_toggles_when_consecutive_data_bits_equal: true
+          evidence: "Figure 5-16"
+      - id: TV-ENC-DS-002
+        stimulus: power_up_reset
+        expect: {Data: 0, Strobe: 0}
+      - id: TV-ENC-DS-003
+        stimulus: controlled_output_port_reset_after_transmission
+        expect:
+          simultaneous_Data_Strobe_transition: false
+          inter_signal_reset_delay_min: "500 ns"
+          inter_signal_reset_delay_max: implementation_dependent
+      - id: TV-ENC-DS-004
+        stimulus: simultaneous_Data_Strobe_transition_at_receiver
+        expect: {receiver_lockup: false}
+
+  - id: TV-ENC-NULL
+    contract: BC-ENC-RXERR-001
+    vectors:
+      - id: TV-ENC-NULL-001
+        stimulus: first_Null_after_TX_ENABLE_asserted
+        expect:
+          first_bit: parity_zero
+          first_transition: Strobe
+          evidence: "Figure 5-17"
+      - id: TV-ENC-NULL-002
+        stimulus: valid_first_Null_after_RX_ENABLE
+        expect: {gotNull: asserted}
+      - id: TV-ENC-NULL-003
+        stimulus: RX_ENABLE_deasserted_after_gotNull
+        expect: {gotNull: cleared}
+      - id: TV-ENC-NULL-004
+        stimulus: received_character_before_gotNull
+        expect: {deliver_to_data_link: false}
+      - id: TV-ENC-NULL-005
+        stimulus: first_Null_with_error_in_any_required_parity_context
+        expect: {gotNull: not_asserted}
+
+  - id: TV-ENC-ERR
+    contract: BC-ENC-RXERR-001
+    vectors:
+      - {id: TV-ENC-ERR-001, stimulus: [ESC, ESC], expect: {ESC_error: true}}
+      - {id: TV-ENC-ERR-002, stimulus: [ESC, EOP], expect: {ESC_error: true}}
+      - {id: TV-ENC-ERR-003, stimulus: [ESC, EEP], expect: {ESC_error: true}}
+      - {id: TV-ENC-ERR-004, stimulus: [ESC, FCT], expect: {ESC_error: false, decode_as: NULL}}
+      - {id: TV-ENC-ERR-005, stimulus: [ESC, DATA_CHARACTER], expect: {ESC_error: false, decode_as: BROADCAST_CODE}}
+      - id: TV-ENC-ERR-006
+        stimulus: parity_error_before_gotNull
+        expect:
+          parity_error_detection_active: false
+      - id: TV-ENC-ERR-007
+        stimulus: parity_error_after_gotNull
+        expect:
+          parity_error_detection_active: true
+
+  - id: TV-ENC-DISC
+    contract: BC-ENC-RXERR-001
+    vectors:
+      - id: TV-ENC-DISC-001
+        stimulus: no_edge_before_detection_is_armed
+        expect: {disconnect: false}
+      - id: TV-ENC-DISC-002
+        stimulus: first_edge_after_leaving_ErrorReset
+        expect: {disconnect_detection_armed: true}
+      - id: TV-ENC-DISC-003
+        stimulus: elapsed_since_last_edge_at_or_below_selected_threshold
+        expect: {disconnect: false}
+      - id: TV-ENC-DISC-004
+        stimulus: elapsed_since_last_edge_above_selected_threshold
+        expect: {disconnect: true}
+      - id: TV-ENC-DISC-005
+        configuration_constraint:
+          selected_threshold: "must satisfy >727 ns and <=1 us"
+        expect: {configuration_valid: true}
+
+  - id: TV-ENC-IF
+    contracts: [BC-ENC-PIPE-001, BC-ENC-IF-001]
+    vectors:
+      - id: TV-ENC-IF-001
+        stimulus: TX_ENABLE_request
+        expect: {output_port_enabled: true}
+      - id: TV-ENC-IF-002
+        stimulus: RX_ENABLE_request
+        expect: {input_port_enabled: true}
+      - id: TV-ENC-IF-003
+        stimulus: receive_error_parity
+        expect:
+          indication: RECEIVE_ERROR
+          RX_Error_Flags_contains: parity_error
+      - id: TV-ENC-IF-004
+        stimulus: receive_error_ESC
+        expect:
+          indication: RECEIVE_ERROR
+          RX_Error_Flags_contains: ESC_error
+      - id: TV-ENC-IF-005
+        stimulus: gotNull_event
+        expect:
+          indication: gotNull
+          data_link_effect_reference: "5.5.7 / Figure 5-19 per interpretation DEC-ENC-001"
+
+invariants:
+  - id: INV-ENC-001
+    statement: characters_and_control_codes_preserve_TX_order
+  - id: INV-ENC-002
+    statement: valid_received_items_preserve_RX_order
+  - id: INV-ENC-003
+    statement: received_items_with_parity_error_are_never_delivered_to_data_link
+  - id: INV-ENC-004
+    statement: received_items_are_not_delivered_to_data_link_before_gotNull
+  - id: INV-ENC-005
+    statement: gotNull_remains_asserted_until_RX_ENABLE_deasserts
+  - id: INV-ENC-006
+    statement: parity_detection_and_ESC_error_detection_are_gated_by_gotNull
+  - id: INV-ENC-007
+    statement: normal_DS_encoding_does_not_require_simultaneous_Data_and_Strobe_transition
+  - id: INV-ENC-008
+    statement: controlled_reset_avoids_simultaneous_Data_and_Strobe_transition
+  - id: INV-ENC-009
+    statement: disconnect_detection_is_not_armed_until_first_edge_after_ErrorReset_exit
+  - id: INV-ENC-010
+    statement: RECEIVE_ERROR_indication_preserves_error_kind
+  - id: INV-ENC-011
+    statement: maximum_signalling_rate_is_not_less_than_initial_operating_rate
+
+freeze_requirement:
+  all_vectors_source_traceable: true
+  golden_model_must_not_generate_expected_values_for_these_vectors: true
