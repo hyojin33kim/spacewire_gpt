@@ -153,4 +153,25 @@ entities:
     unit: Mbps
     source: ["3.2.20", "5.4.10"]
 
+  - id: FIRST_NULL
+    canonical_name: first Null
+    kind: protocol_event
+    source: ["3.2.41", "5.4.5", "5.4.6"]
+
+  - id: DISCONNECT_DETECTION
+    canonical_name: disconnect detection
+    kind: receiver_function
+    source: ["5.4.8"]
+
+  - id: LINK_SPEED
+    canonical_name: Link speed
+    kind: management_parameter
+    unit: Mbps
+    source: ["5.4.10", "5.4.11"]
+
+  - id: ERROR_RESET_STATE
+    canonical_name: ErrorReset
+    kind: data_link_state
+    source: ["5.4.4.d", "5.4.8.b", "5.5.7.2"]
+
 review_status: draft
