@@ -12,7 +12,7 @@ implementation_profile:
   intent: flight_fpga
   system_clock_hz:
     value: 100000000
-    status: project_assumption_to_confirm
+    status: confirmed
   minimum_link_rate_mbps:
     value: 2
     status: required_unless_project_tailoring
@@ -21,11 +21,11 @@ implementation_profile:
     tolerance_mbps: 1
     status: normative
   maximum_operational_link_rate_mbps:
-    value: TBD
-    status: BLOCKING_MISSION_REQUIREMENT
+    value: 200
+    status: confirmed_project_requirement
   target_fpga_family_device:
-    value: TBD
-    status: BLOCKING_IMPLEMENTATION_INPUT
+    value: "Xilinx Zynq-7020 (7-series)"
+    status: confirmed
 
 module_partition:
   - spw_encoding_tx
@@ -80,20 +80,46 @@ data_link_control:
 physical_DS_interface:
   tx_outputs: [data_o, strobe_o]
   rx_inputs: [data_i, strobe_i]
+
+  architectural_boundary:
+    fixed: true
+    rule: >
+      The RX PHY is a Xilinx-7-series-specific implementation boundary.
+      Its internal capture method is intentionally not frozen at this stage.
+      It shall present decoded receive items and receive events into the
+      100 MHz protocol-core domain through an explicit CDC boundary.
+    rx_phy_vendor_scope: xilinx_7_series_specific
+    core_side_clock_hz: 100000000
+    core_side_outputs:
+      - rx_item_valid
+      - rx_item_kind
+      - rx_data_7_0
+      - got_null_event_or_state
+      - parity_error_event
+      - ESC_error_event
+      - disconnect_event
+    cdc_required_if_frontend_not_100MHz_domain: true
+
   rx_frontend_obligation:
     - detect_normal_single_signal_DS_transitions
     - recover_serial_data_bit_value
     - tolerate_simultaneous_Data_Strobe_transition_without_lockup
+    - preserve_receive_order
+    - transfer_decoded_items_and_events_safely_to_100MHz_core_domain
+
   capture_microarchitecture:
     value: TBD
+    status: DEFERRED_NOT_BLOCKING_FOR_ARCHITECTURAL_BOUNDARY
     candidates:
-      - oversampled_single_system_clock
-      - recovered_clock_or_vendor_input_primitive
+      - oversampling_or_SelectIO_based_capture
+      - recovered_edge_or_vendor_clocking_primitive_based_capture
     selection_depends_on:
-      - target_fpga_family_device
-      - maximum_operational_link_rate_mbps
+      - Zynq_7020_SelectIO_clocking_resources
+      - 200_Mbps_timing_feasibility
       - physical_skew_jitter_budget
-    status: BLOCKING
+      - CDC_and_timing_closure
+    prohibition:
+      - do_not_propagate_recovered_clock_into_DataLink_Router_or_AXI_domains
 
 tx_state_and_storage:
   required_state:
@@ -152,7 +178,7 @@ disconnect_timer:
 link_rate_generation:
   initial_after_reset_or_disconnect: "10 ±1 Mbps"
   minimum_supported_unless_tailored: "2 Mbps"
-  max_rate: TBD
+  max_rate: "200 Mbps"
   implementation:
     value: TBD
     reason: depends_on_required_rate_range_and_FPGA_clocking_resources
@@ -197,21 +223,36 @@ traceability:
     - SVA-ENC-008_ESC_error_gated_by_gotNull
     - SVA-ENC-009_receive_error_kind_stable_while_latched
 
-blocking_decisions_before_review:
+resolved_project_inputs:
   - id: RTL-BLOCK-001
-    decision: confirm_target_FPGA_family_and_device
-    reason: determines legal/robust DS input capture and clocking strategy
+    decision: target_FPGA_family_and_device
+    value: "Xilinx Zynq-7020"
+    status: closed
   - id: RTL-BLOCK-002
-    decision: confirm_mission_required_maximum_operational_link_rate
-    reason: determines RX architecture and link-rate generator
+    decision: mission_required_maximum_operational_link_rate
+    value: "200 Mbps"
+    status: closed
   - id: RTL-BLOCK-003
-    decision: confirm_100MHz_system_clock_for_target_build
-    reason: fixes disconnect/reset counters and rate generation choices
+    decision: system_clock_for_protocol_core
+    value: "100 MHz"
+    status: closed
+
+remaining_blocking_decisions_before_review:
+  - id: RTL-BLOCK-004
+    decision: choose_Zynq_7020_RX_PHY_capture_microarchitecture
+    reason: >
+      Must prove robust 2..200 Mbps receive capture and CDC/timing closure,
+      but the architecture is already fixed to keep this vendor-specific logic
+      behind the RX PHY boundary.
+  - id: RTL-BLOCK-005
+    decision: define_AXI4_Lite_clock_and_register_CDC_contract
+    reason: >
+      AXI4-Lite will be added later; decide whether ACLK is physically shared
+      with the 100 MHz core clock or isolated behind a register/CDC wrapper.
 
 hard_gate:
   RTL_implementation_allowed: false
   becomes_true_when:
-    - RTL-BLOCK-001_closed
-    - RTL-BLOCK-002_closed
-    - RTL-BLOCK-003_closed
+    - RTL-BLOCK-004_closed
+    - RTL-BLOCK-005_closed
     - contract_status_reviewed
