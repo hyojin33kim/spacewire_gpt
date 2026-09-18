@@ -1,0 +1,17 @@
+schema_version: 1
+baseline: semantic-network-v0.1
+status: frozen
+vectors:
+  - {id: TV-NET-001, stimulus: {data: [1,2,3], terminator: EOP}, expect: {valid_packet: true}}
+  - {id: TV-NET-002, stimulus: {data: [], terminator: EEP}, expect: {valid_packet: true}}
+  - {id: TV-NET-003, stimulus: {packetA: [1,2], packetB: [3,4], interleaved: true}, expect: {allowed: false}}
+  - {id: TV-NET-004, stimulus: {timecode_register: 5, received: 6}, expect: {valid: true, new_register: 6, notify_host: true}}
+  - {id: TV-NET-005, stimulus: {timecode_register: 63, received: 0}, expect: {valid: true, new_register: 0, notify_host: true}}
+  - {id: TV-NET-006, stimulus: {timecode_register: 5, received: 9}, expect: {valid: false, new_register: 9, notify_host: false}}
+  - {id: TV-NET-007, stimulus: {interrupt_IID: 0}, expect: {type: "0b10", value_bit5: 0}}
+  - {id: TV-NET-008, stimulus: {interrupt_IID: 31}, expect: {type: "0b10", value_bit5: 0}}
+  - {id: TV-NET-009, stimulus: {ack_IID: 17}, expect: {type: "0b10", value_bit5: 1, IID: 17}}
+  - {id: TV-NET-010, stimulus: {IID: 32}, expect: {valid_interrupt_identifier: false}}
+  - {id: TV-NET-011, stimulus: {mode: interrupt_with_acknowledgement, sources_for_IID: 2}, expect: {configuration_valid: false}}
+  - {id: TV-NET-012, stimulus: {feature: time_code}, expect: {supported: true}}
+  - {id: TV-NET-013, stimulus: {feature: distributed_interrupt}, expect: {supported: true}}
