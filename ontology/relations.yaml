@@ -33,4 +33,57 @@ relations:
   - {subject: LINK_SPEED, predicate: minimum_required, object: "2 Mbps", source: "5.4.10.2.a"}
   - {subject: LINK_SPEED, predicate: configured_by, object: MIB, source: "5.4.11.a.1"}
 
-review_status: draft
+
+  - {subject: DATA_LINK_LAYER, predicate: receives_from, object: NETWORK_LAYER, source: "5.5.2.a"}
+  - {subject: DATA_LINK_LAYER, predicate: sends_to, object: ENCODING_LAYER, source: "5.5.2.b"}
+  - {subject: DATA_LINK_LAYER, predicate: receives_from, object: ENCODING_LAYER, source: "5.5.2.c"}
+  - {subject: DATA_LINK_LAYER, predicate: sends_to, object: NETWORK_LAYER, source: "5.5.2.d"}
+  - {subject: FCT, predicate: authorizes, object: "8 N-Chars", source: "5.5.4.b"}
+  - {subject: TRANSMIT_CREDIT_COUNT, predicate: increments_on, object: FCT, source: "5.5.4.e.1"}
+  - {subject: TRANSMIT_CREDIT_COUNT, predicate: decrements_on, object: N_CHAR, source: "5.5.4.e.2"}
+  - {subject: RECEIVE_CREDIT_COUNT, predicate: increments_on, object: FCT, source: "5.5.4.l.1"}
+  - {subject: RECEIVE_CREDIT_COUNT, predicate: decrements_on, object: N_CHAR, source: "5.5.4.l.2"}
+  - {subject: ERROR_RESET_STATE, predicate: clears, object: TRANSMIT_CREDIT_COUNT, source: "5.5.4.g"}
+  - {subject: ERROR_RESET_STATE, predicate: clears, object: RECEIVE_CREDIT_COUNT, source: "5.5.4.m"}
+  - {subject: LINK_STATE_MACHINE, predicate: contains_state, object: ERROR_RESET_STATE, source: "5.5.7"}
+  - {subject: LINK_STATE_MACHINE, predicate: contains_state, object: ERROR_WAIT_STATE, source: "5.5.7"}
+  - {subject: LINK_STATE_MACHINE, predicate: contains_state, object: READY_STATE, source: "5.5.7"}
+  - {subject: LINK_STATE_MACHINE, predicate: contains_state, object: STARTED_STATE, source: "5.5.7"}
+  - {subject: LINK_STATE_MACHINE, predicate: contains_state, object: CONNECTING_STATE, source: "5.5.7"}
+  - {subject: LINK_STATE_MACHINE, predicate: contains_state, object: RUN_STATE, source: "5.5.7"}
+  - {subject: LINK_ERROR_RECOVERY_STATE_MACHINE, predicate: contains_state, object: NORMAL_STATE, source: "5.5.8"}
+  - {subject: LINK_ERROR_RECOVERY_STATE_MACHINE, predicate: contains_state, object: RECOVERY_STATE, source: "5.5.8"}
+  - {subject: LINK_ERROR, predicate: triggers, object: RECOVERY_STATE, source: "5.5.8.3"}
+  - {subject: PORT_RESET, predicate: resets, object: PORT, source: "5.5.3.a.1"}
+  - {subject: LINK_DISABLED, predicate: prevents_operation_of, object: PORT, source: "3.2.65"}
+  - {subject: LINK_START, predicate: requests_transition_toward, object: STARTED_STATE, source: "5.5.7.4"}
+  - {subject: AUTO_START, predicate: with_gotNull_requests_transition_toward, object: STARTED_STATE, source: "5.5.7.4"}
+
+  - {subject: PACKET, predicate: contains_prefix, object: DESTINATION_ADDRESS, source: "5.6.2.1.e"}
+  - {subject: PACKET, predicate: contains, object: CARGO, source: "5.6.2.1.f"}
+  - {subject: TIME_CODE, predicate: specialization_of, object: BROADCAST_CODE, source: "5.6.3.a"}
+  - {subject: DISTRIBUTED_INTERRUPT_CODE, predicate: specialization_of, object: BROADCAST_CODE, source: "5.6.3.b"}
+  - {subject: INTERRUPT_CODE, predicate: specialization_of, object: DISTRIBUTED_INTERRUPT_CODE, source: "5.6.3.c"}
+  - {subject: INTERRUPT_ACKNOWLEDGEMENT_CODE, predicate: specialization_of, object: DISTRIBUTED_INTERRUPT_CODE, source: "5.6.3.c"}
+  - {subject: INTERRUPT_CODE, predicate: identifies, object: INTERRUPT_IDENTIFIER, source: "5.6.5.2"}
+  - {subject: INTERRUPT_ACKNOWLEDGEMENT_CODE, predicate: identifies, object: INTERRUPT_IDENTIFIER, source: "5.6.5.3"}
+  - {subject: TIME_CODE_REGISTER, predicate: holds_last_received, object: TIME_CODE, source: "5.6.4.3"}
+  - {subject: NODE, predicate: comprises, object: END_POINT, source: "5.6.6"}
+  - {subject: NETWORK_LAYER, predicate: transfers, object: PACKET, source: "5.2.2"}
+  - {subject: NETWORK_LAYER, predicate: transfers, object: TIME_CODE, source: "5.2.2"}
+  - {subject: NETWORK_LAYER, predicate: transfers, object: DISTRIBUTED_INTERRUPT_CODE, source: "5.2.2"}
+
+  - {subject: ROUTING_SWITCH, predicate: comprises, object: SWITCH_MATRIX, source: "5.6.8.1"}
+  - {subject: ROUTING_SWITCH, predicate: comprises, object: ROUTING_TABLE, source: "5.6.8.1"}
+  - {subject: ROUTING_SWITCH, predicate: comprises, object: CONFIGURATION_NODE, source: "5.6.8.1"}
+  - {subject: CONFIGURATION_PORT, predicate: accesses, object: CONFIGURATION_NODE, source: "5.6.8.1"}
+  - {subject: ROUTING_TABLE, predicate: indexed_by, object: LOGICAL_ADDRESS, source: "5.6.8.4"}
+  - {subject: PATH_ADDRESS, predicate: directly_selects, object: OUTPUT_PORT, source: "5.6.8.3"}
+  - {subject: LOGICAL_ADDRESS, predicate: maps_via, object: ROUTING_TABLE, source: "5.6.8.4"}
+  - {subject: SWITCH_MATRIX, predicate: locks, object: OUTPUT_PORT, source: "5.6.8.7"}
+  - {subject: GROUP_ADAPTIVE_ROUTING, predicate: selects_from, object: "configured output-port set", source: "5.6.8.9"}
+  - {subject: MULTICAST, predicate: forwards_concurrently_to, object: MULTICAST_SET, source: "5.6.8.10"}
+  - {subject: PORT_TIMEOUT, predicate: detects_stuck_packet_on, object: PORT, source: "5.6.8.12"}
+  - {subject: INTERRUPT_RELAY_REGISTER, predicate: suppresses_duplicate, object: DISTRIBUTED_INTERRUPT_CODE, source: "5.6.5.5"}
+
+review_status: reviewed
