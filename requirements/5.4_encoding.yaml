@@ -1,0 +1,381 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+layer: Encoding
+scope: "5.4.2 through 5.4.4 initial baseline"
+status: draft
+
+requirements:
+  - id: SPW-5.4.2-a
+    source_clause: "5.4.2.a"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    trigger: receive_character_or_control_code_from_data_link
+    action: encode_serialize_ds_encode_transmit
+    constraint: preserve_input_order
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-b
+    source_clause: "5.4.2.b"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    trigger: receive_character_or_control_code_from_physical_side
+    action: pass_to_data_link
+    constraint: preserve_receive_order
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-c
+    source_clause: "5.4.2.c"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    trigger: decoded_character_or_control_code
+    precondition: no_parity_error
+    action: pass_to_data_link
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-d
+    source_clause: "5.4.2.d"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    trigger: decoded_character_or_control_code
+    precondition: gotNull_asserted
+    action: allow_delivery_to_data_link
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-e-1
+    source_clause: "5.4.2.e.1"
+    normative_level: SHALL
+    subject: TX_ENABLE
+    trigger: control_flag_change
+    action:
+      asserted: enable_transmitter_chain
+      deasserted: reset_transmitter_chain
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-e-2
+    source_clause: "5.4.2.e.2"
+    normative_level: SHALL
+    subject: RX_ENABLE
+    trigger: control_flag_change
+    action:
+      asserted: enable_receiver_chain
+      deasserted: reset_receiver_chain
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-f-1
+    source_clause: "5.4.2.f.1"
+    normative_level: SHALL
+    subject: DISCONNECT
+    action: report_status_to_data_link
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-f-2
+    source_clause: "5.4.2.f.2"
+    normative_level: SHALL
+    subject: RECEIVE_ERROR
+    action: report_status_to_data_link
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.2-f-3
+    source_clause: "5.4.2.f.3"
+    normative_level: SHALL
+    subject: GOT_NULL
+    action: report_status_to_data_link
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.1-a
+    source_clause: "5.4.3.1.a"
+    normative_level: SHALL
+    subject: DATA_CHARACTER
+    action: encode_as_data_symbol
+    result:
+      width_bits: 10
+      fields: [parity_bit, data_control_flag, data_7_0]
+    evidence: ["text", "Figure 5-11"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.1-b
+    source_clause: "5.4.3.1.b"
+    normative_level: SHALL
+    subject: DATA_CONTROL_FLAG
+    precondition: symbol_contains_data_character
+    action: set
+    result: 0
+    evidence: ["text", "Figure 5-11"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.1-c
+    source_clause: "5.4.3.1.c"
+    normative_level: SHALL
+    subject: DATA_CHARACTER
+    action: transmit_data_bits
+    constraint: least_significant_bit_first
+    evidence: ["text", "Figure 5-11"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.2-a
+    source_clause: "5.4.3.2.a"
+    normative_level: SHALL
+    subject: CONTROL_CHARACTER
+    action: encode_as_control_symbol
+    result:
+      width_bits: 4
+      fields: [parity_bit, data_control_flag, control_type_1_0]
+    evidence: ["text", "Figure 5-12"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.2-b
+    source_clause: "5.4.3.2.b"
+    normative_level: SHALL
+    subject: DATA_CONTROL_FLAG
+    precondition: symbol_contains_control_character
+    action: set
+    result: 1
+    evidence: ["text", "Figure 5-12"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.2-c
+    source_clause: "5.4.3.2.c"
+    normative_level: SHALL
+    subject: FCT
+    action: encode_control_type
+    result: "0b00"
+    evidence: ["text", "Figure 5-12"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.2-d
+    source_clause: "5.4.3.2.d"
+    normative_level: SHALL
+    subject: EOP
+    action: encode_control_type
+    result: "0b10"
+    evidence: ["text", "Figure 5-12"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.2-e
+    source_clause: "5.4.3.2.e"
+    normative_level: SHALL
+    subject: EEP
+    action: encode_control_type
+    result: "0b01"
+    evidence: ["text", "Figure 5-12"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.2-f
+    source_clause: "5.4.3.2.f"
+    normative_level: SHALL
+    subject: ESC
+    action: encode_control_type
+    result: "0b11"
+    evidence: ["text", "Figure 5-12"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.3-a
+    source_clause: "5.4.3.3.a"
+    normative_level: SHALL
+    subject: CONTROL_CODE
+    action: use_ESC_as_first_character
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.3-b
+    source_clause: "5.4.3.3.b"
+    normative_level: SHALL
+    subject: NULL
+    action: encode_sequence
+    result: [ESC, FCT]
+    evidence: ["text", "Figure 5-13"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.3-c
+    source_clause: "5.4.3.3.c"
+    normative_level: SHALL
+    subject: BROADCAST_CODE
+    action: encode_sequence
+    result: [ESC, DATA_CHARACTER]
+    evidence: ["text", "Figure 5-14"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.3-d-1
+    source_clause: "5.4.3.3.d.1"
+    normative_level: SHALL
+    subject: BROADCAST_CODE
+    action: map_field
+    result: "B7:B6 -> type"
+    evidence: ["text", "Figure 5-14"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.3-d-2
+    source_clause: "5.4.3.3.d.2"
+    normative_level: SHALL
+    subject: BROADCAST_CODE
+    action: map_field
+    result: "B5:B0 -> value"
+    evidence: ["text", "Figure 5-14"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.4-a
+    source_clause: "5.4.3.4.a"
+    normative_level: SHALL
+    subject: PARITY_BIT
+    action: assign_to_each_encoded_character
+    purpose: transmission_error_detection
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.4-b
+    source_clause: "5.4.3.4.b"
+    normative_level: SHALL
+    subject: PARITY_BIT
+    action: cover_previous_character_payload_plus_current_parity_and_dc_flag
+    evidence: ["text", "Figure 5-15"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.3.4-c
+    source_clause: "5.4.3.4.c"
+    normative_level: SHALL
+    subject: PARITY_BIT
+    action: choose_value
+    constraint: total_ones_in_covered_field_is_odd
+    evidence: ["text", "Figure 5-15"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.4-a-1
+    source_clause: "5.4.4.a.1"
+    normative_level: SHALL
+    subject: DATA_SIGNAL
+    trigger: serial_data_bit
+    action: drive_logic_value_equal_to_data_bit
+    evidence: ["text", "Figure 5-16"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.4-a-2
+    source_clause: "5.4.4.a.2"
+    normative_level: SHALL
+    subject: STROBE_SIGNAL
+    trigger: next_serial_data_bit
+    precondition: current_data_bit_equals_previous_data_bit
+    action: toggle
+    evidence: ["text", "Figure 5-16"]
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.4-b
+    source_clause: "5.4.4.b"
+    normative_level: SHALL
+    subject: [DATA_SIGNAL, STROBE_SIGNAL]
+    trigger: power_up_reset
+    action: set
+    result: [0, 0]
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.4-c
+    source_clause: "5.4.4.c"
+    normative_level: SHALL
+    subject: output_port_reset
+    action: controlled_reset
+    constraint: avoid_simultaneous_data_strobe_transitions
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.4-d
+    source_clause: "5.4.4.d"
+    normative_level: SHALL
+    subject: [DATA_SIGNAL, STROBE_SIGNAL]
+    trigger: link_state_enters_ErrorReset_after_transmission
+    action: reset_with_inter_signal_delay
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.4-e
+    source_clause: "5.4.4.e"
+    normative_level: SHALL
+    subject: controlled_reset_delay
+    constraint:
+      minimum: "500 ns"
+      maximum: "period of fastest transmit time for implementation"
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.4.4-f
+    source_clause: "5.4.4.f"
+    normative_level: SHALL
+    subject: receiver
+    trigger: simultaneous_data_strobe_transition
+    action: tolerate_without_lockup
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
