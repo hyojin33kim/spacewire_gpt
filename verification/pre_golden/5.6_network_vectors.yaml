@@ -15,3 +15,19 @@ vectors:
   - {id: TV-NET-011, stimulus: {mode: interrupt_with_acknowledgement, sources_for_IID: 2}, expect: {configuration_valid: false}}
   - {id: TV-NET-012, stimulus: {feature: time_code}, expect: {supported: true}}
   - {id: TV-NET-013, stimulus: {feature: distributed_interrupt}, expect: {supported: true}}
+  - {id: TV-NET-014, stimulus: {broadcast_candidates: [INTERRUPT,INTERRUPT_ACK,TIME_CODE]}, expect: {selected: TIME_CODE}}
+  - {id: TV-NET-015, stimulus: {broadcast_type: "0b01", entity: router}, expect: {action: DELETE_NOT_FORWARD}}
+  - {id: TV-NET-016, stimulus: {broadcast_type: "0b11", entity: node}, expect: {action: DISCARD}}
+  - {id: TV-NET-017, stimulus: {timecode_register: 22, PortReset: true}, expect: {timecode_register: 0}}
+  - {id: TV-NET-018, stimulus: {redundant_endpoint_registers: [TC0,TC0]}, expect: {valid: true}}
+  - {id: TV-NET-019, stimulus: {redundant_endpoint_registers: [TC0,TC1]}, expect: {valid: false}}
+  - {id: TV-NET-020, stimulus: {mode: interrupt, interval: 11, worst_interrupt_propagation: 10}, expect: {valid: true}}
+  - {id: TV-NET-021, stimulus: {mode: interrupt_with_acknowledgement, interval: 31, interrupt_propagation: 10, ack_generation: 10, ack_propagation: 10}, expect: {valid: true}}
+  - {id: TV-NET-022, stimulus: {ack_delay: 11, interrupt_propagation: 10, max_ack_generation: 20}, expect: {valid: true}}
+  - {id: TV-NET-023, stimulus: {packet: [1,2,EOP], source_multicast_endpoints: [A,B]}, expect: {copies: 2}}
+  - {id: TV-NET-024, stimulus: {feature: test_port_loopback}, expect: {supported: true}}
+  - {id: TV-NET-025, stimulus: {service: SEND_PACKET.request, endpoint: EP0}, expect: {primitive: SEND_PACKET.request}}
+  - {id: TV-NET-026, stimulus: {service: TIME_CODE.indication, register: 5, received: 6}, expect: {generated: true}}
+  - {id: TV-NET-027, stimulus: {service: TIME_CODE.indication, register: 5, received: 9}, expect: {generated: false}}
+  - {id: TV-NET-028, stimulus: {service: DISTRIBUTED_INTERRUPT_ACK.request, IID: 7}, expect: {ack_bit: 1, IID: 7}}
+  - {id: TV-NET-029, stimulus: {packet_data_characters: 0, terminator: EOP}, expect: {syntactically_valid: true, first_router_discards: true}}
