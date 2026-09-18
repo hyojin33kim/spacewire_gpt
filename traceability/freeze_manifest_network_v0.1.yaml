@@ -1,0 +1,23 @@
+schema_version: 1
+baseline_id: semantic-network-v0.1
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: frozen
+date: "2026-09-18"
+scope: ["5.2.2","5.6.2-5.6.7","5.6.10","6.1"]
+freeze_gate:
+  scope_closure: PASS
+  semantic_closure: PASS
+  figure_closure: PASS
+  state_boundary_ownership: PASS
+  ambiguity_closure: PASS
+  pre_golden_verification_closure: PASS
+independent_challenge: PASS
+selected_optionals:
+  time_code: true
+  distributed_interrupt: true
+  both_interrupt_modes: true
+  endpoint_timecode_register: true
+  source_multicast: true
+golden_model: golden_model/network/model.py
+validation: pending_CI
