@@ -52,6 +52,16 @@ def odd_parity_for_previous_payload(previous_payload_bits: Sequence[int], curren
     return 0 if ones_without_parity % 2 == 1 else 1
 
 
+def parity_valid(previous_payload_bits: Sequence[int], current_parity_bit: int, current_dc_flag: int) -> bool:
+    if current_parity_bit not in (0, 1):
+        raise ValueError("current_parity_bit must be binary")
+    if current_dc_flag not in (0, 1):
+        raise ValueError("current_dc_flag must be binary")
+    if len(previous_payload_bits) not in (2, 8) or any(b not in (0, 1) for b in previous_payload_bits):
+        raise ValueError("invalid previous payload")
+    return (sum(previous_payload_bits) + current_parity_bit + current_dc_flag) % 2 == 1
+
+
 def data_symbol(value: int, parity_bit: int) -> list[int]:
     """Return [P, C, B0..B7]."""
     if parity_bit not in (0, 1):
@@ -84,6 +94,12 @@ def broadcast_code(value: int) -> tuple[ControlChar, int]:
 
 FIRST_NULL_BITS = (0, 1, 1, 1, 0, 1, 0, 0)
 FIRST_NULL_DETECTION_BITS = (0, 1, 1, 1, 0, 1, 0, 0, 0)
+
+
+def broadcast_fields(value: int) -> tuple[int, int]:
+    if value < 0 or value > 0xFF:
+        raise ValueError("broadcast code value must be one byte")
+    return ((value >> 6) & 0b11, value & 0b111111)
 
 
 def first_null_bits() -> tuple[int, ...]:
@@ -199,3 +215,42 @@ def minimum_rate_setting_valid(rate_mbps: float, two_mbps_operation_required: bo
 
 def maximum_rate_valid(max_rate_mbps: float, initial_rate_mbps: float, decodes_correctly: bool) -> bool:
     return initial_rate_valid(initial_rate_mbps) and max_rate_mbps >= initial_rate_mbps and decodes_correctly
+
+
+class ReceiveErrorKind(str, Enum):
+    PARITY = "parity_error"
+    ESC = "ESC_error"
+
+
+@dataclass(frozen=True)
+class EncodingIndication:
+    name: str
+    parameter: str | None = None
+
+
+def disconnect_indication() -> EncodingIndication:
+    return EncodingIndication("DISCONNECT")
+
+
+def receive_error_indication(kind: ReceiveErrorKind) -> EncodingIndication:
+    return EncodingIndication("RECEIVE_ERROR", kind.value)
+
+
+def got_null_indication() -> EncodingIndication:
+    return EncodingIndication("gotNull")
+
+
+@dataclass
+class EncodingServiceState:
+    tx_enabled: bool = False
+    receiver: ReceiverSemanticState = None  # type: ignore[assignment]
+
+    def __post_init__(self) -> None:
+        if self.receiver is None:
+            self.receiver = ReceiverSemanticState()
+
+    def set_tx_enable(self, enabled: bool) -> None:
+        self.tx_enabled = bool(enabled)
+
+    def set_rx_enable(self, enabled: bool) -> None:
+        self.receiver.set_rx_enable(enabled)
