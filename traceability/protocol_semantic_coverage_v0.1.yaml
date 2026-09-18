@@ -1,0 +1,58 @@
+schema_version: 1
+artifact_id: PROTOCOL-SEMANTIC-COVERAGE-V0.1
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: reviewed
+semantic_content_commit: c2519e4b55a89db2e8c2b5a74b654180002e3977
+
+slices:
+  encoding:
+    baseline: semantic-encoding-v0.1
+    scope: ["5.2.4", "5.4", "6.3", "6.4 encoding-facing boundary"]
+    atomic_requirements: 106
+    concrete_pre_golden_vectors: 45
+    pre_golden_invariants: 12
+    behavior_contracts: 6
+    known_nonblocking_issues: [CR-ENC-010, CR-ENC-011, CR-ENC-013, CR-ENC-014, CR-ENC-015, CR-ENC-016]
+
+  data_link:
+    baseline: semantic-datalink-v0.1
+    scope: ["5.2.3", "5.5", "6.2"]
+    atomic_requirements: 140
+    concrete_pre_golden_vectors: 42
+    pre_golden_invariants: 8
+    behavior_contracts: 1
+    known_nonblocking_issues: [CR-DL-001, CR-DL-002, CR-DL-003]
+
+  network:
+    baseline: semantic-network-v0.1
+    scope: ["5.2.2", "5.6.2-5.6.7", "5.6.10", "6.1", "5.6.8.10.a source-node multicast"]
+    atomic_requirements: 123
+    concrete_pre_golden_vectors: 29
+    pre_golden_invariants: 7
+    behavior_contracts: 1
+    known_nonblocking_issues: [CR-NET-001]
+
+  router:
+    baseline: semantic-router-v0.1
+    normative_name: routing_switch
+    scope: ["3.2.92-3.2.94", "5.6.4.6-5.6.4.7", "5.6.5.5", "5.6.5.7", "5.6.8-5.6.9"]
+    atomic_requirements: 101
+    concrete_pre_golden_vectors: 34
+    pre_golden_invariants: 9
+    behavior_contracts: 1
+    known_nonblocking_issues: [CR-RTR-001]
+
+totals:
+  atomic_requirements: 470
+  concrete_pre_golden_vectors: 150
+  pre_golden_invariants: 36
+  ontology_entities: 80
+  behavior_contracts: 9
+
+coverage_rules:
+  - every_atomic_requirement_maps_to_at_least_one_behavior_contract
+  - every_concrete_pre_golden_vector_maps_to_a_Golden_validation_method
+  - every_DataLink_Network_Router_pre_golden_invariant_maps_to_a_validation_method
+  - source_wording_anomalies_are_recorded_in_traceability/spec_issues.yaml
+  - optional_features_are_fixed_by_profiles/golden_optional_features_v0.1.yaml
