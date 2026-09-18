@@ -1,0 +1,13 @@
+schema_version: 1
+baseline: semantic-router-v0.1
+status: frozen
+invariants:
+  - {id: INV-RTR-001, rule: "A path-address character consumed by a router is removed exactly once at that router", source: ["5.6.8.3"]}
+  - {id: INV-RTR-002, rule: "A logical-address character is retained unless logical-address deletion is configured", source: ["5.6.8.4","5.6.8.6"]}
+  - {id: INV-RTR-003, rule: "Logical address 255 is not used and cannot produce a valid route", source: ["5.6.8.4.d"]}
+  - {id: INV-RTR-004, rule: "One output port cannot be allocated to two packets concurrently", source: ["5.6.8.7"]}
+  - {id: INV-RTR-005, rule: "An allocated output remains locked to a packet until packet end or error termination", source: ["5.6.8.7"]}
+  - {id: INV-RTR-006, rule: "A multicast N-Char is transferred only when all enabled designated outputs can accept it", source: ["5.6.8.10"]}
+  - {id: INV-RTR-007, rule: "Arbitration is fair; deterministic round-robin ordering is reference behavior only", source: ["5.6.8.8"]}
+  - {id: INV-RTR-008, rule: "A duplicate interrupt whose IID relay bit is already active is not relayed", source: ["5.6.5.5"]}
+  - {id: INV-RTR-009, rule: "An active interrupt IID is cleared by its valid acknowledgement or by timeout", source: ["5.6.5.5","5.6.5.7"]}
