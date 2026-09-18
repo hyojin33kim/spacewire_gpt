@@ -1,0 +1,43 @@
+schema_version: 1
+profile_id: GOLDEN-FULL-REFERENCE-V0.1
+spec: ECSS-E-ST-50-12C-Rev.1
+status: selected
+selected_by: user
+date: "2026-09-18"
+purpose: >
+  Freeze optional-feature choices for semantic baselines and Golden Models.
+  RTL may later implement a mission-tailored subset only through an explicit
+  RTL Contract decision; the reference Golden Model remains the semantic superset.
+
+data_link:
+  provide_recommended_status_information: true
+  receive_credit_max: 56
+  discard_pending_broadcast_on_ErrorReset: true
+  discard_network_broadcast_unless_Run: true
+  legacy_pre_Rev1_LinkDisabled_state_machine: false
+
+network:
+  packet_service: true
+  time_code_service: true
+  distributed_interrupt_service: true
+  distributed_interrupt_modes_supported: [interrupt, interrupt_with_acknowledgement]
+  endpoint_time_code_register: true
+  source_node_packet_multicast: true
+
+router:
+  path_addressing: true
+  logical_addressing: true
+  logical_address_deletion: true
+  group_adaptive_routing_for_logical_addresses: true
+  legacy_group_adaptive_routing_for_path_addresses: false
+  packet_multicast: true
+  port_timeout: true
+  per_port_timeout: true
+  invalid_address_error_registration: true
+  time_code_relay: true
+  distributed_interrupt_relay: true
+  arbitration_semantic: fair
+  reference_trace_scheduler: round_robin
+  note: >
+    Round-robin is used only to generate deterministic reference traces.
+    Compliance is defined by fair-arbitration invariants, not exact winner identity.
