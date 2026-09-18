@@ -1,0 +1,28 @@
+schema_version: 1
+artifact: Encoding Golden Model validation result
+semantic_baseline: semantic-encoding-v0.1
+validated_repo_commit: "de964bc93466baaf2f48639396ea49b67c0efb2a"
+github_actions_run_id: 35333664549
+status: PASS
+
+results:
+  unittest_methods: 8
+  pre_golden_vectors_total: 45
+  pre_golden_vectors_mapped: 45
+  mapping_closure: "45/45"
+  coverage_lint: PASS
+
+validated_behavior_groups:
+  - character_and_control_code
+  - history_dependent_parity
+  - data_strobe_encode_decode
+  - first_Null_and_gotNull
+  - parity_and_ESC_error
+  - disconnect
+  - signalling_rate_constraints
+  - encoding_service_indications
+
+authorization:
+  RTL_contract_creation: true
+  RTL_implementation: false
+  RTL_implementation_condition: reviewed_RTL_contract
