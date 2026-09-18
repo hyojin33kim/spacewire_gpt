@@ -1,0 +1,59 @@
+schema_version: 1
+id: BC-ENC-DS-001
+name: Data-Strobe encoding and reset behavior
+spec: ECSS-E-ST-50-12C-Rev.1
+scope: ["5.4.4"]
+status: draft
+
+inputs:
+  - serial_bit_stream
+  - power_up_reset
+  - output_port_reset
+  - link_state
+
+state:
+  - previous_data_bit
+  - data_signal
+  - strobe_signal
+
+outputs:
+  - data_signal
+  - strobe_signal
+
+behavior:
+  encode:
+    data_signal: current_serial_data_bit
+    strobe_toggle_when: current_serial_data_bit_equals_previous_serial_data_bit
+
+  power_up_reset:
+    data_signal: 0
+    strobe_signal: 0
+
+  controlled_reset:
+    avoid_simultaneous_transition: true
+    when_entering_ErrorReset_after_transmission: reset_data_and_strobe_with_delay
+    delay:
+      min: "500 ns"
+      max: "implementation fastest-transmit period"
+
+  receiver:
+    simultaneous_transition: tolerate_without_lockup
+
+invariants:
+  - exactly_one_of_data_or_strobe_transitions_per_normal_encoded_bit_boundary
+  - power_up_reset_results_in_D0_S0
+  - controlled_reset_does_not_create_simultaneous_D_S_transition
+
+requirements:
+  - SPW-5.4.4-a-1
+  - SPW-5.4.4-a-2
+  - SPW-5.4.4-b
+  - SPW-5.4.4-c
+  - SPW-5.4.4-d
+  - SPW-5.4.4-e
+  - SPW-5.4.4-f
+
+open_questions:
+  - id: OQ-ENC-DS-001
+    issue: "The upper bound in 5.4.4.e is implementation-dependent and belongs in the later RTL contract, not hard-coded into the protocol Golden Model."
+    classification: rtl_contract_boundary
