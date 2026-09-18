@@ -8,7 +8,6 @@ on:
       - "verification/pre_golden/**"
       - "tools/golden_coverage_lint.py"
       - "tools/golden_invariant_coverage_lint.py"
-      - "tools/golden_invariant_coverage_lint.py"
       - ".github/workflows/golden-model.yml"
   pull_request:
     paths:
@@ -16,6 +15,7 @@ on:
       - "verification/golden/**"
       - "verification/pre_golden/**"
       - "tools/golden_coverage_lint.py"
+      - "tools/golden_invariant_coverage_lint.py"
 
 jobs:
   protocol-golden:
