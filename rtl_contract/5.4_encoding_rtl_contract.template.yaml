@@ -1,0 +1,81 @@
+schema_version: 1
+artifact: Encoding RTL Contract
+baseline_ref: semantic-encoding-v0.1
+status: template_not_yet_instantiated
+
+purpose: >
+  Convert validated protocol behavior into cycle-accurate FPGA implementation
+  obligations without changing protocol semantics.
+
+required_sections:
+  clocks_and_rates:
+    - reference_clock
+    - generated_or_enable_rates
+    - supported_link_rates
+    - clock_tolerance_mapping
+
+  resets:
+    - power_on_reset
+    - port_reset
+    - TX_ENABLE_deassert_reset_effect
+    - RX_ENABLE_deassert_reset_effect
+    - controlled_Data_Strobe_reset_sequence
+
+  cycle_level_interfaces:
+    - data_link_to_encoding_TX
+    - encoding_to_data_link_RX
+    - encoding_to_physical_DS_TX
+    - physical_to_encoding_DS_RX
+    - valid_ready_or_equivalent_handshake
+    - event_pulse_or_level_semantics
+
+  state_and_storage:
+    - parity_history_state
+    - gotNull_state
+    - ESC_sequence_state
+    - disconnect_timer_state
+    - serializer_deserializer_state
+
+  timing_realization:
+    - disconnect_threshold_clock_count
+    - controlled_reset_delay_clock_count
+    - initial_10Mbps_generation
+    - parameterized_operational_rate_switching
+
+  pipeline_and_latency:
+    - TX_character_to_first_bit_latency
+    - RX_edge_to_character_latency
+    - event_detection_latency
+    - allowed_backpressure_points
+
+  parameterization:
+    - system_clock_frequency
+    - min_max_link_rate
+    - disconnect_threshold
+    - implementation_specific_limits
+
+  error_behavior:
+    - parity_error_timing
+    - ESC_error_timing
+    - disconnect_timing
+    - gotNull_set_clear_timing
+    - invalid_symbol_handling
+
+  fpga_assurance:
+    - CDC_boundaries
+    - metastability_strategy
+    - reset_synchronization
+    - synthesis_constraints
+    - mission_specific_SEU_TMR_EDAC_decisions_if_applicable
+
+  traceability:
+    - semantic_requirement_ids
+    - behavior_contract_ids
+    - golden_model_test_ids
+    - rtl_module_signal_mapping
+    - SVA_property_ids
+
+hard_rule:
+  - no_RTL_implementation_before_contract_reviewed
+  - every_cycle_level_choice_must_be_classified_as_spec_required_or_implementation_choice
+  - implementation_choices_must_not_be_back_propagated_as_spec_semantics
