@@ -38,7 +38,28 @@ issues:
       Current contract/test artifacts encode min=500 ns and max=fastest-transmit period.
       For any transmitter faster than 2 Mbps, the fastest-transmit period is less than
       500 ns, so that min/max ordering is internally impossible.
-    handling: do_not_freeze_until_interpreted_and_corrected
-    decision_required: true
-    blocking: true
-    status: open
+    handling: explicit_interpretation_decision
+    decision_required: false
+    decision_ref: DEC-ENC-002
+    blocking: false
+    status: resolved_by_interpretation
+
+  - id: CR-ENC-013
+    source_clause: "5.4.2.d"
+    source_statement_summary: "gotNull is asserted, see clause 5.4.5"
+    observed_conflict: >
+      Clause 5.4.5 specifies First Null transmission; gotNull detection/set/clear
+      behavior is specified in 5.4.6.
+    handling: use_direct_normative_gotNull_requirements_in_5.4.6_and_preserve_original_cross_reference
+    decision_required: false
+    blocking: false
+    status: documented_source_cross_reference_issue
+
+  - id: CR-ENC-014
+    source_clause: "5.4.10.2 NOTE"
+    source_statement_summary: "minimum disconnect timeout (clause 5.4.7)"
+    observed_conflict: "Disconnect is specified in 5.4.8; 5.4.7 is Parity error."
+    handling: non_normative_note_cross_reference_only_preserve_and_document
+    decision_required: false
+    blocking: false
+    status: documented_source_cross_reference_issue
