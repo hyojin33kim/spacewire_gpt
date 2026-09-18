@@ -21,3 +21,29 @@ decisions:
     effect_on_golden_model: gotNull_event_follows_link_initialisation_behavior_boundary
     effect_on_rtl_contract: no_direct_cycle_semantics_implied
     status: accepted
+
+  - id: DEC-ENC-002
+    date: "2026-09-18"
+    issue: CR-ENC-012
+    source_clause: "5.4.4.e"
+    observation:
+      - "The source says the delay is between 500 ns and the period of the fastest transmit time."
+      - "500 ns is explicitly the bit period at the slowest permitted 2 Mbps rate."
+      - "The fastest supported transmit period is therefore the shorter endpoint for a normal implementation."
+    decision: >
+      Represent the requirement as an unordered endpoint constraint in source evidence,
+      and semantically as T_fastest <= reset_inter_signal_delay <= 500 ns.
+      The exact clock-cycle realization is not protocol semantics and is deferred to
+      the mandatory RTL Contract.
+    approved_by: engineering_review_under_user_go_authorization
+    status: accepted
+
+  - id: DEC-ENC-003
+    date: "2026-09-18"
+    source_clauses: ["5.2.4.a.2", "5.4.4.a", "3.2.33"]
+    decision: >
+      The Golden Model shall model only the observable Data-Strobe decoding semantic:
+      a valid DS waveform recovers the original serial bit stream. No XOR, edge-detector,
+      synchronizer, or flip-flop implementation is implied by the semantic baseline.
+    classification: semantic_vs_microarchitecture_boundary
+    status: accepted
