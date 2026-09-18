@@ -1,0 +1,54 @@
+schema_version: 1
+baseline: semantic-datalink-v0.1
+artifact: Golden Model validation coverage
+status: validated
+mapping:
+  test_credit_vectors:
+    - TV-DL-001
+    - TV-DL-002
+    - TV-DL-003
+    - TV-DL-004
+    - TV-DL-005
+    - TV-DL-021
+    - TV-DL-022
+  test_priority_vectors:
+    - TV-DL-006
+    - TV-DL-007
+    - TV-DL-008
+    - TV-DL-009
+    - TV-DL-040
+    - TV-DL-041
+  test_initialisation_nominal_vectors:
+    - TV-DL-010
+    - TV-DL-011
+    - TV-DL-012
+    - TV-DL-013
+    - TV-DL-014
+    - TV-DL-015
+  test_initialisation_error_vectors:
+    - TV-DL-016
+    - TV-DL-017
+    - TV-DL-018
+    - TV-DL-019
+    - TV-DL-029
+    - TV-DL-030
+    - TV-DL-031
+    - TV-DL-032
+  test_reset_and_recovery_vectors:
+    - TV-DL-020
+    - TV-DL-024
+    - TV-DL-037
+    - TV-DL-042
+  test_directional_service_vectors:
+    - TV-DL-023
+    - TV-DL-025
+    - TV-DL-026
+    - TV-DL-027
+    - TV-DL-028
+    - TV-DL-038
+    - TV-DL-039
+  test_timing_vectors:
+    - TV-DL-033
+    - TV-DL-034
+    - TV-DL-035
+    - TV-DL-036
