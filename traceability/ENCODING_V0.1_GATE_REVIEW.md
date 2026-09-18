@@ -1,21 +1,30 @@
 # Encoding semantic baseline v0.1 — Gate Review
 
-Review basis: ECSS-E-ST-50-12C Rev.1 source plus current repository artifacts.
-Result is intentionally limited to PASS/FAIL and freeze-blocking issues.
+Review basis: ECSS-E-ST-50-12C Rev.1 plus the current repository artifacts.
+Scope: Encoding architecture §5.2.4, Encoding §5.4, relevant service interfaces §6.3/§6.4.
 
 | Gate | Result | Blocking issue |
 |---|---|---|
-| G1 Structural Integrity | PASS | None. GitHub Actions semantic_lint: 17 YAML, 106 requirements, 56 §5.4 requirements, 6 contracts, 44 test IDs, 11 invariants, 33 ontology entities; 0 errors / 0 warnings. |
-| G2 Spec Fidelity | FAIL | **B1:** §5.4.4.e reset-delay range is encoded backwards in current contract/vector (min=500 ns, max=fastest-period). Source only says delay is *between* those endpoints; for >2 Mbps the fastest bit period is <500 ns. **B2:** Normal Data-Strobe RX decoding behavior required by §5.2.4.a.2 is not explicitly represented in the behavior contract. |
-| G3 Executability / Pre-Golden Verification | FAIL | **B3:** BC-ENC-RATE-001 has no pre-Golden test group. **B4:** key bit-level oracle vectors are still symbolic/property-only (parity example, First Null/Null detection) rather than concrete expected bit sequences, so they are not yet an independent executable oracle. **B5:** normal DS decode path has no pre-Golden vector. |
-| G4 Boundary / Ownership | FAIL | **B6:** §5.4.4.e timing endpoint ownership cannot be frozen until B1 is resolved; normal DS decode must be classified and specified as protocol semantic/derived semantic before RTL choices are introduced. |
-| G5 Independent Challenge | FAIL | The independent source-vs-artifact challenge found B1–B6; therefore semantic-encoding-v0.1 must not be frozen yet. |
+| G1 Structural Integrity | **PASS** | None. Latest GitHub Actions semantic_lint: 18 YAML, 106 atomic requirements, 56 §5.4 requirements, 6 behavior contracts, 53 pre-Golden test IDs, 12 invariants, 33 ontology entities; 0 errors / 0 warnings. |
+| G2 Spec Fidelity | **PASS** | None. B1 corrected by DEC-ENC-002; DS receive semantic added from §5.2.4.a.2. Figures 5-11..5-18 have explicit artifact/test coverage. Source cross-reference defects CR-ENC-013/014 are documented without silently rewriting the Standard. |
+| G3 Executability / Pre-Golden Verification | **PASS** | None. Every behavior contract is now represented by pre-Golden vectors; parity, First Null, Null detection and DS encode/decode have concrete bit-level oracles; signalling-rate vectors added. |
+| G4 Boundary / Ownership | **PASS** | None. Protocol semantics, mandatory RTL-contract choices, physical/system constraints, interpretation decisions and deferred interfaces are explicitly separated in 5.4_boundary_ownership.yaml. |
+| G5 Independent Challenge | **PASS** | No remaining freeze-blocking issue. Challenge review found source-reference defects but they do not change observable Encoding semantics and are recorded as non-blocking issues. |
+
+## Non-blocking open/source issues
+
+- CR-ENC-010: RX_CHAR.request parameter notation is incomplete in the rendered source.
+- CR-ENC-011: DS_RX.request parameter notation is incomplete in the rendered source.
+- CR-ENC-013: §5.4.2.d points to §5.4.5 although gotNull set/clear behavior is in §5.4.6.
+- CR-ENC-014: §5.4.10.2 NOTE points to §5.4.7 although disconnect is in §5.4.8.
+
+These issues are retained as evidence and must not be silently edited in source-derived artifacts.
 
 ## Freeze decision
 
-**NO-FREEZE** until B1–B6 are closed and G1 is rerun after corrections.
+**PASS — semantic-encoding-v0.1 may be frozen.**
 
-## Mandatory downstream order
+Mandatory downstream order:
 
 semantic-encoding-v0.1 freeze
 → Golden Model
