@@ -1,0 +1,19 @@
+schema_version: 1
+baseline_id: semantic-datalink-v0.1
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: frozen
+date: "2026-09-18"
+scope: ["5.2.3","5.5","6.2"]
+freeze_gate:
+  scope_closure: PASS
+  semantic_closure: PASS
+  figure_closure: PASS
+  state_boundary_ownership: PASS
+  ambiguity_closure: PASS
+  pre_golden_verification_closure: PASS
+independent_challenge: PASS
+known_interpretation:
+  - "5.5.8.4.b refers to actions listed in 5.5.8.4.b although the action list is in 5.5.8.4.a; source wording preserved, model follows the action list immediately preceding it."
+golden_model: golden_model/data_link/model.py
+validation: pending_CI
