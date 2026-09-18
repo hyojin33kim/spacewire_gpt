@@ -1,0 +1,51 @@
+schema_version: 1
+baseline_id: semantic-encoding-v0.1
+spec: ECSS-E-ST-50-12C-Rev.1
+freeze_date: "2026-09-18"
+status: frozen
+baseline_commit_sha: "34813a4d057ef2876da8e124f9092a1bd50a8caa"
+gate_result: PASS
+golden_model_authorized: true
+rtl_authorized: false
+rtl_authorization_condition: "Golden Model validated and RTL Contract reviewed"
+
+frozen_artifacts:
+  - {path: "spec/source_manifest.yaml", sha: "c2f1950d9bf51186462c89f94b29b97131c5b190"}
+  - {path: "ontology/entities.yaml", sha: "b901680cf5e44425b173f1c6965fc2294008d92a"}
+  - {path: "ontology/relations.yaml", sha: "f4529dd5f1e0eaf40659700e60cb5c2cf81fde76"}
+  - {path: "requirements/5.2.4_encoding_architecture.yaml", sha: "b0358b4b4dcfac7de638accb0f13a5db72bfccc9"}
+  - {path: "requirements/5.4_encoding.yaml", sha: "6ed2a87df7f24912ab8df38c894ff5206703959d"}
+  - {path: "requirements/6.3_encoding_service.yaml", sha: "1b8f30d3ae2d6105b1fb709ea093f2aff46c3810"}
+  - {path: "requirements/6.4_physical_service_for_encoding.yaml", sha: "5bf3cf41f70c7897c63c8141aa2a64cde26aec00"}
+  - {path: "contracts/5.4_character_encoding.yaml", sha: "69b7530064eae02129837afa22c5c05c3e89d22d"}
+  - {path: "contracts/5.4_data_strobe.yaml", sha: "405917b36b77280e613e979650e36411a97e51bf"}
+  - {path: "contracts/5.4_interface_dependencies.yaml", sha: "b79299edbcdd113d126d56b26b8e85f2d8f0febc"}
+  - {path: "contracts/5.4_link_detection_errors.yaml", sha: "851dd78351f2455f103f73b065f8bb7a34a349af"}
+  - {path: "contracts/5.4_serialization_interface.yaml", sha: "97a8eacd0e1a54a68b3af854aa2661fe02595052"}
+  - {path: "contracts/5.4_signalling_rate.yaml", sha: "3da135c21878fabf2fcc6caf9b3a33f6b09457fe"}
+  - {path: "verification/pre_golden/5.4_encoding_vectors.yaml", sha: "c0afcc9c1e80d4bafc5676ad8bfd95e0f13fac47"}
+  - {path: "traceability/5.4_encoding_coverage.yaml", sha: "d95829bf3165d12c9a9f012119a22440ac374fc1"}
+  - {path: "traceability/5.4_boundary_ownership.yaml", sha: "1c3071517cdca4f5c3da76d44e2891a68886f5a7"}
+  - {path: "traceability/interpretation_decisions.yaml", sha: "1624a409d6f3448b67f3b2917a0c23e1529292be"}
+  - {path: "traceability/spec_issues.yaml", sha: "748532367f3b2addb0e73edc8a99ad1f832a0c84"}
+  - {path: "traceability/ENCODING_V0.1_GATE_REVIEW.md", sha: "88f3bfc1ea0c9e11387cfadd9cd58eec6bd0c2d2"}
+  - {path: "tools/semantic_lint.py", sha: "a03536ff452ca7f222061a6e3f0998273582263b"}
+
+non_blocking_source_issues:
+  - CR-ENC-010
+  - CR-ENC-011
+  - CR-ENC-013
+  - CR-ENC-014
+
+change_control:
+  rule: >
+    Do not mutate the meaning of this frozen baseline. Any semantic change creates
+    a new baseline version and a new freeze manifest.
+  next_semantic_version_on_change: semantic-encoding-v0.2
+
+mandatory_downstream_order:
+  - Golden_Model
+  - Golden_Model_validation
+  - RTL_Contract
+  - RTL
+  - RTL_vs_Golden_differential_verification
