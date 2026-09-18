@@ -142,13 +142,13 @@ supporting_context:
     status: referenced_not_yet_atomic_extracted
   - source: "6.3"
     role: data_link_encoding_service_primitives
-    status: referenced_not_yet_atomic_extracted
+    status: atomic_extracted_in_requirements_6_3
   - source: "6.4"
     role: encoding_physical_DS_service_primitives
-    status: newly_identified_cross_clause_dependency_not_yet_atomic_extracted
+    status: atomic_extracted_in_requirements_6_4
 
 closure_gate_before_golden_model:
   - all_5_4_atomic_requirements_have_contract_mapping
   - all_figures_5_11_through_5_18_are_interpreted_as_evidence
-  - cross_clause_6_3_and_6_4_interfaces_are_atomic_extracted_or_explicitly_abstracted
+  - cross_clause_6_3_and_6_4_interfaces_are_atomic_extracted
   - consistency_review_open_items_are_dispositioned
