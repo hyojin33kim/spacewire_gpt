@@ -2,24 +2,41 @@ schema_version: 1
 baseline_id: semantic-network-v0.1
 spec: ECSS-E-ST-50-12C-Rev.1
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
-status: freeze_candidate_pending_DL_interface_closure
+status: frozen
 date: "2026-09-18"
-scope: ["5.2.2","5.6.2-5.6.7","5.6.10","6.1"]
+semantic_content_commit: c2519e4b55a89db2e8c2b5a74b654180002e3977
+scope: ["5.2.2", "5.6.2-5.6.7", "5.6.10", "6.1", "5.6.8.10.a"]
+
+artifacts:
+  ontology: [ontology/entities.yaml, ontology/relations.yaml]
+  requirements:
+    - requirements/5.6_network.yaml
+    - requirements/6.1_network_service.yaml
+  contract: contracts/5.6_network.yaml
+  pre_golden_vectors: verification/pre_golden/5.6_network_vectors.yaml
+  pre_golden_invariants: verification/pre_golden/5.6_network_invariants.yaml
+  golden_model: golden_model/network/model.py
+
+counts:
+  atomic_requirements: 123
+  concrete_pre_golden_vectors: 29
+  pre_golden_invariants: 7
+
 freeze_gate:
-  scope_closure: PASS
-  semantic_closure: PASS
-  figure_closure: PASS
-  state_boundary_ownership: PASS
-  ambiguity_closure: PASS
-  pre_golden_verification_closure: PASS
-independent_challenge: PASS
+  G1_structural_integrity: PASS
+  G2_spec_fidelity: PASS
+  G3_executability_pre_golden: PASS
+  G4_boundary_ownership: PASS
+  G5_independent_challenge: PASS
+
 selected_optionals:
   time_code: true
   distributed_interrupt: true
   both_interrupt_modes: true
   endpoint_timecode_register: true
   source_multicast: true
-golden_model: golden_model/network/model.py
-validation: pending_CI
+  test_port_loopback: true
 
-blocking_issue: CR-DL-001
+known_nonblocking_source_issues: [CR-NET-001]
+golden_model_authorized: true
+rtl_contract_authorized: false
