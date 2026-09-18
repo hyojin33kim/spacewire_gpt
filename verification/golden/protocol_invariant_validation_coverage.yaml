@@ -1,0 +1,34 @@
+schema_version: 1
+artifact: Protocol pre-Golden invariant validation coverage
+status: validated
+mapping:
+  test_data_link_credit_invariants:
+    - INV-DL-001
+    - INV-DL-002
+    - INV-DL-003
+    - INV-DL-004
+    - INV-DL-006
+  test_data_link_priority_direction_and_error_invariants:
+    - INV-DL-005
+    - INV-DL-007
+    - INV-DL-008
+  test_network_packet_and_timecode_invariants:
+    - INV-NET-001
+    - INV-NET-002
+    - INV-NET-003
+    - INV-NET-004
+  test_network_broadcast_and_interrupt_invariants:
+    - INV-NET-005
+    - INV-NET-006
+    - INV-NET-007
+  test_router_address_and_allocation_invariants:
+    - INV-RTR-001
+    - INV-RTR-002
+    - INV-RTR-003
+    - INV-RTR-004
+    - INV-RTR-005
+  test_router_multicast_fairness_interrupt_invariants:
+    - INV-RTR-006
+    - INV-RTR-007
+    - INV-RTR-008
+    - INV-RTR-009
