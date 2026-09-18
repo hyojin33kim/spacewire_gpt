@@ -1,0 +1,55 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+artifact: Encoding semantic / RTL / physical ownership
+status: reviewed
+
+protocol_semantic_golden_model:
+  - character_and_control_code_encoding
+  - parity_history_dependency_and_odd_parity
+  - serialization_order
+  - valid_DS_encode_observable_behavior
+  - valid_DS_decode_recovers_original_bit_stream
+  - first_Null_behavior
+  - gotNull_set_hold_clear
+  - parity_error_semantics
+  - ESC_error_semantics
+  - disconnect_detection_semantics_and_allowed_threshold_range
+  - TX_RX_enable_semantics
+  - typed_encoding_service_indications
+  - signalling_rate_initial_minimum_maximum_and_directional_semantics
+
+mandatory_RTL_contract:
+  - system_clock_frequency
+  - serializer_deserializer_cycle_structure
+  - DS_decoder_microarchitecture
+  - synchronizer_and_CDC_structure
+  - exact_disconnect_threshold_clock_count
+  - exact_controlled_reset_delay_clock_count
+  - TX_RX_handshake_cycle_semantics
+  - event_pulse_or_level_realization
+  - pipeline_latency
+  - reset_synchronization
+  - FPGA_parameter_widths_and_counters
+  - implementation_specific_maximum_link_rate
+
+physical_or_system_constraint:
+  - signal_attenuation
+  - data_strobe_skew
+  - jitter
+  - receiver_minimum_edge_separation
+  - cable_and_connector_constraints
+  - mission_specific_radiation_and_ageing_budget
+
+interpretation_decisions:
+  - DEC-ENC-001
+  - DEC-ENC-002
+  - DEC-ENC-003
+
+external_or_deferred_interface:
+  - MIB_service_realization_in_clause_6_5
+  - physical_signal_integrity_compliance
+  - data_link_state_machine_cycle_realization
+
+hard_rule: >
+  No RTL implementation choice may be promoted into protocol semantics.
+  No RTL coding starts until the reviewed RTL Contract exists after Golden Model validation.
