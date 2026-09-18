@@ -1,0 +1,217 @@
+schema_version: 1
+artifact_id: RTL-CONTRACT-ENCODING-V0.1
+semantic_baseline: semantic-encoding-v0.1
+golden_validation: traceability/golden_validation_encoding_v0.1.yaml
+status: draft_blocked
+purpose: >
+  Convert validated Encoding semantics into cycle-level FPGA obligations without
+  changing protocol meaning. RTL implementation is prohibited until this
+  contract is reviewed and all blocking decisions are closed.
+
+implementation_profile:
+  intent: flight_fpga
+  system_clock_hz:
+    value: 100000000
+    status: project_assumption_to_confirm
+  minimum_link_rate_mbps:
+    value: 2
+    status: required_unless_project_tailoring
+  initial_link_rate_mbps:
+    value: 10
+    tolerance_mbps: 1
+    status: normative
+  maximum_operational_link_rate_mbps:
+    value: TBD
+    status: BLOCKING_MISSION_REQUIREMENT
+  target_fpga_family_device:
+    value: TBD
+    status: BLOCKING_IMPLEMENTATION_INPUT
+
+module_partition:
+  - spw_encoding_tx
+  - spw_encoding_rx
+  - spw_encoding_top
+  - ds_rx_frontend
+  - link_rate_generator
+
+data_link_to_encoding_tx:
+  handshake: valid_ready
+  accepted_on: rising_clk_when_valid_and_ready
+  ordering: preserve_accept_order
+  item_union:
+    - DATA_CHARACTER
+    - FCT
+    - EOP
+    - EEP
+    - ESC
+    - NULL
+    - BROADCAST_CODE
+  fields:
+    - tx_item_valid
+    - tx_item_ready
+    - tx_item_kind
+    - tx_data_7_0
+  note: >
+    Union item interface is an RTL implementation choice that preserves §5.4.2
+    character/control-code semantics despite the narrower TX_CHAR.request wording
+    in §6.3.
+
+data_link_control:
+  inputs:
+    - tx_enable
+    - rx_enable
+    - link_left_error_reset
+    - link_rate_setting
+  outputs:
+    - got_null
+    - disconnect
+    - rx_error_valid
+    - rx_error_kind
+    - rx_item_valid
+    - rx_item_kind
+    - rx_data_7_0
+  status_realization:
+    got_null: level_until_rx_enable_deasserted
+    disconnect: latched_until_rx_enable_deasserted
+    rx_error_valid: latched_until_rx_enable_deasserted
+    rx_error_kind: [PARITY_ERROR, ESC_ERROR]
+  classification: implementation_choice_preserving_semantic_events
+
+physical_DS_interface:
+  tx_outputs: [data_o, strobe_o]
+  rx_inputs: [data_i, strobe_i]
+  rx_frontend_obligation:
+    - detect_normal_single_signal_DS_transitions
+    - recover_serial_data_bit_value
+    - tolerate_simultaneous_Data_Strobe_transition_without_lockup
+  capture_microarchitecture:
+    value: TBD
+    candidates:
+      - oversampled_single_system_clock
+      - recovered_clock_or_vendor_input_primitive
+    selection_depends_on:
+      - target_fpga_family_device
+      - maximum_operational_link_rate_mbps
+      - physical_skew_jitter_budget
+    status: BLOCKING
+
+tx_state_and_storage:
+  required_state:
+    - previous_payload_for_next_parity
+    - serializer_shift_state
+    - current_Data
+    - current_Strobe
+    - first_Null_after_TX_enable_state
+  fifo_depth: 0
+  buffering: one_inflight_item_minimum
+  deeper_prefetch: optional_implementation_choice
+
+rx_state_and_storage:
+  required_state:
+    - current_Data
+    - current_Strobe
+    - deserializer_state
+    - previous_character_payload_for_parity_check
+    - ESC_sequence_state
+    - gotNull
+    - disconnect_armed
+    - disconnect_timer
+    - latched_error_kind
+
+reset_contract:
+  external_reset:
+    policy: async_assert_sync_deassert_inside_each_clock_domain
+    classification: FPGA_assurance_choice
+  tx_enable_deassert:
+    action: reset_TX_character_encoder_serializer_DS_encoder_and_output_driver_semantic_state
+  rx_enable_deassert:
+    action:
+      - reset_RX_decoder_deserializer_character_decoder_semantic_state
+      - clear_gotNull
+      - clear_disconnect_and_receive_error_latches
+  DS_power_up:
+    Data: 0
+    Strobe: 0
+  controlled_DS_reset:
+    sequence: reset_one_signal_then_the_other
+    simultaneous_transition_forbidden: true
+    delay_constraint: "T_fastest <= delay <= 500 ns"
+    exact_cycle_count:
+      preferred_if_clk_100MHz: 50
+      resulting_delay_ns: 500
+      status: implementation_choice_subject_to_clock_confirmation
+
+disconnect_timer:
+  semantic_range_ns: ">727 and <=1000"
+  nominal_choice_ns: 850
+  if_clk_100MHz:
+    clock_period_ns: 10
+    threshold_cycles: 85
+  status: implementation_choice_subject_to_clock_confirmation
+
+link_rate_generation:
+  initial_after_reset_or_disconnect: "10 ±1 Mbps"
+  minimum_supported_unless_tailored: "2 Mbps"
+  max_rate: TBD
+  implementation:
+    value: TBD
+    reason: depends_on_required_rate_range_and_FPGA_clocking_resources
+  management_input: link_rate_setting
+
+cycle_level_latency:
+  tx_item_accept_to_first_serial_bit:
+    value: TBD_after_link_rate_generator_choice
+  rx_DS_transition_to_decoded_item:
+    value: TBD_after_RX_frontend_choice
+  error_detection_to_status_output:
+    requirement: bounded_and_deterministic
+    exact_cycles: TBD_after_RX_frontend_choice
+
+CDC_and_timing_assurance:
+  rules:
+    - no_raw_asynchronous_Data_or_Strobe_signal_may_feed_general_state_logic_without_defined_capture_strategy
+    - all_cross_domain_events_require_documented_synchronization_or_async_FIFO_handshake
+    - reset_deassertion_must_be_synchronous_per_clock_domain
+  constraints_to_produce:
+    - create_clock_and_generated_clock_constraints
+    - CDC_exceptions_only_with_structural_justification
+    - input_timing_or_vendor_input_primitive_constraints_for_DS_frontend
+
+traceability:
+  semantic_contracts:
+    - BC-ENC-CHAR-001
+    - BC-ENC-DS-001
+    - BC-ENC-IF-001
+    - BC-ENC-RXERR-001
+    - BC-ENC-PIPE-001
+    - BC-ENC-RATE-001
+  golden_validation_vectors: "45/45 mapped"
+  planned_SVA:
+    - SVA-ENC-001_TX_order_preserved
+    - SVA-ENC-002_no_RX_delivery_before_gotNull
+    - SVA-ENC-003_gotNull_clear_on_RX_disable
+    - SVA-ENC-004_no_simultaneous_DS_transition_normal_TX
+    - SVA-ENC-005_disconnect_not_before_arm
+    - SVA-ENC-006_disconnect_threshold_behavior
+    - SVA-ENC-007_parity_error_gated_by_gotNull
+    - SVA-ENC-008_ESC_error_gated_by_gotNull
+    - SVA-ENC-009_receive_error_kind_stable_while_latched
+
+blocking_decisions_before_review:
+  - id: RTL-BLOCK-001
+    decision: confirm_target_FPGA_family_and_device
+    reason: determines legal/robust DS input capture and clocking strategy
+  - id: RTL-BLOCK-002
+    decision: confirm_mission_required_maximum_operational_link_rate
+    reason: determines RX architecture and link-rate generator
+  - id: RTL-BLOCK-003
+    decision: confirm_100MHz_system_clock_for_target_build
+    reason: fixes disconnect/reset counters and rate generation choices
+
+hard_gate:
+  RTL_implementation_allowed: false
+  becomes_true_when:
+    - RTL-BLOCK-001_closed
+    - RTL-BLOCK-002_closed
+    - RTL-BLOCK-003_closed
+    - contract_status_reviewed
