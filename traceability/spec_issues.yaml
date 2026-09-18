@@ -1,0 +1,29 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+status: open
+
+issues:
+  - id: CR-ENC-008
+    source_clause: "6.3.2.6.4"
+    source_statement_summary: "gotNull.indication effect shall be according to the state machine of clause 5.5.6"
+    observed_conflict: "5.5.6 is Sending priority; link initialisation state machine is in 5.5.7 / Figure 5-19."
+    handling: do_not_silently_correct
+    decision_required: true
+    candidate_interpretation: "Treat intended reference as 5.5.7, subject to explicit review."
+    status: open
+
+  - id: CR-ENC-010
+    source_clause: "6.3.2.2.2"
+    source_statement_summary: "RX_CHAR.request semantics line is rendered as 'RX_CHAR.request.'"
+    observed_conflict: "Parameter notation is incomplete/unclear in parsed text."
+    handling: preserve_source_semantics_and_avoid_inventing_parameter
+    decision_required: false
+    status: open
+
+  - id: CR-ENC-011
+    source_clause: "6.4.2.2.2"
+    source_statement_summary: "DS_RX.request semantics line is rendered as 'DS_RX.request.'"
+    observed_conflict: "Parameter notation is incomplete/unclear in parsed text."
+    handling: preserve_source_semantics_and_avoid_inventing_parameter
+    decision_required: false
+    status: open
