@@ -1,0 +1,73 @@
+schema_version: 1
+id: BC-RTR-V0.1
+name: SpaceWire routing-switch semantic behavior contract
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: frozen
+
+selected_optional_features:
+  group_adaptive_logical: true
+  legacy_group_adaptive_path: false
+  multicast: true
+  port_timeout: true
+  per_port_timeout: true
+  timecode_relay: true
+  distributed_interrupt_relay: true
+
+addressing:
+  path: {range: [0,31], consume_leading_character: true, port0_is_configuration: true}
+  logical: {range: [32,254], lookup_routing_table: true, retain_by_default: true}
+  reserved: [255]
+  logical_deletion: configurable_one_character_max_per_router
+
+routing:
+  switching: wormhole
+  output_lock: packet_until_EOP_EEP_or_error
+  backpressure: bidirectional_between_connected_input_output
+  arbitration: fair
+  deterministic_reference_trace_scheduler: round_robin
+  compliance_note: exact_round_robin_winner_is_not_normative
+
+adaptive:
+  logical_only: true
+  choose_currently_free_port_from_configured_set: true
+  if_none_free: wait_and_compete_when_candidate_output_frees
+
+multicast:
+  enabled_capability: true
+  start_only_if_all_enabled_designated_outputs_ready: true
+  per_NChar_atomic_across_multicast_outputs: true
+  disabled_outputs_omitted: true
+
+reset:
+  all_ports_reset: true
+  logical_table_entries_invalid: true
+  adaptive_operational_enable: false
+  multicast_operational_enable: false
+
+timeout:
+  supported: true
+  per_port: true
+  stuck_condition: packet_started_and_not_ended_and_idle_gt_timeout
+  action: [discard_packet, send_EEP_on_output, register_stuck_packet_error]
+  disable_supported: true
+
+broadcast:
+  timecode:
+    valid_if_next_mod64: true
+    valid_relay: all_enabled_outputs_except_ingress
+    invalid_relay: none
+    register_updates_on_valid_and_invalid: true
+  interrupt:
+    duplicate_suppression_by_IID_bit: true
+    first_interrupt_relay: all_enabled_outputs_except_ingress
+    ack_active_IID: clear_bit_and_relay_except_ingress
+    timeout: clear_IID_bit
+
+invariants:
+  - path_header_is_consumed_exactly_once_per_router
+  - logical_header_is_retained_unless_deletion_configured
+  - output_port_cannot_carry_two_packets_concurrently
+  - multicast_NChar_is_not_sent_to_subset_of_ready_designated_outputs
+  - fair_arbitration_prevents_permanent_exclusion_under_repeated_service
+  - duplicate_active_interrupt_is_not_relayed
