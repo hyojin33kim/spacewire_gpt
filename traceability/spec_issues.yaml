@@ -136,3 +136,33 @@ issues:
     decision_required: false
     blocking: false
     status: documented_non_blocking_internal_conflict
+
+  - id: CR-DL-003
+    source_clause: "5.5.7.6.b.5"
+    source_statement_summary: >
+      The Connecting-to-Run transition wording includes "When enable is asserted"
+      together with the conditions that at least one FCT has been sent and gotFCT is true.
+      In the Connecting state the transmitter is already enabled, and Figure 5-19
+      presents the transition in terms of Sent FCT AND gotFCT.
+    observed_issue: redundant_or_unclear_enable_condition_in_transition_wording
+    handling: >
+      Preserve the source wording. The Golden Model uses the observable transition
+      condition SentFCT AND gotFCT while Connecting; transmit-enable is a state output
+      already asserted by the Connecting-state contract.
+    decision_required: false
+    blocking: false
+    status: documented_non_blocking_wording_anomaly
+
+  - id: CR-RTR-001
+    source_clauses: ["5.6.8.12.d.2", "5.6.8.12.d NOTE 2"]
+    source_statement_summary: >
+      The stuck-packet action says an EEP is sent to the Encoding Layer; the
+      immediately following note clarifies that the EEP is sent to the output port.
+    observed_issue: cross_layer_shorthand_for_router_output_EEP_action
+    handling: >
+      Preserve both source statements. The Golden Model records the observable router
+      action as sending EEP on the affected output port; the downstream Data Link/
+      Encoding implementation boundary is deferred to the RTL Contract.
+    decision_required: false
+    blocking: false
+    status: documented_non_blocking_boundary_wording
