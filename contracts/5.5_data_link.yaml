@@ -3,8 +3,11 @@ id: BC-DL-V0.1
 name: Data Link semantic behavior contract
 spec: ECSS-E-ST-50-12C-Rev.1
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
-status: review_blocked_CR-DL-001
-requirements_source: requirements/5.5_data_link.yaml
+status: frozen
+requirements_sources:
+  - requirements/5.2.3_data_link_architecture.yaml
+  - requirements/5.5_data_link.yaml
+  - requirements/6.2_data_link_service.yaml
 
 state:
   link_state: [ErrorReset, ErrorWait, Ready, Started, Connecting, Run]
