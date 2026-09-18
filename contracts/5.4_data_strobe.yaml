@@ -1,12 +1,13 @@
 schema_version: 1
 id: BC-ENC-DS-001
-name: Data-Strobe encoding and reset behavior
+name: Data-Strobe encoding, decoding and reset behavior
 spec: ECSS-E-ST-50-12C-Rev.1
-scope: ["5.4.4"]
-status: draft
+scope: ["5.2.4.a.2", "5.4.4"]
+status: reviewed
 
 inputs:
   - serial_bit_stream
+  - received_data_strobe_waveform
   - power_up_reset
   - output_port_reset
   - link_state
@@ -19,11 +20,22 @@ state:
 outputs:
   - data_signal
   - strobe_signal
+  - recovered_serial_bit_stream
 
 behavior:
   encode:
+    normative_basis: ["5.4.4.a", "Figure 5-16"]
     data_signal: current_serial_data_bit
     strobe_toggle_when: current_serial_data_bit_equals_previous_serial_data_bit
+
+  decode:
+    normative_basis: ["5.2.4.a.2", "3.2.33"]
+    semantic_classification: protocol_semantic
+    observable_requirement: >
+      For a valid Data-Strobe waveform representing a transmitted serial bit
+      stream, recover that original serial bit stream.
+    implementation_method: unspecified_by_standard
+    forbidden_in_semantic_model: assume_specific_XOR_or_flipflop_microarchitecture
 
   power_up_reset:
     data_signal: 0
@@ -33,18 +45,23 @@ behavior:
     avoid_simultaneous_transition: true
     when_entering_ErrorReset_after_transmission: reset_data_and_strobe_with_delay
     delay:
-      min: "500 ns"
-      max: "implementation fastest-transmit period"
+      source_relation: between_500ns_and_fastest_transmit_period
+      interpreted_lower_bound: period_of_fastest_supported_transmit_rate
+      interpreted_upper_bound: "500 ns"
+      exact_clock_cycle_realization: RTL_contract
+      decision_ref: DEC-ENC-002
 
   receiver:
     simultaneous_transition: tolerate_without_lockup
 
 invariants:
   - exactly_one_of_data_or_strobe_transitions_per_normal_encoded_bit_boundary
+  - decode_of_valid_DS_encode_recovers_original_serial_bit_stream
   - power_up_reset_results_in_D0_S0
   - controlled_reset_does_not_create_simultaneous_D_S_transition
 
 requirements:
+  - SPW-5.2.4-a-2
   - SPW-5.4.4-a-1
   - SPW-5.4.4-a-2
   - SPW-5.4.4-b
@@ -53,7 +70,7 @@ requirements:
   - SPW-5.4.4-e
   - SPW-5.4.4-f
 
-open_questions:
-  - id: OQ-ENC-DS-001
-    issue: "The upper bound in 5.4.4.e is implementation-dependent and belongs in the later RTL contract, not hard-coded into the protocol Golden Model."
-    classification: rtl_contract_boundary
+rtl_contract_boundary:
+  - exact_reset_delay_cycle_count
+  - DS_decoder_microarchitecture
+  - synchronizer_and_CDC_realization
