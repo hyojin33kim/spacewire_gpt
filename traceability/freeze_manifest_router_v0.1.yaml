@@ -1,0 +1,28 @@
+schema_version: 1
+baseline_id: semantic-router-v0.1
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: frozen
+date: "2026-09-18"
+scope: ["3.2.92-3.2.94","5.6.4.6-5.6.4.7","5.6.5.5","5.6.5.7","5.6.8","5.6.9"]
+freeze_gate:
+  scope_closure: PASS
+  semantic_closure: PASS
+  figure_closure: PASS
+  state_boundary_ownership: PASS
+  ambiguity_closure: PASS
+  pre_golden_verification_closure: PASS
+independent_challenge: PASS
+selected_optionals:
+  group_adaptive_logical: true
+  legacy_group_adaptive_path: false
+  multicast: true
+  port_timeout: true
+  per_port_timeout: true
+  timecode_relay: true
+  distributed_interrupt_relay: true
+arbitration:
+  normative: fair
+  reference_trace_only: round_robin
+golden_model: golden_model/router/model.py
+validation: pending_CI
