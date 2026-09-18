@@ -73,9 +73,11 @@ class RouterModel:
         busy_ports=None,
     ) -> RouteDecision:
         enabled = set(self.external_ports if enabled_ports is None else enabled_ports)
-        ready = set(enabled if ready_ports is None else ready_ports)
-        busy = set(self.output_owner) | set(() if busy_ports is None else busy_ports)
         existing = {0, *self.external_ports}
+        # Port 0 is the internal configuration port and is part of routing
+        # availability even though it is not an external SpaceWire/FIFO port.
+        ready = set((enabled | {0}) if ready_ports is None else ready_ports)
+        busy = set(self.output_owner) | set(() if busy_ports is None else busy_ports)
         if not 0 <= header <= 255:
             raise ValueError("header")
 
