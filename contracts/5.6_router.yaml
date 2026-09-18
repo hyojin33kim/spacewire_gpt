@@ -64,6 +64,25 @@ broadcast:
     ack_active_IID: clear_bit_and_relay_except_ingress
     timeout: clear_IID_bit
 
+wormhole_state_contract:
+  allocate_on_packet_start: true
+  output_owner_locked_until: [EOP, EEP, error_termination]
+  single_output_backpressure: atomic_per_NChar
+  multicast_backpressure: all_enabled_designated_outputs_ready_before_each_NChar
+
+interrupt_relay_contract:
+  relay_register_bits: 32
+  per_IID_timeout: true
+  per_port_interrupt_rx_enable: true
+  per_port_interrupt_tx_enable: true
+  per_port_ack_rx_enable: true
+  per_port_ack_tx_enable: true
+  duplicate_active_interrupt: discard
+  first_interrupt: [set_IID_bit, relay_except_ingress_and_tx_disabled_ports, start_timeout]
+  active_ack: [clear_IID_bit, relay_except_ingress_and_tx_disabled_ports, stop_timeout]
+  inactive_ack: ignore
+  timeout: clear_IID_bit
+
 invariants:
   - path_header_is_consumed_exactly_once_per_router
   - logical_header_is_retained_unless_deletion_configured
