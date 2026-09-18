@@ -36,6 +36,25 @@ interrupt_contract:
   modes: [interrupt, interrupt_with_acknowledgement]
   ack_mode_single_source_and_single_acknowledger_per_IID: true
 
+broadcast_contract:
+  priority: [TIME_CODE, INTERRUPT_ACK, INTERRUPT]
+  reserved_types:
+    "0b01": {router: DELETE_NOT_FORWARD, node: DISCARD}
+    "0b11": {router: DELETE_NOT_FORWARD, node: DISCARD}
+
+service_contract:
+  packet: [SEND_PACKET.request, RECEIVE_PACKET.indication]
+  time_code: [TIME-CODE.request, TIME-CODE.indication]
+  distributed_interrupt:
+    - DISTRIBUTED_INTERRUPT.request
+    - DISTRIBUTED_INTERRUPT.indication
+    - DISTRIBUTED_INTERRUPT_ACK.request
+    - DISTRIBUTED_INTERRUPT_ACK.indication
+
+source_conflicts:
+  - id: CR-NET-001
+    selected_semantics: zero_data_character_packet_is_syntactically_valid_and_first_router_discards
+
 invariants:
   - packet_NChars_from_different_packets_are_not_interleaved
   - timecode_value_is_6_bit
