@@ -53,21 +53,86 @@ requirements:
   - {id: SPW-5.5.7-c, clause: "5.5.7.1.c", level: SHALL, behavior: ErrorReset_delay_range_us_5_82_to_7_22}
   - {id: SPW-5.5.7-d, clause: "5.5.7.1.d", level: SHALL, behavior: timeout_delay_range_us_11_64_to_14_33}
   - {id: SPW-5.5.7-e, clause: "5.5.7.1.e", level: SHALL, behavior: PortReset_clears_FIFOs_and_enters_ErrorReset}
-  - {id: SPW-5.5.7.2-a, clause: "5.5.7.2.a", level: SHALL, behavior: ErrorReset_disable_TX_RX_clear_credits_gotFCT_start_6_4us_timer}
-  - {id: SPW-5.5.7.2-b, clause: "5.5.7.2.b", level: SHOULD, behavior: ErrorReset_discard_pending_broadcast, selected: true}
-  - {id: SPW-5.5.7.2-c, clause: "5.5.7.2.c", level: SHALL, behavior: ErrorReset_to_ErrorWait_after_timer_if_not_disabled}
-  - {id: SPW-5.5.7.3, clause: "5.5.7.3", level: SHALL, behavior: ErrorWait_RX_only_reject_data_then_timeout_to_Ready_and_errors_to_ErrorReset}
-  - {id: SPW-5.5.7.4, clause: "5.5.7.4", level: SHALL, behavior: Ready_RX_only_start_on_LinkStart_or_AutoStart_and_gotNull}
-  - {id: SPW-5.5.7.5, clause: "5.5.7.5", level: SHALL, behavior: Started_send_Nulls_then_connect_on_sentNull_and_gotNull_else_errors_or_timeout}
-  - {id: SPW-5.5.7.6, clause: "5.5.7.6", level: SHALL, behavior: Connecting_send_FCTs_Nulls_then_Run_on_sentFCT_and_gotFCT_else_errors_or_timeout}
-  - {id: SPW-5.5.7.7, clause: "5.5.7.7", level: SHALL, behavior: Run_send_all_classes_receive_and_forward_then_ErrorReset_on_link_errors}
-  - {id: SPW-5.5.7.8, clause: "5.5.7.8", level: MAY, behavior: legacy_LinkDisabled_behavior, selected: false}
+
+  - {id: SPW-5.5.7.2-a1, clause: "5.5.7.2.a.1", level: SHALL, behavior: ErrorReset_deassert_TX_ENABLE}
+  - {id: SPW-5.5.7.2-a2, clause: "5.5.7.2.a.2", level: SHALL, behavior: ErrorReset_deassert_RX_ENABLE}
+  - {id: SPW-5.5.7.2-a3, clause: "5.5.7.2.a.3", level: SHALL, behavior: ErrorReset_clear_TX_credit}
+  - {id: SPW-5.5.7.2-a4, clause: "5.5.7.2.a.4", level: SHALL, behavior: ErrorReset_clear_RX_credit}
+  - {id: SPW-5.5.7.2-a5, clause: "5.5.7.2.a.5", level: SHALL, behavior: ErrorReset_clear_gotFCT}
+  - {id: SPW-5.5.7.2-a6, clause: "5.5.7.2.a.6", level: SHALL, behavior: ErrorReset_start_6_4us_timer}
+  - {id: SPW-5.5.7.2-b1, clause: "5.5.7.2.b.1", level: SHOULD, behavior: ErrorReset_discard_pending_broadcast, selected: true}
+  - {id: SPW-5.5.7.2-c1, clause: "5.5.7.2.c.1", level: SHALL, behavior: ErrorReset_to_ErrorWait_after_timer_if_LinkDisabled_deasserted}
+
+  - {id: SPW-5.5.7.3-a1, clause: "5.5.7.3.a.1", level: SHALL, behavior: ErrorWait_start_12_8us_timer}
+  - {id: SPW-5.5.7.3-a2, clause: "5.5.7.3.a.2", level: SHALL, behavior: ErrorWait_deassert_TX_ENABLE}
+  - {id: SPW-5.5.7.3-a3, clause: "5.5.7.3.a.3", level: SHALL, behavior: ErrorWait_assert_RX_ENABLE_without_storing_NChars_or_registering_BC}
+  - {id: SPW-5.5.7.3-b1, clause: "5.5.7.3.b.1", level: SHALL, behavior: ErrorWait_LinkDisabled_to_ErrorReset}
+  - {id: SPW-5.5.7.3-b2, clause: "5.5.7.3.b.2", level: SHALL, behavior: ErrorWait_disconnect_to_ErrorReset}
+  - {id: SPW-5.5.7.3-b3, clause: "5.5.7.3.b.3", level: SHALL, behavior: ErrorWait_parity_error_to_ErrorReset}
+  - {id: SPW-5.5.7.3-b4, clause: "5.5.7.3.b.4", level: SHALL, behavior: ErrorWait_ESC_error_to_ErrorReset}
+  - {id: SPW-5.5.7.3-b5, clause: "5.5.7.3.b.5", level: SHALL, behavior: ErrorWait_FCT_NChar_or_BC_to_ErrorReset}
+  - {id: SPW-5.5.7.3-b6, clause: "5.5.7.3.b.6", level: SHALL, behavior: ErrorWait_timeout_to_Ready}
+
+  - {id: SPW-5.5.7.4-a1, clause: "5.5.7.4.a.1", level: SHALL, behavior: Ready_deassert_TX_ENABLE}
+  - {id: SPW-5.5.7.4-a2, clause: "5.5.7.4.a.2", level: SHALL, behavior: Ready_assert_RX_ENABLE_without_storing_NChars_or_registering_BC}
+  - {id: SPW-5.5.7.4-b1, clause: "5.5.7.4.b.1", level: SHALL, behavior: Ready_LinkDisabled_to_ErrorReset}
+  - {id: SPW-5.5.7.4-b2, clause: "5.5.7.4.b.2", level: SHALL, behavior: Ready_disconnect_to_ErrorReset}
+  - {id: SPW-5.5.7.4-b3, clause: "5.5.7.4.b.3", level: SHALL, behavior: Ready_parity_error_to_ErrorReset}
+  - {id: SPW-5.5.7.4-b4, clause: "5.5.7.4.b.4", level: SHALL, behavior: Ready_ESC_error_to_ErrorReset}
+  - {id: SPW-5.5.7.4-b5, clause: "5.5.7.4.b.5", level: SHALL, behavior: Ready_FCT_NChar_or_BC_to_ErrorReset}
+  - {id: SPW-5.5.7.4-b6, clause: "5.5.7.4.b.6", level: SHALL, behavior: Ready_LinkStart_to_Started}
+  - {id: SPW-5.5.7.4-b7, clause: "5.5.7.4.b.7", level: SHALL, behavior: Ready_AutoStart_and_gotNull_to_Started}
+
+  - {id: SPW-5.5.7.5-a1, clause: "5.5.7.5.a.1", level: SHALL, behavior: Started_start_12_8us_timer}
+  - {id: SPW-5.5.7.5-a2, clause: "5.5.7.5.a.2", level: SHALL, behavior: Started_assert_TX_ENABLE_and_send_Nulls_only}
+  - {id: SPW-5.5.7.5-a3, clause: "5.5.7.5.a.3", level: SHALL, behavior: Started_assert_RX_ENABLE_without_storing_NChars_or_registering_BC}
+  - {id: SPW-5.5.7.5-b1, clause: "5.5.7.5.b.1", level: SHALL, behavior: Started_LinkDisabled_to_ErrorReset}
+  - {id: SPW-5.5.7.5-b2, clause: "5.5.7.5.b.2", level: SHALL, behavior: Started_disconnect_to_ErrorReset}
+  - {id: SPW-5.5.7.5-b3, clause: "5.5.7.5.b.3", level: SHALL, behavior: Started_parity_error_to_ErrorReset}
+  - {id: SPW-5.5.7.5-b4, clause: "5.5.7.5.b.4", level: SHALL, behavior: Started_ESC_error_to_ErrorReset}
+  - {id: SPW-5.5.7.5-b5, clause: "5.5.7.5.b.5", level: SHALL, behavior: Started_FCT_NChar_or_BC_to_ErrorReset}
+  - {id: SPW-5.5.7.5-b6, clause: "5.5.7.5.b.6", level: SHALL, behavior: Started_sentNull_and_gotNull_to_Connecting}
+  - {id: SPW-5.5.7.5-b7, clause: "5.5.7.5.b.7", level: SHALL, behavior: Started_timeout_to_ErrorReset}
+
+  - {id: SPW-5.5.7.6-a1, clause: "5.5.7.6.a.1", level: SHALL, behavior: Connecting_start_12_8us_timer}
+  - {id: SPW-5.5.7.6-a2, clause: "5.5.7.6.a.2", level: SHALL, behavior: Connecting_assert_TX_ENABLE_send_FCTs_and_Nulls_per_priority}
+  - {id: SPW-5.5.7.6-a3, clause: "5.5.7.6.a.3", level: SHALL, behavior: Connecting_assert_RX_ENABLE_without_storing_NChars_or_registering_BC_before_Run}
+  - {id: SPW-5.5.7.6-b1, clause: "5.5.7.6.b.1", level: SHALL, behavior: Connecting_LinkDisabled_to_ErrorReset}
+  - {id: SPW-5.5.7.6-b2, clause: "5.5.7.6.b.2", level: SHALL, behavior: Connecting_disconnect_to_ErrorReset}
+  - {id: SPW-5.5.7.6-b3, clause: "5.5.7.6.b.3", level: SHALL, behavior: Connecting_parity_error_to_ErrorReset}
+  - {id: SPW-5.5.7.6-b4, clause: "5.5.7.6.b.4", level: SHALL, behavior: Connecting_ESC_error_to_ErrorReset}
+  - {id: SPW-5.5.7.6-b5, clause: "5.5.7.6.b.5", level: SHALL, behavior: Connecting_sentFCT_and_gotFCT_to_Run}
+  - {id: SPW-5.5.7.6-b6, clause: "5.5.7.6.b.6", level: SHALL, behavior: Connecting_NChar_or_BC_to_ErrorReset}
+  - {id: SPW-5.5.7.6-b7, clause: "5.5.7.6.b.7", level: SHALL, behavior: Connecting_timeout_to_ErrorReset}
+
+  - {id: SPW-5.5.7.7-a1, clause: "5.5.7.7.a.1", level: SHALL, behavior: Run_assert_TX_ENABLE_and_send_BC_FCT_NChar_Null_per_priority}
+  - {id: SPW-5.5.7.7-a2, clause: "5.5.7.7.a.2", level: SHALL, behavior: Run_assert_RX_ENABLE}
+  - {id: SPW-5.5.7.7-a3, clause: "5.5.7.7.a.3", level: SHALL, behavior: source_wording_pass_received_NChars_and_BC_to_Encoding, issue: CR-DL-001}
+  - {id: SPW-5.5.7.7-a4, clause: "5.5.7.7.a.4", level: SHALL, behavior: Run_pass_received_BC_to_Network}
+  - {id: SPW-5.5.7.7-a5, clause: "5.5.7.7.a.5", level: SHALL, behavior: Run_change_output_operating_rate_if_required}
+  - {id: SPW-5.5.7.7-b1, clause: "5.5.7.7.b.1", level: SHALL, behavior: Run_LinkDisabled_to_ErrorReset}
+  - {id: SPW-5.5.7.7-b2, clause: "5.5.7.7.b.2", level: SHALL, behavior: Run_disconnect_to_ErrorReset}
+  - {id: SPW-5.5.7.7-b3, clause: "5.5.7.7.b.3", level: SHALL, behavior: Run_parity_error_to_ErrorReset}
+  - {id: SPW-5.5.7.7-b4, clause: "5.5.7.7.b.4", level: SHALL, behavior: Run_ESC_error_to_ErrorReset}
+  - {id: SPW-5.5.7.7-b5, clause: "5.5.7.7.b.5", level: SHALL, behavior: Run_credit_error_to_ErrorReset}
+
+  - {id: SPW-5.5.7.8-a1, clause: "5.5.7.8.a.1", level: MAY, behavior: legacy_LinkDisabled_recognized_only_in_Ready_and_Run, selected: false}
+  - {id: SPW-5.5.7.8-a2, clause: "5.5.7.8.a.2", level: MAY, behavior: legacy_LinkDisabled_in_Ready_remains_Ready, selected: false}
+  - {id: SPW-5.5.7.8-a3, clause: "5.5.7.8.a.3", level: MAY, behavior: legacy_LinkDisabled_in_Run_to_ErrorReset, selected: false}
 
   - {id: SPW-5.5.8.2, clause: "5.5.8.2", level: SHALL, behavior: PortReset_sets_error_recovery_Normal}
-  - {id: SPW-5.5.8.3, clause: "5.5.8.3", level: SHALL, behavior: Normal_to_Recovery_on_Run_error_or_LinkDisabled}
+
+  - {id: SPW-5.5.8.3-a, clause: "5.5.8.3.a", level: SHALL, behavior: RecoveryFSM_Normal_state_takes_no_action}
+  - {id: SPW-5.5.8.3-b1, clause: "5.5.8.3.b.1", level: SHALL, behavior: Run_LinkDisabled_moves_RecoveryFSM_to_Recovery}
+  - {id: SPW-5.5.8.3-b2, clause: "5.5.8.3.b.2", level: SHALL, behavior: Run_link_error_moves_RecoveryFSM_to_Recovery}
   - {id: SPW-5.5.8.4-a1, clause: "5.5.8.4.a.1", level: SHALL, behavior: Recovery_discard_unsent_remainder_of_TX_packet}
   - {id: SPW-5.5.8.4-a2, clause: "5.5.8.4.a.2", level: SHALL, behavior: Recovery_append_EEP_if_RX_packet_open}
   - {id: SPW-5.5.8.4-a4, clause: "5.5.8.4.a.4", level: SHALL, behavior: wait_for_RX_FIFO_space_if_EEP_pending}
   - {id: SPW-5.5.8.4-a5, clause: "5.5.8.4.a.5", level: SHALL, behavior: record_error_cause}
   - {id: SPW-5.5.8.4-b, clause: "5.5.8.4.b", level: SHALL, behavior: Recovery_to_Normal_after_actions_complete}
   - {id: SPW-5.5.9-a, clause: "5.5.9.a", level: SHOULD, behavior: discard_broadcast_for_TX_unless_Run, selected: true}
+
+  - {id: SPW-5.5.7.1-a, clause: "5.5.7.1.a", level: SHALL, behavior: link_initialisation_follows_5_5_7_state_behavior}
+  - {id: SPW-5.5.7.1-b, clause: "5.5.7.1.b", level: SHALL, behavior: recover_from_link_errors_to_resume_normal_operation_when_possible}
+  - {id: SPW-5.5.8.1-a, clause: "5.5.8.1.a", level: SHALL, behavior: link_error_recovery_follows_5_5_8_state_behavior}
+  - {id: SPW-5.5.8.4-a3, clause: "5.5.8.4.a.3", level: CAN, behavior: Recovery_may_add_extra_EEP_after_last_EOP_or_EEP, reference_trace_selected: false}
