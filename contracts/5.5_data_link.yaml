@@ -66,7 +66,7 @@ directional_service_binding:
   ENC_TO_DL_BROADCAST:
     destination: Network
   source_issue:
-    id: CR-DL-001
+    issue_ref: CR-DL-001
     rule: >
       The word "received" in 5.5.7.7.a.3 shall not collapse provenance.
       Direction is bound by 5.5.2 and 6.2 service interfaces.
