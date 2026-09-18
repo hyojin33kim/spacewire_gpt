@@ -63,3 +63,26 @@ issues:
     decision_required: false
     blocking: false
     status: documented_source_cross_reference_issue
+
+  - id: CR-ENC-015
+    source_clauses: ["5.4.2.a", "5.5.2.b", "6.3.1.2"]
+    source_statement_summary: >
+      5.4.2/5.5.2 explicitly transfer characters and control codes between Data Link
+      and Encoding, while TX_CHAR.request in 6.3 carries a Character parameter.
+    observed_conflict: "Control-code transfer is not explicitly represented by the TX_CHAR.request parameter type."
+    handling: "RTL contract uses a tagged union item interface while preserving the source primitive evidence."
+    decision_required: false
+    blocking: false
+    status: documented_interface_mismatch
+
+  - id: CR-ENC-016
+    source_clauses: ["5.4.2.b", "5.5.2.c", "6.3.2.2"]
+    source_statement_summary: >
+      5.4.2/5.5.2 require received characters and control codes to pass to Data Link,
+      while RX_CHAR.request effect text refers to a decoded character and its parameter
+      notation is incomplete.
+    observed_conflict: "Control-code receive representation is not explicit in the service primitive."
+    handling: "RTL contract uses a tagged union receive item plus dedicated status indications."
+    decision_required: false
+    blocking: false
+    status: documented_interface_mismatch
