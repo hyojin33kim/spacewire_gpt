@@ -1,0 +1,36 @@
+schema_version: 1
+artifact: Router Golden Model validation result
+semantic_baseline: semantic-router-v0.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+validated_repo_commit: "34f6406014560045d0ec35e61381c7011f6a8c51"
+github_actions_golden_run_id: 35360571671
+github_actions_semantic_run_id: 35360571669
+status: PASS
+
+results:
+  atomic_requirements: 101
+  unittest_behavior_methods: 8
+  pre_golden_vectors_total: 34
+  pre_golden_vectors_mapped: 34
+  pre_golden_invariants_total: 9
+  mapping_closure: "34/34 vectors"
+  structural_lint: PASS
+  protocol_invariant_suite: PASS
+
+validated_behavior_groups:
+  - path_and_logical_addressing
+  - logical_address_deletion
+  - wormhole_output_allocation_lock_and_backpressure
+  - fair_arbitration_with_round_robin_reference_trace
+  - logical_group_adaptive_routing
+  - packet_multicast_atomicity
+  - routing_switch_reset_and_port_timeout
+  - time_code_relay
+  - distributed_interrupt_and_ack_relay
+
+known_nonblocking_source_issues: [CR-RTR-001]
+
+authorization:
+  RTL_contract_creation: true
+  RTL_implementation: false
+  RTL_implementation_condition: reviewed_Router_RTL_contract
