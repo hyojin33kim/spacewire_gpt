@@ -1,0 +1,63 @@
+schema_version: 1
+id: BC-ENC-PIPE-001
+name: Encoding TX/RX ordering, enable and delivery gating
+spec: ECSS-E-ST-50-12C-Rev.1
+scope: ["5.4.2"]
+status: draft
+
+tx_path:
+  input_from_data_link:
+    - character
+    - control_code
+  required_processing_order:
+    - encode
+    - serialize
+    - data_strobe_encode
+    - transmit
+  ordering_rule: preserve_data_link_input_order
+  enable:
+    control: TX_ENABLE
+    asserted: enable_transmitter_chain
+    deasserted: reset_transmitter_chain
+
+rx_path:
+  required_processing_order:
+    - data_strobe_decode
+    - deserialize
+    - decode
+  ordering_rule: preserve_receive_order
+  delivery_to_data_link:
+    require:
+      - no_parity_error
+      - gotNull_asserted
+  enable:
+    control: RX_ENABLE
+    asserted: enable_receiver_chain
+    deasserted: reset_receiver_chain
+
+status_to_data_link:
+  - DISCONNECT
+  - RECEIVE_ERROR
+  - GOT_NULL
+
+invariants:
+  - tx_character_and_control_code_order_is_preserved
+  - rx_character_and_control_code_order_is_preserved
+  - parity_errored_received_items_are_not_delivered_to_data_link
+  - no_received_character_or_control_code_is_delivered_before_gotNull
+
+requirements:
+  - SPW-5.4.2-a
+  - SPW-5.4.2-b
+  - SPW-5.4.2-c
+  - SPW-5.4.2-d
+  - SPW-5.4.2-e-1
+  - SPW-5.4.2-e-2
+  - SPW-5.4.2-f-1
+  - SPW-5.4.2-f-2
+  - SPW-5.4.2-f-3
+
+open_questions:
+  - id: OQ-ENC-PIPE-001
+    issue: "5.4.2 defines behavioral flags while clause 6.3 defines service primitives. Golden Model API should expose the semantic behavior without assuming an RTL handshake."
+    classification: golden_model_api_boundary
