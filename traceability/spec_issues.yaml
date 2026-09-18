@@ -19,6 +19,7 @@ issues:
     observed_conflict: "Parameter notation is incomplete/unclear in parsed text."
     handling: preserve_source_semantics_and_avoid_inventing_parameter
     decision_required: false
+    blocking: false
     status: open
 
   - id: CR-ENC-011
@@ -27,4 +28,17 @@ issues:
     observed_conflict: "Parameter notation is incomplete/unclear in parsed text."
     handling: preserve_source_semantics_and_avoid_inventing_parameter
     decision_required: false
+    blocking: false
+    status: open
+
+  - id: CR-ENC-012
+    source_clause: "5.4.4.e"
+    source_statement_summary: "Reset delay shall be between 500 ns and the period of the fastest transmit time for the implementation."
+    observed_conflict: >
+      Current contract/test artifacts encode min=500 ns and max=fastest-transmit period.
+      For any transmitter faster than 2 Mbps, the fastest-transmit period is less than
+      500 ns, so that min/max ordering is internally impossible.
+    handling: do_not_freeze_until_interpreted_and_corrected
+    decision_required: true
+    blocking: true
     status: open
