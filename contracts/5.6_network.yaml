@@ -43,3 +43,65 @@ invariants:
   - invalid_timecode_resynchronizes_register_without_valid_host_indication
   - interrupt_IID_is_0_to_31
   - interrupt_and_ack_codes_preserve_IID
+
+requirements:
+  - SPW-5.2.2-a1
+  - SPW-5.2.2-a2
+  - SPW-5.2.2-a3
+  - SPW-5.2.2-b
+  - SPW-5.2.2-c
+  - SPW-5.2.2-d
+  - SPW-5.2.2-e
+  - SPW-5.6.2.1-a
+  - SPW-5.6.2.1-b
+  - SPW-5.6.2.1-c
+  - SPW-5.6.2.1-d
+  - SPW-5.6.2.1-e
+  - SPW-5.6.2.1-f
+  - SPW-5.6.2.2-a
+  - SPW-5.6.3-a
+  - SPW-5.6.3-b
+  - SPW-5.6.4.1-a
+  - SPW-5.6.4.1-b
+  - SPW-5.6.4.2-a
+  - SPW-5.6.4.3-a
+  - SPW-5.6.4.3-b
+  - SPW-5.6.4.3-c
+  - SPW-5.6.4.3-d
+  - SPW-5.6.4.4-a
+  - SPW-5.6.4.4-b
+  - SPW-5.6.4.5-a
+  - SPW-5.6.4.5-b
+  - SPW-5.6.4.5-c
+  - SPW-5.6.4.8-a
+  - SPW-5.6.4.9-a
+  - SPW-5.6.5.1-a
+  - SPW-5.6.5.1-c
+  - SPW-5.6.5.1-d
+  - SPW-5.6.5.1-e
+  - SPW-5.6.5.2-a
+  - SPW-5.6.5.2-b
+  - SPW-5.6.5.2-c
+  - SPW-5.6.5.3-a
+  - SPW-5.6.5.3-b
+  - SPW-5.6.5.3-c
+  - SPW-5.6.5.3-d
+  - SPW-5.6.5.4-a
+  - SPW-5.6.5.4-b
+  - SPW-5.6.5.4-c
+  - SPW-5.6.5.4-d
+  - SPW-5.6.5.6-b
+  - SPW-5.6.5.6-c
+  - SPW-5.6.5.6-e
+  - SPW-5.6.5.6-f
+  - SPW-5.6.5.6-g
+  - SPW-5.6.6-a
+  - SPW-5.6.6-b
+  - SPW-5.6.6-d
+  - SPW-5.6.6-e
+  - SPW-5.6.6-f
+  - SPW-5.6.6-g
+  - SPW-5.6.6-h
+  - SPW-5.6.6-i
+  - SPW-5.6.6-j
+  - SPW-5.6.10-a
