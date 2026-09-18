@@ -1,0 +1,70 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+layer: Encoding architecture
+scope: "5.2.4"
+status: draft
+
+requirements:
+  - id: SPW-5.2.4-a-1
+    source_clause: "5.2.4.a.1"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    action: provide_service
+    result: character_encoding_service
+    behavior:
+      - encode_characters_and_control_codes_into_symbols
+      - serialise_symbols
+      - data_strobe_encode_serial_bit_stream
+      - prepare_for_physical_layer_transmission
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.2.4-a-2
+    source_clause: "5.2.4.a.2"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    action: provide_service
+    result: character_decoding_service
+    behavior:
+      - recover_data_bit_stream_from_data_strobe
+      - deserialise_bit_stream
+      - decode_symbols_into_characters_and_control_codes
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.2.4-b
+    source_clause: "5.2.4.b"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    action: accept_service_requests_from
+    result: DATA_LINK_LAYER
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.2.4-c
+    source_clause: "5.2.4.c"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    action: be_responsible_for
+    result: encoding_and_decoding_characters_for_physical_transfer
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
+
+  - id: SPW-5.2.4-d
+    source_clause: "5.2.4.d"
+    normative_level: SHALL
+    subject: ENCODING_LAYER
+    action: use_services_of
+    result: PHYSICAL_LAYER
+    evidence: text
+    assumption_status: none
+    review_status: draft
+    revision: 1
