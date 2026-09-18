@@ -121,3 +121,18 @@ issues:
     decision_required: false
     blocking: false
     status: documented_source_issue
+
+  - id: CR-NET-001
+    source_clauses: ["5.6.2.1.a", "5.6.2.1.d"]
+    source_statement_summary: >
+      Clause 5.6.2.1.a says a packet comprises one or more data characters
+      followed by EOP/EEP, while 5.6.2.1.d explicitly says a packet contains
+      zero or more data characters and its note describes handling of an empty packet.
+    observed_conflict: minimum_packet_data_character_count_is_one_vs_zero
+    handling: >
+      Model zero-data-character packets as syntactically valid SpaceWire packets.
+      This follows the more specific 5.6.2.1.d requirement and its explicit empty-packet
+      note; a routing switch discards an empty packet when encountered.
+    decision_required: false
+    blocking: false
+    status: documented_non_blocking_internal_conflict
