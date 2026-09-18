@@ -1,2 +1,156 @@
 schema_version: 1
-entities: []
+spec: ECSS-E-ST-50-12C-Rev.1
+
+entities:
+  - id: ENCODING_LAYER
+    canonical_name: Encoding layer
+    kind: protocol_layer
+    source: ["3.2.33", "5.2.4", "5.4.1"]
+
+  - id: CHARACTER
+    canonical_name: character
+    kind: abstract_data
+    source: ["3.2.10"]
+
+  - id: DATA_CHARACTER
+    canonical_name: data character
+    kind: character
+    width_bits: 8
+    source: ["3.2.17", "5.4.3.1"]
+
+  - id: CONTROL_CHARACTER
+    canonical_name: control character
+    kind: character
+    members: [FCT, EOP, EEP, ESC]
+    source: ["3.2.14", "5.4.3.2"]
+
+  - id: CONTROL_CODE
+    canonical_name: control code
+    kind: character_sequence
+    source: ["3.2.15", "5.4.3.3"]
+
+  - id: FCT
+    canonical_name: flow control token
+    kind: control_character
+    control_type: "0b00"
+    source: ["3.2.42", "5.4.3.2.c"]
+
+  - id: EOP
+    canonical_name: end of packet marker
+    kind: control_character
+    control_type: "0b10"
+    source: ["3.2.34", "5.4.3.2.d"]
+
+  - id: EEP
+    canonical_name: error end of packet marker
+    kind: control_character
+    control_type: "0b01"
+    source: ["5.4.3.2.e"]
+
+  - id: ESC
+    canonical_name: escape character
+    kind: control_character
+    control_type: "0b11"
+    source: ["3.2.37", "5.4.3.2.f"]
+
+  - id: NULL
+    canonical_name: Null
+    kind: control_code
+    sequence: [ESC, FCT]
+    source: ["3.2.79", "5.4.3.3.b"]
+
+  - id: BROADCAST_CODE
+    canonical_name: broadcast code
+    kind: control_code
+    sequence: [ESC, DATA_CHARACTER]
+    source: ["3.2.6", "5.4.3.3.c"]
+
+  - id: SYMBOL
+    canonical_name: symbol
+    kind: encoded_representation
+    source: ["3.2.105"]
+
+  - id: DATA_SYMBOL
+    canonical_name: data symbol
+    kind: symbol
+    width_bits: 10
+    source: ["3.2.22", "5.4.3.1"]
+
+  - id: CONTROL_SYMBOL
+    canonical_name: control symbol
+    kind: symbol
+    width_bits: 4
+    source: ["3.2.16", "5.4.3.2"]
+
+  - id: PARITY_BIT
+    canonical_name: parity bit
+    kind: field
+    parity: odd
+    source: ["5.4.3.4"]
+
+  - id: DATA_CONTROL_FLAG
+    canonical_name: data-control flag
+    kind: field
+    values:
+      data: 0
+      control: 1
+    source: ["5.4.3.1.b", "5.4.3.2.b"]
+
+  - id: SERIAL_BIT_STREAM
+    canonical_name: serial bit stream
+    kind: signal_sequence
+    source: ["5.4.1", "5.4.4"]
+
+  - id: DATA_SIGNAL
+    canonical_name: Data signal
+    kind: digital_signal
+    source: ["3.4.2", "5.4.4"]
+
+  - id: STROBE_SIGNAL
+    canonical_name: Strobe signal
+    kind: digital_signal
+    source: ["3.4.2", "5.4.4"]
+
+  - id: GOT_NULL
+    canonical_name: gotNull
+    kind: status_flag
+    source: ["3.2.46", "5.4.2.f.3", "5.4.6"]
+
+  - id: TX_ENABLE
+    canonical_name: Transmit Enable
+    kind: control_flag
+    source: ["5.4.2.e.1"]
+
+  - id: RX_ENABLE
+    canonical_name: Receive Enable
+    kind: control_flag
+    source: ["5.4.2.e.2"]
+
+  - id: RECEIVE_ERROR
+    canonical_name: receive error
+    kind: status_flag
+    source: ["3.2.86", "5.4.2.f.2"]
+
+  - id: PARITY_ERROR
+    canonical_name: parity error
+    kind: receive_error
+    source: ["5.4.7"]
+
+  - id: DISCONNECT
+    canonical_name: disconnect
+    kind: status_flag
+    nominal_definition_ns: 850
+    source: ["3.2.28", "5.4.8"]
+
+  - id: ESC_ERROR
+    canonical_name: ESC error
+    kind: receive_error
+    source: ["3.2.38", "5.4.9"]
+
+  - id: DATA_SIGNALLING_RATE
+    canonical_name: data signalling rate
+    kind: timing_parameter
+    unit: Mbps
+    source: ["3.2.20", "5.4.10"]
+
+review_status: draft
