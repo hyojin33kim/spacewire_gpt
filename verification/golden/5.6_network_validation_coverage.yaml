@@ -1,0 +1,39 @@
+schema_version: 1
+baseline: semantic-network-v0.1
+artifact: Golden Model validation coverage
+status: validated
+mapping:
+  test_packet_vectors:
+    - TV-NET-001
+    - TV-NET-002
+    - TV-NET-003
+    - TV-NET-029
+  test_timecode_vectors:
+    - TV-NET-004
+    - TV-NET-005
+    - TV-NET-006
+    - TV-NET-017
+    - TV-NET-018
+    - TV-NET-019
+  test_interrupt_vectors:
+    - TV-NET-007
+    - TV-NET-008
+    - TV-NET-009
+    - TV-NET-010
+    - TV-NET-011
+    - TV-NET-020
+    - TV-NET-021
+    - TV-NET-022
+  test_broadcast_priority_and_reserved_types:
+    - TV-NET-014
+    - TV-NET-015
+    - TV-NET-016
+  test_services_and_selected_features:
+    - TV-NET-012
+    - TV-NET-013
+    - TV-NET-023
+    - TV-NET-024
+    - TV-NET-025
+    - TV-NET-026
+    - TV-NET-027
+    - TV-NET-028
