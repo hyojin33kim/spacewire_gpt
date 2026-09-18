@@ -1,0 +1,12 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+layer: Data Link
+scope: ["5.2.3"]
+status: reviewed
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+requirements:
+  - {id: SPW-DL-5.2.3-a1, clause: "5.2.3.a.1", level: SHALL, behavior: provide_NChar_service}
+  - {id: SPW-DL-5.2.3-a2, clause: "5.2.3.a.2", level: SHALL, behavior: provide_broadcast_code_service}
+  - {id: SPW-DL-5.2.3-b, clause: "5.2.3.b", level: SHALL, behavior: accept_service_requests_from_network_layer}
+  - {id: SPW-DL-5.2.3-c, clause: "5.2.3.c", level: SHALL, behavior: establish_flow_control_transfer_and_error_recovery_over_link}
+  - {id: SPW-DL-5.2.3-d, clause: "5.2.3.d", level: SHALL, behavior: use_encoding_layer_services}
