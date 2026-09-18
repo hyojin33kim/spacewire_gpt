@@ -54,3 +54,55 @@ open_questions:
   - id: OQ-ENC-IF-001
     issue: "Exact software API shape is an implementation choice; semantic primitives and direction are normative."
     classification: golden_model_api_boundary
+
+requirements:
+  - SPW-5.2.4-a-1
+  - SPW-5.2.4-a-2
+  - SPW-5.2.4-b
+  - SPW-5.2.4-c
+  - SPW-5.2.4-d
+  - SPW-6.3.1.1-a-1
+  - SPW-6.3.1.1-a-2
+  - SPW-6.3.1.2.1-a
+  - SPW-6.3.1.2.2-a
+  - SPW-6.3.1.2.3-a
+  - SPW-6.3.1.2.4-a
+  - SPW-6.3.1.3.1-a
+  - SPW-6.3.1.3.2-a
+  - SPW-6.3.1.3.3-a
+  - SPW-6.3.1.3.4-a
+  - SPW-6.3.2.1-a-1
+  - SPW-6.3.2.1-a-2
+  - SPW-6.3.2.1-a-3
+  - SPW-6.3.2.1-a-4
+  - SPW-6.3.2.1-a-5
+  - SPW-6.3.2.2.1-a
+  - SPW-6.3.2.2.2-a
+  - SPW-6.3.2.2.3-a
+  - SPW-6.3.2.2.4-a
+  - SPW-6.3.2.3.1-a
+  - SPW-6.3.2.3.2-a
+  - SPW-6.3.2.3.3-a
+  - SPW-6.3.2.3.4-a
+  - SPW-6.3.2.4.1-a
+  - SPW-6.3.2.4.2-a
+  - SPW-6.3.2.4.3-a
+  - SPW-6.3.2.4.4-a
+  - SPW-6.3.2.5.1-a
+  - SPW-6.3.2.5.2-a
+  - SPW-6.3.2.5.3-a
+  - SPW-6.3.2.5.4-a
+  - SPW-6.3.2.6.1-a
+  - SPW-6.3.2.6.2-a
+  - SPW-6.3.2.6.3-a
+  - SPW-6.3.2.6.4-a
+  - SPW-6.4.1.1-a-1
+  - SPW-6.4.1.2.1-a
+  - SPW-6.4.1.2.2-a
+  - SPW-6.4.1.2.3-a
+  - SPW-6.4.1.2.4-a
+  - SPW-6.4.2.1-a-1
+  - SPW-6.4.2.2.1-a
+  - SPW-6.4.2.2.2-a
+  - SPW-6.4.2.2.3-a
+  - SPW-6.4.2.2.4-a
