@@ -23,4 +23,14 @@ relations:
   - {subject: DISCONNECT, predicate: timeout_since, object: last_data_or_strobe_transition, source: "5.4.8.c"}
   - {subject: DATA_SIGNALLING_RATE, predicate: initial_value, object: "10±1 Mbps", source: "5.4.10.1"}
   - {subject: DATA_SIGNALLING_RATE, predicate: minimum_value, object: "2 Mbps", source: "5.4.10.2"}
+  - {subject: FIRST_NULL, predicate: first_bit, object: parity_bit_zero, source: "5.4.5.a"}
+  - {subject: FIRST_NULL, predicate: first_transition, object: STROBE_SIGNAL, source: "5.4.5.a"}
+  - {subject: RX_ENABLE, predicate: enables, object: DISCONNECT_DETECTION_context, source: "5.4.8"}
+  - {subject: ERROR_RESET_STATE, predicate: leaving_then_first_DS_edge_enables, object: DISCONNECT_DETECTION, source: "5.4.8.b"}
+  - {subject: DISCONNECT_DETECTION, predicate: timeout_range, object: "greater_than_727ns_to_1us_max", source: "5.4.8.c"}
+  - {subject: ESC, predicate: invalid_followers, object: "[ESC,EOP,EEP]", source: "5.4.9.a"}
+  - {subject: LINK_SPEED, predicate: initial_after_reset_or_disconnect, object: "10±1 Mbps", source: "5.4.10.1.a"}
+  - {subject: LINK_SPEED, predicate: minimum_required, object: "2 Mbps", source: "5.4.10.2.a"}
+  - {subject: LINK_SPEED, predicate: configured_by, object: MIB, source: "5.4.11.a.1"}
+
 review_status: draft
