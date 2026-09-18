@@ -1,0 +1,45 @@
+schema_version: 1
+id: BC-NET-V0.1
+name: Network semantic behavior contract
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: frozen
+scope: ["packet", "time-code", "distributed interrupt", "node/service"]
+
+selected_optional_features:
+  time_code: true
+  distributed_interrupt: true
+  distributed_interrupt_modes: [interrupt, interrupt_with_acknowledgement]
+  endpoint_time_code_register: true
+  source_node_packet_multicast: true
+
+packet_contract:
+  terminators: [EOP, EEP]
+  no_packet_NChar_interleaving: true
+  destination_address_is_prefix: true
+  cargo_follows_destination_address: true
+
+timecode_contract:
+  broadcast_type: "0b00"
+  value_range: [0,63]
+  valid_rule: "received == (register + 1) mod 64"
+  node_valid_action: [notify_host, update_register]
+  node_invalid_action: [update_register]
+  single_master_per_timecode_network: true
+
+interrupt_contract:
+  broadcast_type: "0b10"
+  IID_range: [0,31]
+  interrupt_bit5: 0
+  acknowledgement_bit5: 1
+  ack_IID_must_match_interrupt_IID: true
+  modes: [interrupt, interrupt_with_acknowledgement]
+  ack_mode_single_source_and_single_acknowledger_per_IID: true
+
+invariants:
+  - packet_NChars_from_different_packets_are_not_interleaved
+  - timecode_value_is_6_bit
+  - valid_timecode_sequence_advances_modulo_64
+  - invalid_timecode_resynchronizes_register_without_valid_host_indication
+  - interrupt_IID_is_0_to_31
+  - interrupt_and_ack_codes_preserve_IID
