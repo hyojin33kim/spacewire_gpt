@@ -1,0 +1,47 @@
+schema_version: 1
+spec: ECSS-E-ST-50-12C-Rev.1
+layer: Network
+scope: ["6.1"]
+status: reviewed
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+requirements:
+  - {id: SPW-NET-6.1.1.1-a1, clause: "6.1.1.1.a.1", level: SHALL, behavior: associate_SEND_PACKET_request_with_packet_service}
+  - {id: SPW-NET-6.1.1.1-a2, clause: "6.1.1.1.a.2", level: SHALL, behavior: associate_RECEIVE_PACKET_indication_with_packet_service}
+  - {id: SPW-NET-6.1.1.2.1-a, clause: "6.1.1.2.1.a", level: SHALL, behavior: SEND_PACKET_request_sends_packet_across_network}
+  - {id: SPW-NET-6.1.1.2.2-a, clause: "6.1.1.2.2.a", level: SHALL, behavior: SEND_PACKET_request_parameters_endpoint_and_packet}
+  - {id: SPW-NET-6.1.1.2.3-a, clause: "6.1.1.2.3.a", level: SHALL, behavior: user_generates_SEND_PACKET_request}
+  - {id: SPW-NET-6.1.1.2.4-a, clause: "6.1.1.2.4.a", level: SHALL, behavior: endpoint_sends_requested_packet_through_port}
+  - {id: SPW-NET-6.1.1.3.1-a, clause: "6.1.1.3.1.a", level: SHALL, behavior: endpoint_passes_RECEIVE_PACKET_indication_for_received_packet}
+  - {id: SPW-NET-6.1.1.3.2-a, clause: "6.1.1.3.2.a", level: SHALL, behavior: RECEIVE_PACKET_indication_parameters_endpoint_packet_EOP_EEP}
+  - {id: SPW-NET-6.1.1.3.3-a, clause: "6.1.1.3.3.a", level: SHALL, behavior: indication_generated_when_packet_received}
+  - {id: SPW-NET-6.1.1.3.4-a, clause: "6.1.1.3.4.a", level: SHALL, behavior: service_user_reads_received_packet}
+  - {id: SPW-NET-6.1.2.1-a1, clause: "6.1.2.1.a.1", level: SHALL, behavior: associate_TIME_CODE_request_with_timecode_service}
+  - {id: SPW-NET-6.1.2.1-a2, clause: "6.1.2.1.a.2", level: SHALL, behavior: associate_TIME_CODE_indication_with_timecode_service}
+  - {id: SPW-NET-6.1.2.2.1-a, clause: "6.1.2.2.1.a", level: SHALL, behavior: TIME_CODE_request_requests_endpoint_broadcast}
+  - {id: SPW-NET-6.1.2.2.2-a, clause: "6.1.2.2.2.a", level: SHALL, behavior: TIME_CODE_request_parameters_endpoint_and_value}
+  - {id: SPW-NET-6.1.2.2.3-a, clause: "6.1.2.2.3.a", level: SHALL, behavior: user_generates_TIME_CODE_request}
+  - {id: SPW-NET-6.1.2.2.4-a, clause: "6.1.2.2.4.a", level: SHALL, behavior: endpoint_sends_timecode_through_port}
+  - {id: SPW-NET-6.1.2.3.1-a, clause: "6.1.2.3.1.a", level: SHALL, behavior: TIME_CODE_indication_reports_valid_timecode}
+  - {id: SPW-NET-6.1.2.3.2-a, clause: "6.1.2.3.2.a", level: SHALL, behavior: TIME_CODE_indication_parameters_endpoint_and_value}
+  - {id: SPW-NET-6.1.2.3.3-a, clause: "6.1.2.3.3.a", level: SHALL, behavior: TIME_CODE_indication_generated_on_valid_timecode}
+  - {id: SPW-NET-6.1.2.3.4-a, clause: "6.1.2.3.4.a", level: SHALL, behavior: TIME_CODE_indication_effect_application_dependent}
+  - {id: SPW-NET-6.1.3.1-a1, clause: "6.1.3.1.a.1", level: SHALL, behavior: associate_DISTRIBUTED_INTERRUPT_request}
+  - {id: SPW-NET-6.1.3.1-a2, clause: "6.1.3.1.a.2", level: SHALL, behavior: associate_DISTRIBUTED_INTERRUPT_indication}
+  - {id: SPW-NET-6.1.3.1-a3, clause: "6.1.3.1.a.3", level: SHALL, behavior: associate_DISTRIBUTED_INTERRUPT_ACK_request}
+  - {id: SPW-NET-6.1.3.1-a4, clause: "6.1.3.1.a.4", level: SHALL, behavior: associate_DISTRIBUTED_INTERRUPT_ACK_indication}
+  - {id: SPW-NET-6.1.3.2.1-a, clause: "6.1.3.2.1.a", level: SHALL, behavior: interrupt_request_asks_endpoint_to_send_interrupt_code}
+  - {id: SPW-NET-6.1.3.2.2-a, clause: "6.1.3.2.2.a", level: SHALL, behavior: interrupt_request_parameters_endpoint_and_IID}
+  - {id: SPW-NET-6.1.3.2.3-a, clause: "6.1.3.2.3.a", level: SHALL, behavior: user_generates_interrupt_request}
+  - {id: SPW-NET-6.1.3.2.4-a, clause: "6.1.3.2.4.a", level: SHALL, behavior: endpoint_immediately_sends_interrupt_code}
+  - {id: SPW-NET-6.1.3.3.1-a, clause: "6.1.3.3.1.a", level: SHALL, behavior: interrupt_indication_reports_interrupt_arrival}
+  - {id: SPW-NET-6.1.3.3.2-a, clause: "6.1.3.3.2.a", level: SHALL, behavior: interrupt_indication_parameters_endpoint_and_IID}
+  - {id: SPW-NET-6.1.3.3.3-a, clause: "6.1.3.3.3.a", level: SHALL, behavior: interrupt_indication_generated_on_valid_interrupt_code}
+  - {id: SPW-NET-6.1.3.3.4-a, clause: "6.1.3.3.4.a", level: SHALL, behavior: interrupt_indication_effect_application_dependent}
+  - {id: SPW-NET-6.1.3.4.1-a, clause: "6.1.3.4.1.a", level: SHALL, behavior: interrupt_ACK_request_clears_interrupt_locally_or_networkwide}
+  - {id: SPW-NET-6.1.3.4.2-a, clause: "6.1.3.4.2.a", level: SHALL, behavior: interrupt_ACK_request_parameters_endpoint_and_IID}
+  - {id: SPW-NET-6.1.3.4.3-a, clause: "6.1.3.4.3.a", level: SHALL, behavior: host_acknowledges_received_interrupt_with_ACK_request}
+  - {id: SPW-NET-6.1.3.4.4-a, clause: "6.1.3.4.4.a", level: SHALL, behavior: endpoint_clears_interrupt_and_sends_ACK_if_enabled}
+  - {id: SPW-NET-6.1.3.5.1-a, clause: "6.1.3.5.1.a", level: SHALL, behavior: ACK_indication_reports_acknowledgement_arrival}
+  - {id: SPW-NET-6.1.3.5.2-a, clause: "6.1.3.5.2.a", level: SHALL, behavior: ACK_indication_parameters_endpoint_and_IID}
+  - {id: SPW-NET-6.1.3.5.3-a, clause: "6.1.3.5.3.a", level: SHALL, behavior: ACK_indication_generated_on_valid_ack_code}
+  - {id: SPW-NET-6.1.3.5.4-a, clause: "6.1.3.5.4.a", level: SHALL, behavior: ACK_indication_effect_application_dependent}
