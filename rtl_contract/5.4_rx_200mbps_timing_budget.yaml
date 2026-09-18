@@ -1,0 +1,90 @@
+schema_version: 1
+artifact: Zynq-7020 SpaceWire RX 200 Mbps timing feasibility budget
+spec: ECSS-E-ST-50-12C-Rev.1
+status: draft_measurement_required
+target:
+  data_signalling_rate_mbps: 200
+  unit_interval_ps: 5000
+  system_clock_hz: 100000000
+  rx_architecture: recovered_edge_with_programmable_sampling_delay
+
+source_requirements:
+  - clause: "5.3.7"
+    rule: >
+      TUIMIN is the sum of worst-case source D-S skew, cable-assembly D-S skew,
+      cable jitter, receiver minimum tolerated edge separation, and 10% margin.
+  - clause: "5.3.7.m"
+    rule: maximum operating frequency shall be less than inverse of TUIMIN
+  - clause: "5.3.2.4"
+    rule: cable pair-to-pair skew is normally <0.1 ns/m; overall D-S skew budget governs
+  - clause: "5.3.7 Figure 5-10"
+    rule: >
+      receiver timing includes delay from Data/Strobe edge through recovered-clock
+      generation to input sampling plus input hold requirement
+
+derived_200Mbps_budget:
+  target_UI_ps: 5000
+  ten_percent_margin_method:
+    equation: "TUIMIN = 1.10 * (DSskewOUT + DSskewCA + JitterCA + MinsepIN)"
+    max_pre_margin_sum_ps: 4545.45
+  requirement_for_200Mbps:
+    equation: "DSskewOUT + DSskewCA + JitterCA + MinsepIN <= 4545.45 ps"
+
+illustrative_cable_skew_only:
+  note: not_a_project_allocation
+  if_10m_at_0_1ns_per_m:
+    DSskewCA_ps: 1000
+    remaining_for_DSskewOUT_JitterCA_MinsepIN_ps: 3545.45
+  if_5m_at_0_1ns_per_m:
+    DSskewCA_ps: 500
+    remaining_for_DSskewOUT_JitterCA_MinsepIN_ps: 4045.45
+
+standard_table_5_10_sanity_reference:
+  note: example_only_not_project_requirement
+  DSskewOUT_ps: 1234
+  DSskewCA_ps: 500
+  JitterCA_ps: 500
+  MinsepIN_ps: 1384
+  pre_margin_sum_ps: 3618
+  margin_ps: 362
+  TUIMIN_ps: 3980
+  maximum_bit_rate_Mbps: 251
+
+zynq_7020_receiver_terms_to_measure_or_close:
+  DSskewOUT_ps:
+    value: TBD
+    owner: remote_transmitter_and_system_budget
+  DSskewCA_ps:
+    value: TBD
+    owner: cable_assembly
+  JitterCA_ps:
+    value: TBD
+    owner: cable_assembly
+  MinsepIN_ps:
+    value: TBD
+    owner: zynq_7020_rx_phy
+    includes:
+      - recovered_edge_generation_delay_uncertainty
+      - programmable_delay_quantization_and_PVT
+      - input_sampling_setup_hold
+      - local_clock_routing_uncertainty_if_applicable
+  programmable_sampling_delay_ps:
+    value: TBD
+    selection_rule: >
+      Choose only after the legal Xilinx 7-series primitive path and worst-case
+      input timing are established. The delay is an implementation aid for
+      sampling margin and is not itself an ECSS protocol parameter.
+
+feasibility_pass_conditions:
+  - legal_Zynq_7020_input_and_clocking_primitive_path_identified
+  - recovered_edge_path_has_no_unconstrained_general_fabric_clocking
+  - delay_range_and_resolution_cover_required_sampling_window_at_200Mbps
+  - worst_case_TUIMIN_less_than_5000ps
+  - static_timing_closes_with_PVT_margin
+  - 2_10_100_200Mbps_simulation_or_hardware_vectors_pass
+  - recovered_edge_stop_disconnect_and_reset_behavior_verified
+  - PHY_to_100MHz_CDC_verified
+
+decision_gate:
+  blocker: RTL-BLOCK-004B
+  close_when: all_feasibility_pass_conditions_are_evidenced
