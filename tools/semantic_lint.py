@@ -175,16 +175,10 @@ def main() -> int:
             if isinstance(rid, str):
                 req_to_contracts[rid].add(str(cid))
 
-    # All current Encoding semantic-slice atomic requirements must map to >=1 contract.
-    in_scope_files = {
-        "5.2.4_encoding_architecture.yaml",
-        "5.4_encoding.yaml",
-        "6.3_encoding_service.yaml",
-        "6.4_physical_service_for_encoding.yaml",
-    }
+    # Every requirement artifact currently committed to the semantic baseline
+    # must map to at least one behavior contract.  This keeps new Data Link,
+    # Network and Router slices from silently bypassing traceability.
     for p, d in req_docs.items():
-        if p.name not in in_scope_files:
-            continue
         for r in d.get("requirements", []) or []:
             if not isinstance(r, dict):
                 continue
@@ -260,7 +254,7 @@ def main() -> int:
             if isinstance(obj, str) and ENTITY_RE.fullmatch(obj) and obj not in entity_ids:
                 errors.append(f"RELATION_UNDECLARED_OBJECT: {obj}")
 
-    print("Semantic lint — SpaceWire Encoding baseline")
+    print("Semantic lint — SpaceWire semantic baselines")
     print(f"YAML files parsed        : {len(yaml_files)}")
     print(f"Atomic requirements      : {len(requirement_ids)}")
     print(f"  §5.4 requirements      : {len((req54 or {}).get('requirements', []) or []) if isinstance(req54, dict) else 0}")
