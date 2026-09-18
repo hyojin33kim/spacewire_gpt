@@ -361,13 +361,19 @@ requirements:
     source_clause: "5.4.4.e"
     normative_level: SHALL
     subject: controlled_reset_delay
-    constraint:
-      minimum: "500 ns"
-      maximum: "period of fastest transmit time for implementation"
+    source_constraint:
+      endpoint_a: "500 ns (period of slowest permitted transmit bit rate, 2 Mbps)"
+      endpoint_b: "period of fastest transmit time for the particular transmitter"
+      relation: between_endpoints
+    interpreted_constraint:
+      lower_bound: "period of fastest supported transmit rate for the implementation"
+      upper_bound: "500 ns"
+      exact_cycle_mapping: deferred_to_RTL_contract
+    decision_ref: DEC-ENC-002
     evidence: text
-    assumption_status: none
-    review_status: draft
-    revision: 1
+    assumption_status: explicit_interpretation_of_unordered_between_endpoints
+    review_status: reviewed
+    revision: 2
 
   - id: SPW-5.4.4-f
     source_clause: "5.4.4.f"
