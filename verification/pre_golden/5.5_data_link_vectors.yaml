@@ -1,0 +1,28 @@
+schema_version: 1
+baseline: semantic-datalink-v0.1
+status: frozen
+vectors:
+  - {id: TV-DL-001, stimulus: {rx_FCT: 1, tx_credit: 0}, expect: {tx_credit: 8}}
+  - {id: TV-DL-002, stimulus: {tx_NChar: 1, tx_credit: 8}, expect: {tx_credit: 7}}
+  - {id: TV-DL-003, stimulus: {tx_NChar: 1, tx_credit: 0}, expect: {allowed: false}}
+  - {id: TV-DL-004, stimulus: {rx_FCT: 1, tx_credit: 56}, expect: {credit_error: true}}
+  - {id: TV-DL-005, stimulus: {rx_NChar: 1, rx_credit: 0}, expect: {credit_error: true}}
+  - {id: TV-DL-006, stimulus: {candidates: [NULL,NCHAR,FCT,BROADCAST_CODE], tx_credit: 8, state: Run}, expect: {selected: BROADCAST_CODE}}
+  - {id: TV-DL-007, stimulus: {candidates: [NULL,NCHAR,FCT], tx_credit: 8, state: Run}, expect: {selected: FCT}}
+  - {id: TV-DL-008, stimulus: {candidates: [NULL,NCHAR], tx_credit: 8, state: Run}, expect: {selected: NCHAR}}
+  - {id: TV-DL-009, stimulus: {candidates: [NULL,NCHAR], tx_credit: 0, state: Run}, expect: {selected: NULL}}
+  - {id: TV-DL-010, stimulus: {state: ErrorReset, timer_elapsed: true, LinkDisabled: false}, expect: {state: ErrorWait}}
+  - {id: TV-DL-011, stimulus: {state: ErrorWait, timeout: true}, expect: {state: Ready}}
+  - {id: TV-DL-012, stimulus: {state: Ready, LinkStart: true}, expect: {state: Started}}
+  - {id: TV-DL-013, stimulus: {state: Ready, AutoStart: true, gotNull: true}, expect: {state: Started}}
+  - {id: TV-DL-014, stimulus: {state: Started, sentNull: true, gotNull: true}, expect: {state: Connecting}}
+  - {id: TV-DL-015, stimulus: {state: Connecting, sentFCT: true, gotFCT: true}, expect: {state: Run}}
+  - {id: TV-DL-016, stimulus: {state: Run, parity_error: true}, expect: {state: ErrorReset, recovery_state: Recovery}}
+  - {id: TV-DL-017, stimulus: {state: Run, credit_error: true}, expect: {state: ErrorReset, recovery_state: Recovery}}
+  - {id: TV-DL-018, stimulus: {state: Started, timeout: true}, expect: {state: ErrorReset}}
+  - {id: TV-DL-019, stimulus: {state: Connecting, timeout: true}, expect: {state: ErrorReset}}
+  - {id: TV-DL-020, stimulus: {state: ErrorReset, tx_credit: 24, rx_credit: 32}, expect: {tx_credit: 0, rx_credit: 0}}
+  - {id: TV-DL-021, stimulus: {rx_fifo_free: 8, rx_credit: 0}, expect: {FCT_allowed: true}}
+  - {id: TV-DL-022, stimulus: {rx_fifo_free: 7, rx_credit: 0}, expect: {FCT_allowed: false}}
+  - {id: TV-DL-023, stimulus: {broadcast_request: true, state: Ready}, expect: {accepted_for_later_TX: false}}
+  - {id: TV-DL-024, stimulus: {recovery: true, rx_packet_open: true}, expect: {append_EEP: true}}
