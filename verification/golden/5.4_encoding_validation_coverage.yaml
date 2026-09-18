@@ -1,0 +1,59 @@
+schema_version: 1
+baseline: semantic-encoding-v0.1
+artifact: Golden Model validation coverage
+status: validated
+
+mapping:
+  test_character_and_control_vectors:
+    - TV-ENC-CHAR-001
+    - TV-ENC-CHAR-002
+    - TV-ENC-CTRL-001
+    - TV-ENC-CTRL-002
+    - TV-ENC-CTRL-003
+    - TV-ENC-CTRL-004
+    - TV-ENC-CODE-001
+    - TV-ENC-CODE-002
+  test_parity_vectors:
+    - TV-ENC-PARITY-001
+    - TV-ENC-PARITY-002
+    - TV-ENC-PARITY-003
+    - TV-ENC-PARITY-004
+    - TV-ENC-PARITY-005
+  test_ds_vectors:
+    - TV-ENC-DS-001
+    - TV-ENC-DS-002
+    - TV-ENC-DS-003
+    - TV-ENC-DS-004
+  test_null_vectors:
+    - TV-ENC-NULL-001
+    - TV-ENC-NULL-002
+    - TV-ENC-NULL-003
+    - TV-ENC-NULL-004
+    - TV-ENC-NULL-005
+  test_error_vectors:
+    - TV-ENC-ERR-001
+    - TV-ENC-ERR-002
+    - TV-ENC-ERR-003
+    - TV-ENC-ERR-004
+    - TV-ENC-ERR-005
+    - TV-ENC-ERR-006
+    - TV-ENC-ERR-007
+  test_disconnect_vectors:
+    - TV-ENC-DISC-001
+    - TV-ENC-DISC-002
+    - TV-ENC-DISC-003
+    - TV-ENC-DISC-004
+    - TV-ENC-DISC-005
+  test_rate_vectors:
+    - TV-ENC-RATE-001
+    - TV-ENC-RATE-002
+    - TV-ENC-RATE-003
+    - TV-ENC-RATE-004
+    - TV-ENC-RATE-005
+    - TV-ENC-RATE-006
+  test_interface_vectors:
+    - TV-ENC-IF-001
+    - TV-ENC-IF-002
+    - TV-ENC-IF-003
+    - TV-ENC-IF-004
+    - TV-ENC-IF-005
