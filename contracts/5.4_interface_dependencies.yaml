@@ -2,7 +2,7 @@ schema_version: 1
 id: BC-ENC-IF-001
 name: Encoding layer cross-clause service-interface dependencies
 spec: ECSS-E-ST-50-12C-Rev.1
-scope: ["5.2.4", "5.4", "6.3"]
+scope: ["5.2.4", "5.4", "6.3", "6.4"]
 status: draft
 
 purpose: >
@@ -22,16 +22,33 @@ encoding_to_data_link:
     - RECEIVE_ERROR.indication
     - gotNull.indication
 
+encoding_to_physical:
+  requests:
+    - DS_TX.request(Data, Strobe)
+    - DS_RX.request
+
+typed_receiver_indications:
+  - name: DISCONNECT.indication
+    parameters: []
+  - name: RECEIVE_ERROR.indication
+    parameters: [RX_Error_Flags]
+    error_kinds: [parity_error, ESC_error]
+  - name: gotNull.indication
+    parameters: []
+
 behavioral_dependency:
   - "5.4 TX_ENABLE/RX_ENABLE semantics are exposed via 6.3 service primitives."
   - "5.4 disconnect/receive-error/gotNull status flags are exposed via 6.3 indications."
   - "Golden Model API should preserve this layer boundary even if Python implementation is simplified."
+  - "6.4 DS_TX.request and DS_RX.request define the Encoding/Physical service boundary."
 
 source_evidence:
   - "5.2.4"
   - "5.4.2"
   - "6.3.1"
   - "6.3.2"
+  - "6.4.1"
+  - "6.4.2"
 
 open_questions:
   - id: OQ-ENC-IF-001
