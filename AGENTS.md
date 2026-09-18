@@ -11,6 +11,8 @@ Build a traceable SpaceWire Golden Model and FPGA RTL from ECSS-E-ST-50-12C Rev.
 5. Never silently resolve specification ambiguity.
 6. Requirement/contract changes must identify affected model/tests/RTL.
 7. Generated SQLite/HTML is not the source of truth.
+8. RTL Contract is a mandatory gate between validated Golden Model and RTL implementation.
+9. RTL must not be coded directly from semantic requirements without a reviewed RTL Contract.
 8. Figures/tables/state diagrams are specification evidence, not decoration.
 9. Cross-clause dependencies must be explicit before Golden Model implementation.
 
