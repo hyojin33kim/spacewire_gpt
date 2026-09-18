@@ -88,27 +88,27 @@ issues:
     status: documented_interface_mismatch
 
   - id: CR-DL-001
-    source_clauses: ["5.5.2.a", "5.5.2.b", "5.5.2.c", "5.5.2.d", "5.5.7.7.a.1", "5.5.7.7.a.3", "5.5.7.7.a.4"]
+    source_clauses: ["5.5.2.a", "5.5.2.b", "5.5.2.c", "5.5.2.d", "5.5.4.l", "5.5.7.7.a.1", "5.5.7.7.a.3", "5.5.7.7.a.4"]
     source_statement_summary: >
-      The Data Link layer is bidirectional. Network-originated N-Chars and broadcast
-      codes are transmitted toward Encoding, while link-originated characters/control
-      codes are received from Encoding and delivered upward as N-Chars/broadcast codes.
-      In Run, 5.5.7.7.a.3 uses the phrase "received N-Chars and broadcast codes" and
-      directs them to the Encoding Layer.
-    observed_ambiguity: >
-      Broadcast codes are valid in both directions, so their inclusion in 5.5.7.7.a.3
-      is not by itself contradictory. The remaining ambiguity is specifically the
-      provenance of the word "received" for N-Chars: received from the Network service
-      for transmission, or received from Encoding/link for delivery upward.
-    candidate_interpretation: >
-      Preserve 5.5.7.7.a.3 literally unless stronger evidence shows an editorial error.
-      Treat Network-originated N-Chars/broadcast codes as TX traffic passed to Encoding;
-      treat Encoding-originated N-Chars/broadcast codes as RX traffic passed to Network.
-      The Golden Model shall keep TX and RX service events directionally typed so the
-      same term cannot silently collapse the two directions.
+      N-Chars and broadcast codes are bidirectional at the Data Link boundary:
+      Network-originated items are TX traffic toward Encoding, while link-originated
+      items are RX traffic from Encoding toward Network. In Run, 5.5.7.7.a.3 says
+      "Pass received N-Chars and broadcast codes to the Encoding Layer."
+    observed_issue: >
+      The word "received" does not identify which service boundary supplied the item.
+      A literal Network-originated/TX reading is legal but redundant with 5.5.7.7.a.1.
+      An Encoding-originated/RX reading would conflict with 5.5.2.d for N-Chars.
+      Broadcast-code inclusion is not itself contradictory because broadcast codes
+      are valid in both directions.
+    handling: >
+      Do not use 5.5.7.7.a.3 alone to infer direction. Type every Golden-Model event
+      by provenance: NET_TO_DL_NCHAR/BC are transmitted toward Encoding; ENC_TO_DL_NCHAR/BC
+      are received from the link and delivered toward Network. This behavior is already
+      fixed by 5.5.2 and the credit/service clauses, so 5.5.7.7.a.3 is retained as a
+      documented editorial/wording anomaly and is non-blocking.
     decision_required: false
     blocking: false
-    status: clarified_directional_semantics
+    status: documented_non_blocking_source_anomaly
 
   - id: CR-DL-002
     source_clause: "5.5.8.4.b.1"
