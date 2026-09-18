@@ -1,0 +1,39 @@
+schema_version: 1
+id: BC-ENC-IF-001
+name: Encoding layer cross-clause service-interface dependencies
+spec: ECSS-E-ST-50-12C-Rev.1
+scope: ["5.2.4", "5.4", "6.3"]
+status: draft
+
+purpose: >
+  Record the service-interface obligations needed to implement the 5.4 behavior
+  without treating clause 5.4 as isolated prose.
+
+data_link_to_encoding:
+  requests:
+    - TX_CHAR.request(Character)
+    - TX_ENABLE.request()
+    - RX_CHAR.request
+    - RX_ENABLE.request()
+
+encoding_to_data_link:
+  indications:
+    - DISCONNECT.indication
+    - RECEIVE_ERROR.indication
+    - gotNull.indication
+
+behavioral_dependency:
+  - "5.4 TX_ENABLE/RX_ENABLE semantics are exposed via 6.3 service primitives."
+  - "5.4 disconnect/receive-error/gotNull status flags are exposed via 6.3 indications."
+  - "Golden Model API should preserve this layer boundary even if Python implementation is simplified."
+
+source_evidence:
+  - "5.2.4"
+  - "5.4.2"
+  - "6.3.1"
+  - "6.3.2"
+
+open_questions:
+  - id: OQ-ENC-IF-001
+    issue: "Exact software API shape is an implementation choice; semantic primitives and direction are normative."
+    classification: golden_model_api_boundary
