@@ -53,6 +53,32 @@ observable_contract:
     discard_pending_BC_in_ErrorReset: enabled
     discard_BC_request_unless_Run: enabled
 
+directional_service_binding:
+  NET_TO_DL_NCHAR:
+    destination: Encoding
+    credit_effect: decrement_tx_credit_by_1
+  ENC_TO_DL_NCHAR:
+    destination: Network
+    credit_effect: decrement_rx_credit_by_1
+  NET_TO_DL_BROADCAST:
+    destination: Encoding
+    selected_policy: discard_request_unless_Run
+  ENC_TO_DL_BROADCAST:
+    destination: Network
+  source_issue:
+    id: CR-DL-001
+    rule: >
+      The word "received" in 5.5.7.7.a.3 shall not collapse provenance.
+      Direction is bound by 5.5.2 and 6.2 service interfaces.
+
+state_output_contract:
+  ErrorReset: {tx_enable: false, rx_enable: false}
+  ErrorWait: {tx_enable: false, rx_enable: true, store_rx_nchar: false, register_rx_bc: false}
+  Ready: {tx_enable: false, rx_enable: true, store_rx_nchar: false, register_rx_bc: false}
+  Started: {tx_enable: true, tx_allowed: [NULL], rx_enable: true, store_rx_nchar: false, register_rx_bc: false}
+  Connecting: {tx_enable: true, tx_allowed: [FCT, NULL], rx_enable: true, store_rx_nchar: false, register_rx_bc: false}
+  Run: {tx_enable: true, tx_allowed: [BROADCAST_CODE, FCT, NCHAR, NULL], rx_enable: true}
+
 invariants:
   - "0 <= tx_credit <= 56"
   - "0 <= rx_credit <= 56"
