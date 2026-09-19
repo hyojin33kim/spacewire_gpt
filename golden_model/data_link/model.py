@@ -121,7 +121,12 @@ class DataLinkModel:
         return True
 
     def can_send_fct(self, rx_fifo_free: int) -> bool:
-        return rx_fifo_free >= 8 and self.rx_credit <= self.rx_credit_max - 8
+        # 5.5.4.p: outstanding receive credit already reserves FIFO capacity.
+        # A new FCT is legal only if eight additional unreserved slots exist.
+        return (
+            rx_fifo_free >= self.rx_credit + 8
+            and self.rx_credit <= self.rx_credit_max - 8
+        )
 
     def send_fct(self, rx_fifo_free: int) -> bool:
         if not self.can_send_fct(rx_fifo_free):

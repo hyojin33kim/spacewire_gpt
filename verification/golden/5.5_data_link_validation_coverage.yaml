@@ -1,7 +1,7 @@
 schema_version: 1
-baseline: semantic-datalink-v0.1
+baseline: semantic-datalink-v0.1.1
 artifact: Golden Model validation coverage
-status: validated
+status: corrective_review_pending_revalidation
 mapping:
   test_credit_vectors:
     - TV-DL-001
@@ -11,6 +11,10 @@ mapping:
     - TV-DL-005
     - TV-DL-021
     - TV-DL-022
+    - TV-DL-043
+    - TV-DL-044
+    - TV-DL-045
+    - TV-DL-046
   test_priority_vectors:
     - TV-DL-006
     - TV-DL-007

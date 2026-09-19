@@ -26,6 +26,11 @@ class TestDataLinkGolden(unittest.TestCase):
         self.assertEqual(m.rx_credit, 8)                        # TV-DL-021
         self.assertFalse(DataLinkModel().send_fct(7))           # TV-DL-022
 
+        self.assertFalse(DataLinkModel(rx_credit=8).can_send_fct(8))    # TV-DL-043
+        self.assertTrue(DataLinkModel(rx_credit=8).can_send_fct(16))    # TV-DL-044
+        self.assertFalse(DataLinkModel(rx_credit=48).can_send_fct(55))  # TV-DL-045
+        self.assertTrue(DataLinkModel(rx_credit=48).can_send_fct(56))   # TV-DL-046
+
     def test_priority_vectors(self):
         m = DataLinkModel(link_state=LinkState.RUN, tx_credit=8)
         self.assertEqual(

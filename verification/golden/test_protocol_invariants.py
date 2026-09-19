@@ -12,9 +12,11 @@ class TestProtocolInvariants(unittest.TestCase):
         self.assertTrue(0 <= m.rx_credit <= 56)          # INV-DL-002
         m.tx_credit = 0
         self.assertFalse(m.send_nchar())                 # INV-DL-003
-        self.assertFalse(DataLinkModel(rx_credit=56).can_send_fct(8))
+        self.assertFalse(DataLinkModel(rx_credit=56).can_send_fct(128))
         self.assertFalse(DataLinkModel(rx_credit=0).can_send_fct(7))
-        self.assertTrue(DataLinkModel(rx_credit=0).can_send_fct(8))  # INV-DL-004
+        self.assertTrue(DataLinkModel(rx_credit=0).can_send_fct(8))
+        self.assertFalse(DataLinkModel(rx_credit=8).can_send_fct(8))
+        self.assertTrue(DataLinkModel(rx_credit=8).can_send_fct(16)) # INV-DL-004
         m = DataLinkModel(tx_credit=12, rx_credit=24)
         m.enter_error_reset("TEST")
         self.assertEqual((m.tx_credit, m.rx_credit), (0, 0))          # INV-DL-006

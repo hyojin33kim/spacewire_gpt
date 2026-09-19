@@ -1,6 +1,6 @@
 schema_version: 1
-baseline: semantic-datalink-v0.1
-status: frozen
+baseline: semantic-datalink-v0.1.1
+status: corrective_review_pending_refreeze
 vectors:
   - {id: TV-DL-001, stimulus: {rx_FCT: 1, tx_credit: 0}, expect: {tx_credit: 8}}
   - {id: TV-DL-002, stimulus: {tx_NChar: 1, tx_credit: 8}, expect: {tx_credit: 7}}
@@ -44,3 +44,7 @@ vectors:
   - {id: TV-DL-040, stimulus: {state: Started, candidates: [FCT,NCHAR,BROADCAST_CODE]}, expect: {selected: NULL}}
   - {id: TV-DL-041, stimulus: {state: Connecting, candidates: [FCT,NCHAR,BROADCAST_CODE]}, expect: {selected: FCT}}
   - {id: TV-DL-042, stimulus: {recovery: true, last_rx_was_EOP: true}, expect: {extra_EEP_allowed: true, reference_trace_extra_EEP: false}}
+  - {id: TV-DL-043, stimulus: {rx_fifo_free: 8, rx_credit: 8}, expect: {FCT_allowed: false}}
+  - {id: TV-DL-044, stimulus: {rx_fifo_free: 16, rx_credit: 8}, expect: {FCT_allowed: true}}
+  - {id: TV-DL-045, stimulus: {rx_fifo_free: 55, rx_credit: 48}, expect: {FCT_allowed: false}}
+  - {id: TV-DL-046, stimulus: {rx_fifo_free: 56, rx_credit: 48}, expect: {FCT_allowed: true}}
