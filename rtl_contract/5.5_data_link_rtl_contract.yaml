@@ -2,9 +2,9 @@ schema_version: 1
 artifact_id: RTL-CONTRACT-DATALINK-V0.1
 semantic_baseline: semantic-datalink-v0.1.1
 semantic_contract: contracts/5.5_data_link.yaml
-golden_validation: pending_datalink_v0.1.1_revalidation
+golden_validation: traceability/golden_validation_datalink_v0.1.1.yaml
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
-status: review_hold_corrective_revalidation
+status: reviewed
 purpose: >
   Convert the validated Data Link semantics into cycle-level RTL obligations
   while preserving the Golden Model as an implementation-independent oracle.
@@ -569,8 +569,18 @@ review_findings:
     finding: "single last_error enum can collapse simultaneous error causes"
     disposition: current_and_latched_4bit_error_flags
 
+review_evidence:
+  semantic_baseline: semantic-datalink-v0.1.1
+  validated_repo_commit: ae0ae56f43fffd3fcf9744cb6d86ed91d3a11405
+  golden_validation_run: 35420999942
+  semantic_lint_run: 35420999944
+  golden_tests: "34/34 PASS"
+  DataLink_vectors: "46/46 mapped"
+  protocol_invariants: "24/24 mapped"
+  semantic_lint: "0 errors / 0 warnings"
+
 hard_gate:
-  RTL_implementation_allowed: false
-  becomes_true_when:
+  RTL_implementation_allowed: true
+  satisfied_by:
     - semantic_datalink_v0.1.1_revalidated
     - contract_status_reviewed

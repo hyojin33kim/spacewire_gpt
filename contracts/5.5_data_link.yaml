@@ -3,7 +3,7 @@ id: BC-DL-V0.1
 name: Data Link semantic behavior contract
 spec: ECSS-E-ST-50-12C-Rev.1
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
-status: corrective_review_pending_refreeze
+status: frozen
 requirements_sources:
   - requirements/5.2.3_data_link_architecture.yaml
   - requirements/5.5_data_link.yaml

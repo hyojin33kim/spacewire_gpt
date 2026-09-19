@@ -1,6 +1,6 @@
 schema_version: 1
 baseline: semantic-datalink-v0.1.1
-status: corrective_review_pending_refreeze
+status: frozen
 vectors:
   - {id: TV-DL-001, stimulus: {rx_FCT: 1, tx_credit: 0}, expect: {tx_credit: 8}}
   - {id: TV-DL-002, stimulus: {tx_NChar: 1, tx_credit: 8}, expect: {tx_credit: 7}}

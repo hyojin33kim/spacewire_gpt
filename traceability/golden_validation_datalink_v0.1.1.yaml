@@ -1,0 +1,37 @@
+schema_version: 1
+artifact: Data Link Golden Model validation result
+semantic_baseline: semantic-datalink-v0.1.1
+supersedes_validation: traceability/golden_validation_datalink_v0.1.yaml
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+validated_repo_commit: "ae0ae56f43fffd3fcf9744cb6d86ed91d3a11405"
+github_actions_golden_run_id: 35420999942
+github_actions_semantic_run_id: 35420999944
+status: PASS
+
+results:
+  atomic_requirements: 140
+  unittest_behavior_methods: 7
+  repository_python_test_methods: 34
+  pre_golden_vectors_total: 46
+  pre_golden_vectors_mapped: 46
+  pre_golden_invariants_total: 8
+  mapping_closure: "46/46 Data Link vectors"
+  protocol_invariant_mapping: "24/24"
+  structural_lint: PASS
+  semantic_lint_errors: 0
+  semantic_lint_warnings: 0
+
+corrective_validation:
+  source_clause: "5.5.4.p"
+  verified_cases:
+    - "rx_credit=8, physical_free=8 -> FCT denied"
+    - "rx_credit=8, physical_free=16 -> FCT allowed"
+    - "rx_credit=48, physical_free=55 -> FCT denied"
+    - "rx_credit=48, physical_free=56 -> FCT allowed"
+
+known_nonblocking_source_issues: [CR-DL-001, CR-DL-002, CR-DL-003]
+
+authorization:
+  RTL_contract_creation: true
+  reviewed_Data_Link_RTL_contract: true
+  RTL_implementation: true

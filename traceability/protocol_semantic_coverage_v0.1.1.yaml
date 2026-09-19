@@ -1,0 +1,40 @@
+schema_version: 1
+artifact_id: PROTOCOL-SEMANTIC-COVERAGE-V0.1.1
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: reviewed
+semantic_content_commit: ae0ae56f43fffd3fcf9744cb6d86ed91d3a11405
+
+slices:
+  encoding:
+    baseline: semantic-encoding-v0.1
+    atomic_requirements: 106
+    concrete_pre_golden_vectors: 45
+    pre_golden_invariants: 12
+    behavior_contracts: 6
+  data_link:
+    baseline: semantic-datalink-v0.1.1
+    atomic_requirements: 140
+    concrete_pre_golden_vectors: 46
+    pre_golden_invariants: 8
+    behavior_contracts: 1
+    supersedes: semantic-datalink-v0.1
+  network:
+    baseline: semantic-network-v0.1
+    atomic_requirements: 123
+    concrete_pre_golden_vectors: 29
+    pre_golden_invariants: 7
+    behavior_contracts: 1
+  router:
+    baseline: semantic-router-v0.1
+    atomic_requirements: 101
+    concrete_pre_golden_vectors: 34
+    pre_golden_invariants: 9
+    behavior_contracts: 1
+
+totals:
+  atomic_requirements: 470
+  concrete_pre_golden_vectors: 154
+  pre_golden_invariants: 36
+  ontology_entities: 80
+  behavior_contracts: 9

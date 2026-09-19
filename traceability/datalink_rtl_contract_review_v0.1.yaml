@@ -3,7 +3,7 @@ artifact_id: DATALINK-RTL-CONTRACT-REVIEW-V0.1
 date: "2026-09-19"
 spec: ECSS-E-ST-50-12C-Rev.1
 contract: rtl_contract/5.5_data_link_rtl_contract.yaml
-review_status: HOLD_PENDING_CORRECTIVE_REVALIDATION
+review_status: PASS
 review_scope:
   - cycle_level_IO
   - storage_and_FIFO_ownership
@@ -78,11 +78,19 @@ findings:
       obligation must be carried into the Network Ownership & Interface Contract.
     action: documented_as_integration_obligation
 
+evidence:
+  semantic_content_commit: ae0ae56f43fffd3fcf9744cb6d86ed91d3a11405
+  golden_validation_run: 35420999942
+  semantic_lint_run: 35420999944
+  python_tests: "34 PASS"
+  DataLink_vector_mapping: "46/46"
+  protocol_invariant_mapping: "24/24"
+  semantic_lint_result: "0 errors / 0 warnings"
+
 gate:
-  semantic_datalink_v0.1_1_revalidation: REQUIRED
+  semantic_datalink_v0.1_1_revalidation: PASS
   remaining_architecture_blockers: 0
-  RTL_implementation_allowed: false
-  contract_review_can_close_when:
-    - Golden_validation_for_semantic_datalink_v0.1.1_PASS
-    - Semantic_lint_PASS
-    - review_artifact_updated_to_PASS
+  contract_review: PASS
+  RTL_implementation_allowed: true
+  residual_integration_obligation:
+    - carry_recovery_direct_drain_liveness_into_Network_Ownership_and_Interface_Contract

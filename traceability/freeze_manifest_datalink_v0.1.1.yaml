@@ -1,0 +1,48 @@
+schema_version: 1
+baseline_id: semantic-datalink-v0.1.1
+supersedes: semantic-datalink-v0.1
+supersession_reason: >
+  RTL Contract review found that 5.5.4.p requires physical RX FIFO free capacity
+  for outstanding receive credit plus eight additional N-Chars. The previous v0.1
+  Golden condition only checked eight physical free slots.
+spec: ECSS-E-ST-50-12C-Rev.1
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: frozen
+date: "2026-09-19"
+semantic_content_commit: ae0ae56f43fffd3fcf9744cb6d86ed91d3a11405
+scope: ["5.2.3", "5.5", "6.2"]
+
+artifacts:
+  ontology: [ontology/entities.yaml, ontology/relations.yaml]
+  requirements:
+    - requirements/5.2.3_data_link_architecture.yaml
+    - requirements/5.5_data_link.yaml
+    - requirements/6.2_data_link_service.yaml
+  contract: contracts/5.5_data_link.yaml
+  pre_golden_vectors: verification/pre_golden/5.5_data_link_vectors.yaml
+  pre_golden_invariants: verification/pre_golden/5.5_data_link_invariants.yaml
+  golden_model: golden_model/data_link/model.py
+
+counts:
+  atomic_requirements: 140
+  concrete_pre_golden_vectors: 46
+  pre_golden_invariants: 8
+
+corrective_change:
+  source_clause: "5.5.4.p"
+  rule: "rx_fifo_free_entries >= rx_credit + 8 AND rx_credit <= max-8"
+  added_vectors: [TV-DL-043, TV-DL-044, TV-DL-045, TV-DL-046]
+
+freeze_gate:
+  G1_structural_integrity: PASS
+  G2_spec_fidelity: PASS
+  G3_executability_pre_golden: PASS
+  G4_boundary_ownership: PASS
+  G5_independent_challenge: PASS
+
+validation:
+  golden_run_id: 35420999942
+  semantic_lint_run_id: 35420999944
+known_nonblocking_source_issues: [CR-DL-001, CR-DL-002, CR-DL-003]
+golden_model_authorized: true
+rtl_contract_authorized: true

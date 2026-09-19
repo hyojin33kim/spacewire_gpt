@@ -1,6 +1,6 @@
 schema_version: 1
 baseline: semantic-datalink-v0.1.1
-status: corrective_review_pending_refreeze
+status: frozen
 invariants:
   - {id: INV-DL-001, rule: "0 <= tx_credit <= 56", source: ["5.5.4.e","5.5.4.h"]}
   - {id: INV-DL-002, rule: "0 <= rx_credit <= 56", source: ["5.5.4.l","5.5.4.n"]}
