@@ -65,10 +65,11 @@ network_to_datalink_tx_nchar:
     normal_ready: "Run && Recovery==Normal && tx_fifo_not_full"
     outside_Run: "do not accept for later transmission"
     recovery_discard_exception: >
-      If an error occurs while a packet is open, the Data Link shall continue
-      accepting the remainder of that same upstream packet as needed solely to
-      discard it until EOP or EEP is consumed. Those accepted N-Chars shall never
-      be transmitted on the recovering link.
+      If an error occurs while a packet is open, the Data Link owns the recovery
+      drain. After any already-buffered remainder is discarded, it shall continue
+      accepting the remainder of that same upstream packet through EOP/EEP and
+      discard those accepted N-Chars directly without writing them into the TX FIFO.
+      No recovery-drained N-Char shall be transmitted on the recovering link.
   packet_order: preserve
   interface_reason: >
     Implements 5.5.2.e and 6.2 SEND_NCHAR while allowing 5.5.8.4 packet-spill
@@ -180,8 +181,8 @@ fifo_contract:
   tx_fifo:
     content: NCHAR_only
     entry_fields: [kind_2b, data_8b]
-    default_depth_entries: 128
-    depth_status: provisional_project_default_to_confirm_at_review
+    depth_entries: 128
+    depth_status: confirmed_v0_1_architecture_choice
     PortReset_action: clear
     recovery_behavior: >
       When a transmitted packet is open at error entry, discard queued entries
@@ -190,13 +191,39 @@ fifo_contract:
   rx_fifo:
     content: NCHAR_only
     entry_fields: [kind_2b, data_8b]
-    default_depth_entries: 128
-    depth_status: provisional_project_default_to_confirm_at_review
+    depth_entries: 128
+    depth_status: confirmed_v0_1_architecture_choice
     PortReset_action: clear
     minimum_for_selected_credit_profile: 56
     recovery_behavior: >
       If recovery requires an EEP and the FIFO is full, keep EEP pending until
       space becomes available, then write the EEP before declaring Recovery complete.
+  recovery_direct_drain:
+    owner: DataLink
+    activation: >
+      Current TX packet is open, Recovery is active, and the terminator for that
+      current packet was not found in the buffered TX FIFO remainder.
+    upstream_handshake: valid_ready
+    ready_behavior: >
+      Assert net_tx_nchar_ready while waiting for the current packet terminator.
+    data_behavior: "accepted DATA is discarded immediately and is not written to TX FIFO"
+    terminator_behavior: >
+      Accepted EOP or EEP is discarded and completes the TX recovery drain.
+      Deassert recovery-drain readiness before any next-packet N-Char can be accepted.
+    fifo_interaction:
+      - discard_existing_current_packet_entries_from_TX_FIFO_first
+      - stop_FIFO_discard_at_first_EOP_or_EEP
+      - preserve_entries_after_that_terminator_as_following_packet_data
+      - if_FIFO_empties_before_terminator_switch_to_direct_drain
+    safety:
+      - never_store_direct_drain_items_in_TX_FIFO
+      - never_forward_direct_drain_items_to_Encoding
+      - never_consume_first_item_of_following_packet
+    rationale: >
+      Packet length is not bounded by the 128-entry FIFO. Direct drain therefore
+      avoids recovery deadlock and avoids write/read traffic for data that is
+      known to be discarded.
+
   broadcast_storage:
     tx: separate_one_entry_register_not_in_TX_FIFO
     rx: not_stored_in_NChar_RX_FIFO
@@ -319,9 +346,12 @@ error_recovery_contract:
   actions:
     tx:
       - detect_whether_packet_was_open_at_error
-      - discard_unsent_remainder_until_and_including_EOP_or_EEP
-      - continue_upstream_drain_if_terminator_was_not_already_buffered
-      - do_not_discard_following_packet_after_current_packet_terminator
+      - discard_buffered_current_packet_remainder_through_EOP_or_EEP
+      - preserve_any_TX_FIFO_entries_after_the_current_packet_terminator
+      - if_terminator_not_buffered_enter_direct_drain_bypass
+      - direct_drain_accepts_and_discards_without_TX_FIFO_write
+      - direct_drain_completes_on_first_EOP_or_EEP
+      - do_not_accept_or_discard_following_packet_after_current_packet_terminator
     rx:
       - "if last N-Char written to RX FIFO was DATA, append EEP"
       - "if EEP is pending and RX FIFO full, wait for space"
@@ -416,12 +446,19 @@ verification_obligations:
     - SVA-DL-016_no_phantom_or_duplicate_Encoding_commit
     - SVA-DL-017_at_most_one_accepted_uncommitted_Encoding_item
     - SVA-DL-018_Encoding_commit_preserves_accept_kind_and_order
+    - SVA-DL-019_recovery_direct_drain_never_writes_TX_FIFO
+    - SVA-DL-020_recovery_direct_drain_stops_at_first_EOP_or_EEP
+    - SVA-DL-021_recovery_direct_drain_never_reaches_Encoding
+    - SVA-DL-022_preserve_following_packet_after_recovery_terminator
   directed_RTL_tests:
     - all_42_DataLink_Golden_vectors
     - simultaneous_TX_NChar_commit_and_RX_FCT
     - simultaneous_RX_NChar_and_TX_FCT_commit
     - recovery_with_TX_FIFO_terminator_present
     - recovery_with_TX_FIFO_empty_before_terminator
+    - recovery_direct_drain_packet_longer_than_128
+    - recovery_preserves_next_packet_buffered_after_terminator
+    - recovery_direct_drain_stops_before_next_packet
     - recovery_RX_FIFO_full_pending_EEP
     - Run_reached_before_Recovery_complete
     - PortReset_during_each_LinkFSM_state
@@ -431,6 +468,9 @@ implementation_choices_fixed_in_v0_1:
   - one_DataLink_instance_per_SpaceWire_port
   - separate_Encoding_accept_and_commit_events
   - maximum_one_accepted_but_uncommitted_Encoding_protocol_item
+  - TX_FIFO_depth_128
+  - RX_FIFO_depth_128
+  - DataLink_owned_recovery_direct_drain_bypass
   - single_100MHz_protocol_core_domain
   - valid_ready_for_NChar_service_mapping
   - one_entry_pending_TX_broadcast_register
@@ -447,28 +487,26 @@ resolved_blocking_decisions:
     accounting_event: Encoding_commit
     max_accepted_but_uncommitted_items: 1
     status: closed
-
-remaining_blocking_decisions_before_review:
   - blocker_id: DL-BLOCK-002
     decision: FIFO_depth_confirmation
-    reason: >
-      The contract uses 128-entry TX/RX FIFOs as the current project default.
-      Confirm the mission/prototype depth before review; RX depth shall not be
-      below 56 for the selected maximum-credit profile unless the profile changes.
+    selected_value:
+      TX_FIFO_entries: 128
+      RX_FIFO_entries: 128
+    selected_credit_max: 56
+    status: closed
   - blocker_id: DL-BLOCK-003
-    decision: upstream_recovery_drain_contract
-    reason: >
-      Error recovery can require discarding the remainder of a packet that is
-      larger than the TX FIFO. The Network/Router-side owner must therefore
-      continue supplying the current packet through EOP/EEP while Data Link is
-      in discard mode, without starting the next packet.
-    required_action: >
-      Carry this rule into the Network Ownership & Interface Contract and its
-      Router/DataLink integration tests.
+    decision: recovery_drain_ownership_and_storage
+    selected_option: DataLink_owned_direct_drain
+    behavior: >
+      Discard already-buffered current-packet remainder through its terminator.
+      If the FIFO empties first, accept the remaining current packet directly
+      from upstream and discard it without FIFO storage until EOP/EEP.
+      Do not consume the next packet.
+    status: closed
+
+remaining_blocking_decisions_before_review: []
 
 hard_gate:
   RTL_implementation_allowed: false
   becomes_true_when:
-    - DL-BLOCK-002_closed
-    - DL-BLOCK-003_interface_owner_acknowledged
     - contract_status_reviewed
