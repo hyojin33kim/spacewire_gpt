@@ -128,9 +128,25 @@ datalink_to_encoding_tx:
   commit_feedback_required:
     - enc_tx_commit_valid
     - enc_tx_commit_kind
+  accept_definition: >
+    valid && ready transfers one protocol item into Encoding ownership but does
+    not mean that the item has been sent.
   commit_definition: >
-    Pulse when the Encoding layer irrevocably removes the item for serial
-    transmission at a character/control-code boundary.
+    Pulse when the Encoding layer irrevocably removes the accepted item from its
+    pending slot and consumes it as the next serial character/control-code at a
+    character/control-code boundary. Commit is not wire-transmission completion.
+  pending_rule:
+    max_accepted_but_uncommitted_items: 1
+    while_pending: "enc_tx_item_ready shall be deasserted"
+    rationale: >
+      The Data Link scheduler must re-evaluate BC > FCT > NChar > Null at every
+      character boundary. Deeper in-order protocol-item prefetch could prevent a
+      newly arrived higher-priority item from winning the next boundary.
+  commit_order: preserve_accept_order
+  commit_safety:
+    - no_commit_without_a_prior_uncommitted_accept
+    - no_duplicate_commit
+    - accepted_item_kind_equals_committed_item_kind
   semantic_use_of_commit:
     - TX_NChar_commit_decrements_tx_credit
     - FCT_commit_increments_rx_credit
@@ -219,7 +235,10 @@ credit_contract:
       - "a same-cycle newly sent FCT shall not legalise an N-Char received with pre-cycle rx_credit == 0"
 
 tx_scheduler:
-  decision_point: "only when Encoding is ready to commit a next item"
+  decision_point: >
+    Re-evaluate priority whenever there is no accepted-but-uncommitted Encoding
+    item and Encoding asserts ready for a new acceptance. Semantic send/accounting
+    occurs later on commit feedback.
   state_behavior:
     ErrorReset: none
     ErrorWait: none
@@ -394,6 +413,9 @@ verification_obligations:
     - SVA-DL-013_no_new_packet_TX_while_Recovery_active
     - SVA-DL-014_broadcast_discarded_outside_Run
     - SVA-DL-015_sentNull_sentFCT_come_from_Encoding_commit
+    - SVA-DL-016_no_phantom_or_duplicate_Encoding_commit
+    - SVA-DL-017_at_most_one_accepted_uncommitted_Encoding_item
+    - SVA-DL-018_Encoding_commit_preserves_accept_kind_and_order
   directed_RTL_tests:
     - all_42_DataLink_Golden_vectors
     - simultaneous_TX_NChar_commit_and_RX_FCT
@@ -407,6 +429,8 @@ verification_obligations:
 
 implementation_choices_fixed_in_v0_1:
   - one_DataLink_instance_per_SpaceWire_port
+  - separate_Encoding_accept_and_commit_events
+  - maximum_one_accepted_but_uncommitted_Encoding_protocol_item
   - single_100MHz_protocol_core_domain
   - valid_ready_for_NChar_service_mapping
   - one_entry_pending_TX_broadcast_register
@@ -415,16 +439,16 @@ implementation_choices_fixed_in_v0_1:
   - separate_concurrent_LinkFSM_and_RecoveryFSM
   - reference_choice_no_optional_extra_EEP_after_closed_packet
 
-remaining_blocking_decisions_before_review:
+resolved_blocking_decisions:
   - blocker_id: DL-BLOCK-001
-    decision: Encoding_TX_commit_feedback
-    reason: >
-      The existing Encoding RTL Contract has valid/ready request acceptance but
-      no explicit commit/completion feedback. Data Link needs an unambiguous
-      character-boundary event for tx-credit accounting and SentNull/SentFCT.
-    required_action: >
-      Add enc_tx_commit_valid/enc_tx_commit_kind, or prove that enc_tx_item_ready
-      acceptance itself is exactly the irrevocable serializer commit event.
+    decision: Encoding_TX_accept_and_commit_are_separate
+    selected_option: B
+    signals: [enc_tx_commit_valid, enc_tx_commit_kind]
+    accounting_event: Encoding_commit
+    max_accepted_but_uncommitted_items: 1
+    status: closed
+
+remaining_blocking_decisions_before_review:
   - blocker_id: DL-BLOCK-002
     decision: FIFO_depth_confirmation
     reason: >
@@ -445,7 +469,6 @@ remaining_blocking_decisions_before_review:
 hard_gate:
   RTL_implementation_allowed: false
   becomes_true_when:
-    - DL-BLOCK-001_closed
     - DL-BLOCK-002_closed
     - DL-BLOCK-003_interface_owner_acknowledged
     - contract_status_reviewed
