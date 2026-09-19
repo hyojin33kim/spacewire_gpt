@@ -35,8 +35,11 @@ module_partition:
   - link_rate_generator
 
 data_link_to_encoding_tx:
-  handshake: valid_ready
+  handshake: valid_ready_accept_plus_commit_feedback
   accepted_on: rising_clk_when_valid_and_ready
+  acceptance_meaning: >
+    Transfer one protocol item into Encoding ownership. Acceptance is not a
+    declaration that the item has been sent.
   ordering: preserve_accept_order
   item_union:
     - DATA_CHARACTER
@@ -46,11 +49,36 @@ data_link_to_encoding_tx:
     - ESC
     - NULL
     - BROADCAST_CODE
-  fields:
+  request_fields:
     - tx_item_valid
     - tx_item_ready
     - tx_item_kind
     - tx_data_7_0
+  commit_feedback:
+    fields:
+      - tx_commit_valid
+      - tx_commit_kind
+    definition: >
+      tx_commit_valid pulses when the oldest accepted item is irrevocably
+      consumed as the next serial character/control-code at a character/control-code
+      boundary. This is not wire-transmission completion.
+    ordering: same_as_accept_order
+    safety:
+      - no_commit_without_prior_uncommitted_accept
+      - no_duplicate_commit
+      - commit_kind_matches_accepted_kind
+  pending_acceptance:
+    max_items: 1
+    ready_rule: "tx_item_ready shall be low while one accepted item is uncommitted"
+    rationale: >
+      Data Link must be able to re-arbitrate BC > FCT > NChar > Null at every
+      character boundary. Deeper in-order protocol-item prefetch is therefore
+      outside v0.1 unless explicit cancellation/reordering semantics are added.
+  reset_or_tx_disable:
+    accepted_uncommitted_action: flush
+    cross_layer_rule: >
+      Data Link and Encoding shall clear the matching pending-accept bookkeeping
+      on the same reset/TX-disable cause.
   note: >
     Union item interface is an RTL implementation choice that preserves §5.4.2
     character/control-code semantics despite the narrower TX_CHAR.request wording
@@ -147,9 +175,13 @@ tx_state_and_storage:
     - current_Data
     - current_Strobe
     - first_Null_after_TX_enable_state
-  fifo_depth: 0
-  buffering: one_inflight_item_minimum
-  deeper_prefetch: optional_implementation_choice
+    - accepted_pending_item_valid
+    - accepted_pending_item_kind
+    - accepted_pending_item_data
+  protocol_item_pending_depth: 1
+  buffering: one_accepted_but_uncommitted_item
+  deeper_protocol_item_prefetch: prohibited_in_v0_1
+  internal_serializer_pipeline_after_commit: implementation_choice
 
 rx_state_and_storage:
   required_state:
@@ -232,6 +264,7 @@ traceability:
     - BC-ENC-RATE-001
   golden_validation_vectors: "45/45 mapped"
   planned_SVA:
+    - SVA-ENC-000_no_phantom_duplicate_or_reordered_TX_commit
     - SVA-ENC-001_TX_order_preserved
     - SVA-ENC-002_no_RX_delivery_before_gotNull
     - SVA-ENC-003_gotNull_clear_on_RX_disable
@@ -257,6 +290,12 @@ resolved_project_inputs:
     status: closed
 
 resolved_architecture_decisions:
+  - id: RTL-IF-001
+    decision: DataLink_to_Encoding_TX_accept_vs_commit
+    selected_option: separate_accept_and_commit
+    value: "valid/ready acceptance + tx_commit_valid/tx_commit_kind feedback"
+    max_accepted_but_uncommitted_items: 1
+    status: closed
   - id: RTL-BLOCK-004A
     decision: RX_PHY_capture_architecture
     value: recovered_edge_with_programmable_sampling_delay
