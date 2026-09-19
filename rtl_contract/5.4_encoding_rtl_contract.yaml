@@ -50,14 +50,20 @@ data_link_to_encoding_tx:
     - NULL
     - BROADCAST_CODE
   request_fields:
-    - tx_item_valid
-    - tx_item_ready
-    - tx_item_kind
-    - tx_data_7_0
+    - enc_tx_item_valid
+    - enc_tx_item_ready
+    - enc_tx_item_kind
+    - enc_tx_item_data_7_0
+  ready_semantics: >
+    enc_tx_item_ready shall assert only at a next-item selection opportunity,
+    after the current character/control code has finished and the transmitter
+    can reserve exactly one next protocol item. It is not a generic FIFO-space
+    indication. This preserves Data Link BC > FCT > NChar > Null arbitration
+    at every character/control-code boundary.
   commit_feedback:
     fields:
-      - tx_commit_valid
-      - tx_commit_kind
+      - enc_tx_commit_valid
+      - enc_tx_commit_kind
     definition: >
       tx_commit_valid pulses when the oldest accepted item is irrevocably
       consumed as the next serial character/control-code at a character/control-code
@@ -86,23 +92,23 @@ data_link_to_encoding_tx:
 
 data_link_control:
   inputs:
-    - tx_enable
-    - rx_enable
-    - link_left_error_reset
-    - link_rate_setting
+    - enc_tx_enable
+    - enc_rx_enable
+    - enc_link_left_error_reset
+    - enc_link_rate_setting
   outputs:
-    - got_null
-    - disconnect
-    - rx_error_valid
-    - rx_error_kind
-    - rx_item_valid
-    - rx_item_kind
-    - rx_data_7_0
+    - enc_got_null
+    - enc_disconnect
+    - enc_rx_error_valid
+    - enc_rx_error_kind
+    - enc_rx_item_valid
+    - enc_rx_item_kind
+    - enc_rx_item_data_7_0
   status_realization:
-    got_null: level_until_rx_enable_deasserted
-    disconnect: latched_until_rx_enable_deasserted
-    rx_error_valid: latched_until_rx_enable_deasserted
-    rx_error_kind: [PARITY_ERROR, ESC_ERROR]
+    enc_got_null: level_until_enc_rx_enable_deasserted
+    enc_disconnect: latched_until_enc_rx_enable_deasserted
+    enc_rx_error_valid: latched_until_enc_rx_enable_deasserted
+    enc_rx_error_kind: [PARITY_ERROR, ESC_ERROR]
   classification: implementation_choice_preserving_semantic_events
 
 physical_DS_interface:
@@ -265,6 +271,7 @@ traceability:
   golden_validation_vectors: "45/45 mapped"
   planned_SVA:
     - SVA-ENC-000_no_phantom_duplicate_or_reordered_TX_commit
+    - SVA-ENC-000A_TX_ready_only_at_next_item_selection_opportunity
     - SVA-ENC-001_TX_order_preserved
     - SVA-ENC-002_no_RX_delivery_before_gotNull
     - SVA-ENC-003_gotNull_clear_on_RX_disable

@@ -3,7 +3,7 @@ id: BC-DL-V0.1
 name: Data Link semantic behavior contract
 spec: ECSS-E-ST-50-12C-Rev.1
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
-status: frozen
+status: corrective_review_pending_refreeze
 requirements_sources:
   - requirements/5.2.3_data_link_architecture.yaml
   - requirements/5.5_data_link.yaml
@@ -29,7 +29,11 @@ observable_contract:
     received_NChar: "rx_credit -= 1; if zero before receipt => CreditError"
     ErrorReset: "tx_credit=0; rx_credit=0"
   fct_issue:
-    allowed_when: "RX free space >= 8 AND rx_credit <= max-8"
+    allowed_when: "RX FIFO physical free entries >= rx_credit + 8 AND rx_credit <= max-8"
+    interpretation: >
+      rx_credit represents N-Chars already requested by previously sent FCTs but
+      not yet received. Those outstanding N-Chars therefore reserve FIFO capacity;
+      a new FCT requires eight additional unreserved receive slots.
   timers:
     ErrorReset_nominal_us: 6.4
     ErrorReset_allowed_us: [5.82, 7.22]
@@ -86,7 +90,7 @@ invariants:
   - "0 <= tx_credit <= 56"
   - "0 <= rx_credit <= 56"
   - "NCHAR transmission implies tx_credit_before > 0"
-  - "FCT issue implies at least 8 receive slots and credit headroom"
+  - "FCT issue implies at least 8 unreserved receive slots after accounting for outstanding rx_credit, and credit headroom"
   - "priority BC > FCT > NCHAR > NULL at item boundary"
   - "Run exit on Disconnect/Parity/ESC/Credit error is ErrorReset"
   - "credit counters are zero in ErrorReset"

@@ -1,0 +1,88 @@
+schema_version: 1
+artifact_id: DATALINK-RTL-CONTRACT-REVIEW-V0.1
+date: "2026-09-19"
+spec: ECSS-E-ST-50-12C-Rev.1
+contract: rtl_contract/5.5_data_link_rtl_contract.yaml
+review_status: HOLD_PENDING_CORRECTIVE_REVALIDATION
+review_scope:
+  - cycle_level_IO
+  - storage_and_FIFO_ownership
+  - handshake_and_priority
+  - credit_accounting
+  - Link_FSM_and_timers
+  - error_recovery
+  - reset
+  - management_and_status
+  - Encoding_boundary_consistency
+
+findings:
+  - id: DL-RVW-001
+    severity: BLOCKER
+    class: semantic_fidelity
+    source: "5.5.4.l and 5.5.4.p"
+    finding: >
+      The frozen v0.1 Golden/contract treated physical RX FIFO free entries >= 8
+      as sufficient to issue another FCT. Outstanding rx_credit already represents
+      N-Chars authorized but not yet received and therefore reserves FIFO capacity.
+    required_rule: "rx_fifo_free_entries >= rx_credit + 8 AND rx_credit <= max-8"
+    action: >
+      Correct requirement wording, semantic contract, invariant, Golden model,
+      vectors and tests; create semantic-datalink-v0.1.1 and revalidate.
+
+  - id: DL-RVW-002
+    severity: BLOCKER_UNTIL_CONTRACT_FIXED
+    class: priority_boundary
+    source: "5.5.6.b through 5.5.6.e"
+    finding: >
+      Separate accept/commit is retained, but an accepted low-priority item cannot
+      reserve the next boundary before BC/FCT arbitration. enc_tx_item_ready must
+      therefore mean a next-item selection opportunity, not generic queue capacity.
+    action: corrected_in_DataLink_and_Encoding_RTL_contracts
+
+  - id: DL-RVW-003
+    severity: MAJOR
+    class: service_vs_storage_boundary
+    source: "5.2.8.b, 5.5.9, 6.2.1.2"
+    finding: >
+      TX FIFO loading was incorrectly coupled to the Run state. N-Chars may be
+      queued in the port TX FIFO before Run, while actual transfer to Encoding
+      remains Run-gated. Broadcast requests retain the selected discard-unless-Run rule.
+    action: corrected_in_RTL_contract
+
+  - id: DL-RVW-004
+    severity: MAJOR
+    class: status_fidelity
+    source: "5.5.3.b.2 and 5.5.8.4.a.5"
+    finding: >
+      A single last_error enum can collapse simultaneous causes. The reviewed
+      interface separates current four-bit error flags from latched recovery-cause
+      flags and preserves all causes present on the Recovery-entry cycle.
+    action: corrected_in_RTL_contract
+
+  - id: DL-RVW-005
+    severity: MAJOR
+    class: cross_layer_interface_consistency
+    finding: >
+      Data Link and Encoding RTL contracts used different names/shapes for the
+      same TX/RX boundary. Canonical enc_* request, commit, RX event and control
+      signal names are now used by both contracts.
+    action: corrected_in_both_RTL_contracts
+
+  - id: DL-RVW-006
+    severity: ASSUMPTION
+    class: recovery_liveness
+    source: "5.5.8.4 and 5.6.2.2"
+    finding: >
+      Direct recovery drain requires the owner of an already-started packet to
+      continue without interleaving and eventually supply EOP/EEP. This liveness
+      obligation must be carried into the Network Ownership & Interface Contract.
+    action: documented_as_integration_obligation
+
+gate:
+  semantic_datalink_v0.1_1_revalidation: REQUIRED
+  remaining_architecture_blockers: 0
+  RTL_implementation_allowed: false
+  contract_review_can_close_when:
+    - Golden_validation_for_semantic_datalink_v0.1.1_PASS
+    - Semantic_lint_PASS
+    - review_artifact_updated_to_PASS

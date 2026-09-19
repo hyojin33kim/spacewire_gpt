@@ -39,7 +39,7 @@ requirements:
   - {id: SPW-5.5.4-m, clause: "5.5.4.m", level: SHALL, behavior: ErrorReset_clears_RX_credit}
   - {id: SPW-5.5.4-n, clause: "5.5.4.n", level: SHALL, behavior: RX_credit_max_56}
   - {id: SPW-5.5.4-o, clause: "5.5.4.o", level: MAY, behavior: smaller_RX_credit_max_if_capacity_below_56, selected: false}
-  - {id: SPW-5.5.4-p, clause: "5.5.4.p", level: SHALL, behavior: FCT_only_if_8_slots_and_credit_headroom}
+  - {id: SPW-5.5.4-p, clause: "5.5.4.p", level: SHALL, behavior: FCT_only_if_RX_FIFO_has_room_for_8_additional_NChars_beyond_all_outstanding_receive_credit_and_receive_credit_has_8_headroom}
 
   - {id: SPW-5.5.5-a1, clause: "5.5.5.a.1", level: SHALL, behavior: NChar_with_zero_RX_credit_is_credit_error}
   - {id: SPW-5.5.5-a2, clause: "5.5.5.a.2", level: SHALL, behavior: FCT_causing_TX_credit_overflow_is_credit_error}
