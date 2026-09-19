@@ -1,0 +1,216 @@
+schema_version: 1
+artifact_id: RTL-CONTRACT-ROUTER-V0.1
+status: draft_pending_decisions
+source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
+semantic_baseline: semantic-router-v0.1
+semantic_contract: contracts/5.6_router.yaml
+network_contract: rtl_contract/5.6_network_ownership_contract.yaml
+requirement_allocation: traceability/network_router_owner_map_v0.1.json
+hard_gate:
+  RTL_implementation_allowed: false
+  reviewed: false
+  blockers: [NR-DEC-01, NR-DEC-02, NR-DEC-03, NR-TECH-01, NR-TECH-02, NR-TECH-03, NR-TECH-04]
+
+inherited_semantics:
+  source: contracts/5.6_router.yaml
+  features: [path, logical, logical_deletion, adaptive_logical, multicast, per_port_timeout, timecode_relay, interrupt_and_ack_relay]
+  legacy_path_adaptive: false
+  packet_length_limit: none
+  FIFO_depth_per_DataLink_TX_RX: 128
+  DataLink_credit_max: 56
+  note: This draft proposes no removal of existing reference features.
+
+implementation_proposal:
+  decision: NR-DEC-01
+  clock_hz: 100000000
+  external_ports_default: 4
+  external_ports_parameter_range: [1, 31]
+  configuration_port: 0
+  count_rationale: Matches current RouterModel default, not an approved FPGA resource estimate.
+  storage: DataLink_RX_TX_FIFOs_plus_one_registered_ingress_head_per_input
+  no_additional_whole_packet_buffer: true
+  blocks: [ingress_head, route_lookup, allocator, crossbar, timeout_control, broadcast_engine, configuration_adapter]
+  timing: >
+    Transfer at rising core edge only. Head register is filled independently of
+    downstream ready. Lookup and grant are registered; no same-edge release/regrant.
+    Exact pipeline latency and table implementation require NR-TECH-04 closure.
+  reset: >
+    RouterReset resets all ports, clears head/ownership/event state, invalidates
+    logical entries and disables adaptive/multicast. Partial PortReset requires
+    packet-aware coordination; it is not implicitly a global RouterReset.
+
+addressing:
+  references: [5.6.8.2, 5.6.8.3, 5.6.8.4, 5.6.8.5, 5.6.8.6]
+  path:
+    zero: configuration_endpoint_only
+    external: ports_1_through_configured_N
+    absent_port: discard_through_first_terminator_and_record_invalid_address
+    header: consume_exactly_once
+  logical:
+    usable_addresses: [32, 254]
+    address_255: discard_and_record_invalid_address_per_frozen_semantics
+    entry_fields_proposed: [valid, output_mask, delete_header, adaptive, multicast]
+    retained_unless_deletion_enabled: true
+    deletion_count_max_per_hop: 1
+    invalid_entry: discard_through_first_terminator_and_record_invalid_address
+    configuration_port_target: prohibited_by_5_6_8_3_f
+    conflicting_mode_bits: configuration_write_rejected_proposal
+  empty_packet: >
+    EOP/EEP in the header-wait state is consumed locally without allocating output;
+    follow CR-NET-001. Deleting a real header is distinct from receiving an empty packet.
+  updates: >
+    Proposed route snapshot at allocation, frozen for the packet. Management writes
+    must be atomic; lookup/write collision, invalid combination handling and table
+    versioning require NR-DEC-03 and NR-TECH-04.
+
+allocation:
+  inherited: fair_packet_level_wormhole
+  proposal: >
+    A rotating input-order allocator scans eligible packet requests and grants
+    disjoint free output sets. Adaptive chooses one eligible output with a rotating
+    candidate cursor. Multicast reserves its complete eligible set atomically,
+    never a partial subset. Disjoint unicasts may proceed together.
+  fairness: >
+    Exact Golden round-robin winners are not normative. Prove no permanent
+    exclusion under recurrent eligibility and completed competing packets;
+    do not promise a cycle bound for unbounded packets or blocked sinks.
+    Multicast starvation under asymmetric port availability is NR-TECH-04.
+  ownership_release: >
+    Proposed release at terminal acceptance into the output FIFO is NOT yet approved.
+    Queued-packet order may preserve wire non-interleaving, but adaptive free-port
+    semantics and error association must also be proved. NR-TECH-01 blocks closure.
+  multicast_transfer:
+    all_ready: every_selected_output_can_accept_same_NChar
+    fire: head_valid_and_all_ready
+    all_outputs_receive_same_kind_and_data: true
+    subset_handshake_forbidden: true
+    unresolved: >
+      A conventional per-output stable-valid interface must not accept a subset.
+      Define a group acceptance/reservation adapter or justify simultaneous gated
+      valid with DataLink ready independent of valid. NR-TECH-04.
+  disabled_output:
+    at_packet_start: omit_disabled_multicast_ports_per_selected_SHOULD
+    mid_packet: NR-DEC-02
+  progress_tracking:
+    router_output_accept: distinct_from_Encoding_commit
+    packet_context: per_ingress_route_and_per_output_outstanding_packet_association
+    terminal: EOP_or_EEP_handshake_not_signal_presence
+
+timeout:
+  references: [5.6.8.12, CR-RTR-001]
+  inherited: configurable_per_port_and_disable_supported
+  normative_measurement: time_since_last_DATA_passed_from_input_port_to_output_port
+  starts: first_DATA_passed_to_output
+  ends: EOP_or_EEP_passed_to_output
+  expiry_comparison: strictly_greater_than_configured_period
+  proposed_timebase: core_cycles_with_saturating_counter
+  counter_width_and_reset_default: unresolved_NR_DEC_02
+  action: discard_current_packet_send_output_EEP_record_stuck_error
+  boundary: >
+    Output EEP travels through DataLink N-Char credit/accounting, not an
+    invented credit-bypassing wire injection. An error flush must not delete
+    subsequent packets queued behind the affected packet.
+  candidate_extension: >
+    Add a packet-associated abort request/completion interface to DataLink.
+    DataLink retains storage ownership and atomically reconciles accepted but
+    uncommitted Encoding item, committed open packet, TX FIFO remainder and
+    replacement terminal. Signal schema/priority is not yet fixed.
+  reject_shortcut: >
+    Appending EEP alone behind an arbitrary buffered remainder does not prove
+    discard of that remainder or correct packet association.
+  upstream_tail: >
+    After an output is terminated, discard the original input tail through its
+    first EOP/EEP before treating subsequent data as a new packet. If no terminator
+    ever arrives, retain quarantine until explicit reset; do not reframe arbitrary
+    DATA as a fresh header.
+  unresolved: [NR-DEC-02, NR-TECH-01]
+
+broadcast:
+  references: [5.6.3, 5.6.4.6, 5.6.4.7, 5.6.5.5, 5.6.5.7]
+  event_capture: all_per_port_DataLink_event_valid_inputs_in_same_cycle
+  priority: [TIME_CODE, INTERRUPT_ACK, INTERRUPT]
+  reserved_types: delete_without_relay
+  timecode:
+    register_bits: 6
+    valid: received_equals_previous_plus_one_modulo_64
+    valid_action: update_and_relay_except_ingress
+    invalid_action: update_without_relay
+  interrupt:
+    IID_bits: 5
+    active_bits: 32
+    timers: one_per_IID
+    inactive_interrupt: set_bit_relay_start_timer
+    active_interrupt: discard_duplicate
+    active_ack: clear_bit_relay_stop_and_reset_timer
+    inactive_ack: ignore
+    timeout: clear_bit
+    per_port_masks: [interrupt_rx, interrupt_tx, ack_rx, ack_tx]
+  proposed_collision_order: >
+    Capture all arrivals first. Establish deterministic processing of same-cycle
+    events against shared state; ACK/interrupt/timeout on one IID and multiple
+    time-codes need explicit precedence, golden event serialization and tests.
+  capacity: >
+    No-backpressure reception does not imply unbounded storage. Derive event burst,
+    aggregate arrival and per-egress service bounds before selecting FIFO depths.
+    Silent overwrite/coalescing or unrestricted lossless relay is not assumed.
+  DataLink_priority_dependency: >
+    A lower-priority BC already accepted by the one-entry DataLink pending register
+    cannot be preempted by a newly arrived time-code. Define the actual Network
+    arbitration/transfer boundary; acceptance-order priority is not automatically
+    next-character wire priority.
+  unresolved: [NR-DEC-03, NR-TECH-03]
+
+configuration:
+  port0_path_only: true
+  required_access: [routing_table, per_port_status, per_port_timeout, interrupt_parameters]
+  application_protocol: unresolved_NR_DEC_03
+  proposal: >
+    Port-0 packet service plus a documented configuration application/CSR adapter.
+    Do not assume RMAP is required by this ECSS contract, and do not substitute
+    AXI-only access for the required port-0 access.
+  safety: no_torn_entry_updates_and_no_midpacket_route_change
+  reset_values: logical_entries_invalid_adaptive_and_multicast_disabled
+  remaining: register_map_transaction_schema_reset_and_write_collision_rules
+
+verification:
+  status: planned_not_executed
+  existing_semantic_evidence:
+    router_vectors_mapped: 34
+    network_vectors_mapped: 29
+    caution: Mapping counts are not proof of cycle-level or integration coverage.
+  directed_cases:
+    - path_0_configuration_and_absent_port_discard
+    - logical_keep_delete_reserved255_and_empty_packet
+    - logical_port0_rejected_against_normative_requirement
+    - two_inputs_one_output_packet_lock_and_fairness
+    - disjoint_outputs_concurrent_and_adaptive_contention
+    - multicast_one_sink_stalled_no_subset_handshake
+    - multicast_port_failure_midpacket
+    - long_packet_with_FIFO_empty_bubbles_and_recovery
+    - timeout_at_threshold_and_threshold_plus_one
+    - timeout_with_TX_FIFO_backlog_and_following_packet
+    - EOP_accepted_not_committed_then_link_error
+    - same_cycle_reset_error_commit_and_terminator
+    - pending_Encoding_EOP_flushed_while_packet_open
+    - simultaneous_broadcasts_same_IID_and_different_IIDs
+    - BC_pending_interrupt_then_new_timecode
+    - configuration_write_vs_lookup_and_reset
+  assertions:
+    - one_owner_per_output_and_no_NChar_interleaving
+    - no_transfer_without_handshake_and_stable_stalled_item
+    - exactly_one_header_deletion_when_selected
+    - multicast_all_or_none_same_NChar
+    - no_old_epoch_commit_after_flush
+    - recovery_never_discards_next_packet
+    - timeout_EEP_at_most_once_per_affected_output_packet
+    - event_capture_and_no_silent_overflow_within_approved_envelope
+    - fairness_under_explicit_progress_assumptions
+  scoreboard: >
+    Compare ordered semantic events and per-packet payload/end status using the
+    implementation-independent Golden model. Do not compare arbitrary cycle
+    latency or exact fair-scheduler winner identity. Adapter must expose any
+    assumed event order and may not hide dropped, duplicated or late events.
+  review_pass: >
+    All 101 Router requirements dispositioned; decisions approved; technical
+    blockers closed; contract lint and targeted boundary model checks pass.
+    No claims of RTL verification until separately authorized RTL exists.
