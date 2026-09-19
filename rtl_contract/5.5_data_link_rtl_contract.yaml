@@ -1,0 +1,451 @@
+schema_version: 1
+artifact_id: RTL-CONTRACT-DATALINK-V0.1
+semantic_baseline: semantic-datalink-v0.1
+semantic_contract: contracts/5.5_data_link.yaml
+golden_validation: traceability/golden_validation_datalink_v0.1.yaml
+feature_profile: GOLDEN-FULL-REFERENCE-V0.1
+status: draft_review_required
+purpose: >
+  Convert the validated Data Link semantics into cycle-level RTL obligations
+  while preserving the Golden Model as an implementation-independent oracle.
+  This contract fixes the Data Link core I/O, storage ownership, handshake,
+  reset, timing and recovery rules. RTL implementation remains prohibited
+  until the blocking interface decisions are closed and this contract is reviewed.
+
+source_scope:
+  normative:
+    - "ECSS-E-ST-50-12C Rev.1 5.2.3"
+    - "ECSS-E-ST-50-12C Rev.1 5.2.8"
+    - "ECSS-E-ST-50-12C Rev.1 5.5.2 through 5.5.9"
+    - "ECSS-E-ST-50-12C Rev.1 6.2"
+  repository:
+    - requirements/5.2.3_data_link_architecture.yaml
+    - requirements/5.5_data_link.yaml
+    - requirements/6.2_data_link_service.yaml
+    - contracts/5.5_data_link.yaml
+    - golden_model/data_link/model.py
+    - verification/pre_golden/5.5_data_link_vectors.yaml
+    - verification/pre_golden/5.5_data_link_invariants.yaml
+
+implementation_profile:
+  intent: flight_fpga
+  instance_granularity: one_DataLink_instance_per_SpaceWire_port
+  core_clock_hz: 100000000
+  core_clock_period_ns: 10
+  core_domain: spw_core_clk
+  encoding_core_interface_domain: spw_core_clk
+  maximum_credit: 56
+  credit_quantum: 8
+  legacy_LinkDisabled_behavior: disabled
+  discard_broadcast_unless_Run: enabled
+  recommended_status_information: enabled
+
+module_partition:
+  required_logical_blocks:
+    - spw_datalink_ctrl
+    - spw_datalink_tx_scheduler
+    - spw_datalink_credit_mgr
+    - spw_datalink_tx_fifo
+    - spw_datalink_rx_fifo
+    - spw_datalink_recovery
+  note: >
+    These are logical ownership boundaries. They may be merged physically in RTL
+    provided the externally observable contract and verification points remain intact.
+
+network_to_datalink_tx_nchar:
+  handshake: valid_ready
+  signals:
+    - net_tx_nchar_valid
+    - net_tx_nchar_ready
+    - net_tx_nchar_kind
+    - net_tx_nchar_data_7_0
+  nchar_kind: [DATA, EOP, EEP]
+  acceptance:
+    normal_mode: "accept on rising edge when valid && ready"
+    normal_ready: "Run && Recovery==Normal && tx_fifo_not_full"
+    outside_Run: "do not accept for later transmission"
+    recovery_discard_exception: >
+      If an error occurs while a packet is open, the Data Link shall continue
+      accepting the remainder of that same upstream packet as needed solely to
+      discard it until EOP or EEP is consumed. Those accepted N-Chars shall never
+      be transmitted on the recovering link.
+  packet_order: preserve
+  interface_reason: >
+    Implements 5.5.2.e and 6.2 SEND_NCHAR while allowing 5.5.8.4 packet-spill
+    recovery to complete even when the full packet was not already buffered.
+
+network_to_datalink_tx_broadcast:
+  handshake: valid_ready
+  signals:
+    - net_tx_bc_valid
+    - net_tx_bc_ready
+    - net_tx_bc_value_7_0
+  behavior:
+    Run: "accept into one-entry pending register when empty"
+    not_Run: "accept request and discard immediately; never defer until a later Run state"
+    pending_full: "deassert ready until the pending broadcast is committed to Encoding"
+  storage: one_entry_pending_register
+  priority: highest_at_next_character_boundary
+
+datalink_to_network_rx_nchar:
+  handshake: valid_ready
+  signals:
+    - net_rx_nchar_valid
+    - net_rx_nchar_ready
+    - net_rx_nchar_kind
+    - net_rx_nchar_data_7_0
+  source: rx_fifo_head
+  pop_condition: "valid && ready on rising edge"
+  availability: independent_of_current_link_state
+  reason: >
+    Previously received N-Chars, including a recovery-inserted EEP, remain readable
+    while the link is being re-initialised.
+
+datalink_to_network_rx_broadcast:
+  handshake: event_valid
+  signals:
+    - net_rx_bc_valid
+    - net_rx_bc_value_7_0
+  contract:
+    valid_width_cycles: 1
+    backpressure: none
+    sink_obligation: "Network-side owner shall capture each event in the same core cycle"
+  reason: >
+    Broadcast codes are not protected by N-Char flow control. The Network ownership
+    contract shall provide a sink that accepts each Data Link broadcast indication.
+
+datalink_to_encoding_tx:
+  handshake: valid_ready_plus_commit_feedback
+  request_signals:
+    - enc_tx_item_valid
+    - enc_tx_item_ready
+    - enc_tx_item_kind
+    - enc_tx_data_7_0
+  item_kind: [DATA, EOP, EEP, FCT, NULL, BROADCAST_CODE]
+  prohibited_request_kind:
+    - raw_ESC
+  acceptance: "request accepted on valid && ready"
+  commit_feedback_required:
+    - enc_tx_commit_valid
+    - enc_tx_commit_kind
+  commit_definition: >
+    Pulse when the Encoding layer irrevocably removes the item for serial
+    transmission at a character/control-code boundary.
+  semantic_use_of_commit:
+    - TX_NChar_commit_decrements_tx_credit
+    - FCT_commit_increments_rx_credit
+    - NULL_commit_generates_sentNull
+    - FCT_commit_generates_sentFCT
+    - BROADCAST_CODE_commit_clears_pending_broadcast
+  ordering: preserve_request_order
+
+encoding_to_datalink_rx:
+  handshake: event_valid_no_backpressure
+  signals:
+    - enc_rx_item_valid
+    - enc_rx_item_kind
+    - enc_rx_data_7_0
+    - enc_got_null
+    - enc_disconnect
+    - enc_parity_error
+    - enc_esc_error
+  item_kind: [DATA, EOP, EEP, FCT, BROADCAST_CODE]
+  sink_obligation: >
+    Data Link shall consume every Encoding receive event in the cycle presented.
+    N-Char loss due to local FIFO full is forbidden by the credit contract.
+  qualification:
+    disconnect: "Encoding contract shall not assert before disconnect is armed by the first D/S transition"
+    parity_ESC_and_received_items: "shall be semantically effective only after gotNull"
+  defensive_assertions:
+    - no_NChar_or_BC_delivery_before_gotNull
+    - no_FCT_condition_before_gotNull
+
+fifo_contract:
+  tx_fifo:
+    content: NCHAR_only
+    entry_fields: [kind_2b, data_8b]
+    default_depth_entries: 128
+    depth_status: provisional_project_default_to_confirm_at_review
+    PortReset_action: clear
+    recovery_behavior: >
+      When a transmitted packet is open at error entry, discard queued entries
+      through and including the first EOP or EEP belonging to that packet.
+      Preserve any subsequent complete packet already buffered after that terminator.
+  rx_fifo:
+    content: NCHAR_only
+    entry_fields: [kind_2b, data_8b]
+    default_depth_entries: 128
+    depth_status: provisional_project_default_to_confirm_at_review
+    PortReset_action: clear
+    minimum_for_selected_credit_profile: 56
+    recovery_behavior: >
+      If recovery requires an EEP and the FIFO is full, keep EEP pending until
+      space becomes available, then write the EEP before declaring Recovery complete.
+  broadcast_storage:
+    tx: separate_one_entry_register_not_in_TX_FIFO
+    rx: not_stored_in_NChar_RX_FIFO
+
+credit_contract:
+  counter_width_bits: 6
+  tx_credit:
+    range: [0, 56]
+    reset_value: 0
+    decrement_event: TX_NChar_commit
+    increment_event: RX_FCT_event
+    increment_amount: 8
+    overflow: CreditError
+  rx_credit:
+    range: [0, 56]
+    reset_value: 0
+    decrement_event: RX_NChar_event
+    increment_event: TX_FCT_commit
+    increment_amount: 8
+    underflow: CreditError
+  FCT_request_condition:
+    all:
+      - "rx_fifo_free_entries >= 8"
+      - "rx_credit <= 48"
+    behavior: >
+      Re-evaluate after each credit/FIFO update. In Connecting and Run, request
+      FCT whenever the condition is true and the scheduler allows it.
+  same_cycle_event_rules:
+    tx_credit:
+      - "TX_NChar_commit legality is checked against pre-cycle tx_credit > 0"
+      - "apply TX_NChar_commit decrement before applying a same-cycle RX_FCT increment"
+      - "then RX_FCT is a CreditError if resulting credit + 8 would exceed 56"
+    rx_credit:
+      - "RX_NChar legality is checked against pre-cycle rx_credit > 0"
+      - "apply RX_NChar decrement, then apply a same-cycle TX_FCT_commit increment"
+      - "a same-cycle newly sent FCT shall not legalise an N-Char received with pre-cycle rx_credit == 0"
+
+tx_scheduler:
+  decision_point: "only when Encoding is ready to commit a next item"
+  state_behavior:
+    ErrorReset: none
+    ErrorWait: none
+    Ready: none
+    Started: [NULL]
+    Connecting: [FCT, NULL]
+    Run: [BROADCAST_CODE, FCT, NCHAR, NULL]
+  Run_priority:
+    - BROADCAST_CODE
+    - FCT
+    - NCHAR
+    - NULL
+  NChar_enable:
+    all:
+      - "tx_credit > 0"
+      - "Recovery == Normal"
+      - "tx_fifo_not_empty"
+  recovery_note: >
+    Link re-initialisation may proceed while TX packet spill is still active.
+    FCT/Null and broadcast operation may continue according to link state, but no
+    new packet N-Char may be transmitted until Recovery returns to Normal.
+
+link_fsm_contract:
+  states: [ErrorReset, ErrorWait, Ready, Started, Connecting, Run]
+  implementation: registered_Moore_state
+  state_update_edge: rising_spw_core_clk
+  outputs_change: "immediately after the state update edge"
+  transition_priority:
+    - PortReset
+    - LinkDisabled_or_qualified_link_error
+    - protocol_illegal_receive_condition
+    - nominal_handshake_transition
+    - state_timer_expiry
+  error_dominance: true
+  state_outputs:
+    ErrorReset: {tx_enable: false, rx_enable: false}
+    ErrorWait: {tx_enable: false, rx_enable: true, store_rx_nchar: false, deliver_rx_bc: false}
+    Ready: {tx_enable: false, rx_enable: true, store_rx_nchar: false, deliver_rx_bc: false}
+    Started: {tx_enable: true, rx_enable: true, tx_allowed: [NULL], store_rx_nchar: false, deliver_rx_bc: false}
+    Connecting: {tx_enable: true, rx_enable: true, tx_allowed: [FCT, NULL], store_rx_nchar: false, deliver_rx_bc: false}
+    Run: {tx_enable: true, rx_enable: true, tx_allowed: [BROADCAST_CODE, FCT, NCHAR, NULL], store_rx_nchar: true, deliver_rx_bc: true}
+  conditions:
+    ErrorReset_to_ErrorWait: "!LinkDisabled && timer_6_4us_elapsed"
+    ErrorWait_to_Ready: "timer_12_8us_elapsed"
+    Ready_to_Started: "LinkStart || (AutoStart && gotNull)"
+    Started_to_Connecting: "sentNull && gotNull"
+    Connecting_to_Run: "sentFCT && gotFCT"
+  timing_qualification:
+    disconnect: only_after_Encoding_qualified_disconnect
+    parity_ESC_gotFCT_gotNChar_gotBC: only_after_gotNull
+  note: >
+    Error-dominant ordering is an RTL determinisation for simultaneous core-cycle
+    conditions; it shall not suppress any normative error transition.
+
+timer_contract:
+  implementation_clock_hz: 100000000
+  timer_reference: measured_from_state_entry
+  error_reset_delay:
+    nominal_us: 6.4
+    allowed_us: [5.82, 7.22]
+    selected_cycles: 640
+    exact_rule: "expire on the 640th rising edge after state entry"
+  state_timeout:
+    nominal_us: 12.8
+    allowed_us: [11.64, 14.33]
+    selected_cycles: 1280
+    exact_rule: "expire on the 1280th rising edge after state entry"
+  counter_reset: on_each_relevant_state_entry
+
+error_recovery_contract:
+  states: [Normal, Recovery]
+  entry:
+    - "Run && LinkDisabled"
+    - "Run && Disconnect"
+    - "Run && ParityError"
+    - "Run && ESCError"
+    - "Run && CreditError"
+  actions:
+    tx:
+      - detect_whether_packet_was_open_at_error
+      - discard_unsent_remainder_until_and_including_EOP_or_EEP
+      - continue_upstream_drain_if_terminator_was_not_already_buffered
+      - do_not_discard_following_packet_after_current_packet_terminator
+    rx:
+      - "if last N-Char written to RX FIFO was DATA, append EEP"
+      - "if EEP is pending and RX FIFO full, wait for space"
+      - "reference implementation does not add optional extra EEP after EOP/EEP"
+    status:
+      - latch_error_cause
+  completion: >
+    Recovery returns to Normal only after TX spill/discard is complete and any
+    required RX EEP has been written.
+  concurrency: >
+    Recovery FSM and Link initialisation FSM operate concurrently. Reaching Run
+    does not by itself complete Recovery.
+
+reset_contract:
+  external_reset:
+    policy: async_assert_sync_deassert_in_spw_core_clk_domain
+  PortReset:
+    sampling: synchronous_management_input
+    actions:
+      - clear_TX_FIFO
+      - clear_RX_FIFO
+      - clear_pending_broadcast
+      - set_LinkFSM_ErrorReset
+      - set_RecoveryFSM_Normal
+      - clear_tx_credit
+      - clear_rx_credit
+      - clear_gotFCT
+      - clear_packet_open_tracking
+      - clear_pending_recovery_EEP
+      - clear_error_status
+  LinkDisabled:
+    action: force_or_hold_LinkFSM_ErrorReset
+    FIFO_policy: "does not itself clear TX/RX FIFOs; PortReset does"
+  encoding_control:
+    tx_enable_rx_enable: derived_from_LinkFSM_state
+
+packet_tracking:
+  tx_packet_open:
+    set_on: "TX_DATA_commit when previously closed"
+    clear_on: "TX_EOP_or_EEP_commit"
+    purpose: recovery_remainder_discard
+  rx_packet_open:
+    set_on: "RX_DATA_written_to_RX_FIFO when previously closed"
+    clear_on: "RX_EOP_or_EEP_written_to_RX_FIFO"
+    purpose: recovery_EEP_insertion
+  note: >
+    N-Chars from different packets shall never be interleaved. Recovery discard
+    stops exactly at the current packet terminator.
+
+management_and_status:
+  control_inputs:
+    - PortReset
+    - LinkDisabled
+    - LinkStart
+    - AutoStart
+  status_outputs:
+    - link_state
+    - recovery_state
+    - tx_credit_5_0
+    - rx_credit_5_0
+    - last_error
+    - tx_fifo_level
+    - rx_fifo_level
+    - pending_broadcast
+    - pending_recovery_EEP
+  operational_rate_control:
+    non_Run: initial_link_rate
+    Run: configured_operational_link_rate
+    ownership: Encoding_layer_rate_generator
+  register_bus_mapping: deferred_to_MIB_or_AXI_wrapper_contract
+
+verification_obligations:
+  differential_reference: golden_model/data_link/model.py
+  golden_vectors: "42/42"
+  golden_invariants: "8"
+  planned_SVA:
+    - SVA-DL-001_credit_ranges
+    - SVA-DL-002_no_TX_NChar_without_credit
+    - SVA-DL-003_RX_NChar_zero_credit_causes_error
+    - SVA-DL-004_RX_FCT_overflow_causes_error
+    - SVA-DL-005_FCT_only_with_8_slots_and_credit_headroom
+    - SVA-DL-006_Run_priority_BC_FCT_NChar_Null
+    - SVA-DL-007_ErrorReset_clears_credits
+    - SVA-DL-008_no_receive_delivery_before_gotNull
+    - SVA-DL-009_state_timer_exact_cycles
+    - SVA-DL-010_PortReset_clears_FIFOs_and_state
+    - SVA-DL-011_recovery_spills_only_current_TX_packet
+    - SVA-DL-012_pending_recovery_EEP_waits_for_RX_space
+    - SVA-DL-013_no_new_packet_TX_while_Recovery_active
+    - SVA-DL-014_broadcast_discarded_outside_Run
+    - SVA-DL-015_sentNull_sentFCT_come_from_Encoding_commit
+  directed_RTL_tests:
+    - all_42_DataLink_Golden_vectors
+    - simultaneous_TX_NChar_commit_and_RX_FCT
+    - simultaneous_RX_NChar_and_TX_FCT_commit
+    - recovery_with_TX_FIFO_terminator_present
+    - recovery_with_TX_FIFO_empty_before_terminator
+    - recovery_RX_FIFO_full_pending_EEP
+    - Run_reached_before_Recovery_complete
+    - PortReset_during_each_LinkFSM_state
+    - PortReset_during_Recovery
+
+implementation_choices_fixed_in_v0_1:
+  - one_DataLink_instance_per_SpaceWire_port
+  - single_100MHz_protocol_core_domain
+  - valid_ready_for_NChar_service_mapping
+  - one_entry_pending_TX_broadcast_register
+  - error_dominant_simultaneous_transition_resolution
+  - exact_640_and_1280_cycle_timers
+  - separate_concurrent_LinkFSM_and_RecoveryFSM
+  - reference_choice_no_optional_extra_EEP_after_closed_packet
+
+remaining_blocking_decisions_before_review:
+  - blocker_id: DL-BLOCK-001
+    decision: Encoding_TX_commit_feedback
+    reason: >
+      The existing Encoding RTL Contract has valid/ready request acceptance but
+      no explicit commit/completion feedback. Data Link needs an unambiguous
+      character-boundary event for tx-credit accounting and SentNull/SentFCT.
+    required_action: >
+      Add enc_tx_commit_valid/enc_tx_commit_kind, or prove that enc_tx_item_ready
+      acceptance itself is exactly the irrevocable serializer commit event.
+  - blocker_id: DL-BLOCK-002
+    decision: FIFO_depth_confirmation
+    reason: >
+      The contract uses 128-entry TX/RX FIFOs as the current project default.
+      Confirm the mission/prototype depth before review; RX depth shall not be
+      below 56 for the selected maximum-credit profile unless the profile changes.
+  - blocker_id: DL-BLOCK-003
+    decision: upstream_recovery_drain_contract
+    reason: >
+      Error recovery can require discarding the remainder of a packet that is
+      larger than the TX FIFO. The Network/Router-side owner must therefore
+      continue supplying the current packet through EOP/EEP while Data Link is
+      in discard mode, without starting the next packet.
+    required_action: >
+      Carry this rule into the Network Ownership & Interface Contract and its
+      Router/DataLink integration tests.
+
+hard_gate:
+  RTL_implementation_allowed: false
+  becomes_true_when:
+    - DL-BLOCK-001_closed
+    - DL-BLOCK-002_closed
+    - DL-BLOCK-003_interface_owner_acknowledged
+    - contract_status_reviewed
