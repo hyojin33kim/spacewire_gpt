@@ -9,7 +9,23 @@ requirement_allocation: traceability/network_router_owner_map_v0.1.json
 hard_gate:
   RTL_implementation_allowed: false
   reviewed: false
-  blockers: [NR-DEC-01, NR-DEC-02, NR-DEC-03, NR-TECH-01, NR-TECH-02, NR-TECH-03, NR-TECH-04]
+  blockers: [NR-DEC-02, NR-DEC-03, NR-TECH-01, NR-TECH-03, NR-TECH-04]
+
+closure_status:
+  NR-DEC-01:
+    status: closed_user_approved_direction
+    scope: >
+      Four external ports plus Port 0; reuse Data Link FIFOs; rotating-order
+      packet arbitration. Parameter range and final FPGA resource feasibility
+      remain implementation/verification concerns, not a reopened architecture choice.
+  NR-TECH-02:
+    status: closed_by_lower_layer_contract_draft
+    evidence_branch: contracts/dl-encoding-cross-layer-v0.1
+    evidence_head: 83c424fe7eab6dd1293591930fbb7a9d1f1af923
+    note: >
+      Accepted-but-uncommitted EOP/EEP is retained as a reserved TX FIFO head
+      until commit or explicit pre-commit flush resolution, preventing accidental
+      discard of a following packet.
 
 inherited_semantics:
   source: contracts/5.6_router.yaml
@@ -22,6 +38,7 @@ inherited_semantics:
 
 implementation_proposal:
   decision: NR-DEC-01
+  decision_status: closed_user_approved_direction
   clock_hz: 100000000
   external_ports_default: 4
   external_ports_parameter_range: [1, 31]
