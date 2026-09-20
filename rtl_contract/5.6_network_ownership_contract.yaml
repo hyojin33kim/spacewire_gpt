@@ -14,7 +14,7 @@ execution_order: [Network_contract, Router_contract, cross_layer_review, separat
 hard_gate:
   RTL_implementation_allowed: false
   reviewed: false
-  blockers: [NR-DEC-02, NR-DEC-03, NR-TECH-01, NR-TECH-03, NR-TECH-04]
+  blockers: [NR-DEC-03, NR-TECH-03, NR-TECH-04]
 
 closure_inherited_from_lower_layers:
   branch_base: contracts/dl-encoding-cross-layer-v0.1
@@ -27,6 +27,17 @@ closure_inherited_from_lower_layers:
       Lower-layer cross-layer draft now defines N-Char FIFO reservation until
       Encoding commit, pre-commit EOP/EEP flush resolution, and same-edge
       commit/error precedence. Main merge remains verification-gated.
+    NR-TECH-01: >
+      Output packet ownership is packet-level, not FIFO-level. A Router output is
+      not free for another packet until normal terminal local serial completion,
+      timeout-abort synthetic EEP completion, or link-error termination. Character
+      ready and new-packet ready are separate interface concepts.
+    NR-DEC-02: >
+      Per-output timeout uses an explicit Router-to-DataLink abort handshake.
+      DataLink cancels/resolves any accepted-uncommitted current-packet N-Char,
+      discards unsent buffered remainder, and sends a synthetic EEP through the
+      normal credited Encoding path without resetting the link. Multicast failure
+      interaction remains under NR-TECH-04.
   note: >
     Closing NR-TECH-02 here means the contract hazard has a coherent lower-layer
     resolution; directed verification is still required before Reviewed status.
@@ -81,6 +92,23 @@ inherited_interfaces:
     meaning: ownership_transfer_not_wire_delivery
     before_Run: queue_per_DataLink_contract
     during_recovery: only_current_packet_remainder_may_be_direct_drained
+  output_packet_status_from_DataLink:
+    fields:
+      - net_tx_new_packet_ready
+      - net_tx_packet_done_valid
+      - net_tx_packet_done_kind
+      - net_tx_link_abort_valid
+      - net_tx_abort_done
+    packet_start_permission: net_tx_new_packet_ready
+    normal_completion: "EOP/EEP local serial completion, not FIFO enqueue and not Encoding commit"
+    link_error_termination: "net_tx_link_abort_valid; new packet still waits for net_tx_new_packet_ready"
+  output_abort_to_DataLink:
+    fields:
+      - net_tx_abort_valid
+      - net_tx_abort_ready
+      - net_tx_abort_reason
+    reason: [ROUTER_TIMEOUT]
+    packet_tag: not_required_in_v0_1_due_one_active_Router_packet_per_output
   broadcast_rx:
     fields: [net_rx_bc_valid, net_rx_bc_value_7_0]
     backpressure: none
@@ -92,8 +120,10 @@ inherited_interfaces:
     unresolved: NR-TECH-03
   streaming_safety:
     - Producer holds valid, kind and data stable while stalled except agreed reset/abort.
-    - Packet termination is a handshake event, not merely EOP/EEP visible on the bus.
-    - Router acceptance and Encoding commit are distinct events.
+    - Router-to-DataLink N-Char handshake means passed_to_output for Network-layer timeout semantics.
+    - Encoding commit is a distinct Data Link accounting event.
+    - Encoding completion is a distinct local-transmission-complete event.
+    - net_tx_nchar_ready permits the current packet to progress; net_tx_new_packet_ready permits a new packet to start.
     - No packet-length limit is inferred from FIFO depth.
     - Packet boundary tracking must survive FIFO empty bubbles.
 
@@ -116,7 +146,12 @@ recovery_ownership:
     - Original producer eventually terminates, or an approved router-timeout abort path substitutes an EEP.
     - RX consumer eventually makes space for any pending recovery EEP.
   not_guaranteed: bounded_recovery_without_environment_progress
-  unresolved: NR-DEC-02
+  router_timeout_integration: >
+    Router timeout is not a link error. Router drains/quarantines the original
+    input tail through EOP/EEP while DataLink aborts only the unsent output-side
+    remainder and emits one synthetic EEP. A later link error supersedes the
+    timeout abort without generating a duplicate EEP.
+  unresolved: none_for_unicast_timeout_base_contract
 
 endpoint_proposals:
   classification: proposed_implementation_not_new_normative_rule
@@ -136,6 +171,14 @@ endpoint_proposals:
 
 verification:
   status: planned_not_executed
+  added_for_NR_TECH_01_NR_DEC_02:
+    - new_packet_never_starts_before_previous_terminal_serial_completion
+    - timeout_active_window_is_first_DATA_passed_to_output_through_terminal_passed_to_output
+    - same_edge_progress_or_terminal_handshake_suppresses_timeout_expiry
+    - timeout_abort_discards_only_current_output_packet_unsent_remainder
+    - synthetic_EEP_uses_normal_credit_no_bypass
+    - abort_done_only_after_synthetic_EEP_local_serial_completion
+    - link_error_supersedes_timeout_abort_without_duplicate_EEP
   pass_conditions:
     - All 123 network requirements allocated, including explicit N/A and system obligations.
     - No orphan producer, storage owner, recovery owner or event consumer.
