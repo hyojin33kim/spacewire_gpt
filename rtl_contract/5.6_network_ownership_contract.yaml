@@ -1,0 +1,133 @@
+schema_version: 1
+artifact_id: RTL-CONTRACT-NETWORK-OWNERSHIP-V0.1
+status: draft_pending_decisions
+source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
+semantic_baseline: semantic-network-v0.1
+semantic_contract: contracts/5.6_network.yaml
+profile: profiles/golden_optional_features_v0.1.yaml
+requirement_allocation: traceability/network_router_owner_map_v0.1.json
+scope_note: >
+  This is an ownership and interface contract, not a monolithic network RTL module.
+  Existing semantic features remain in scope; no mission subset is silently selected.
+  Proposed implementation choices require approval and technical closure.
+execution_order: [Network_contract, Router_contract, cross_layer_review, separately_authorized_RTL]
+hard_gate:
+  RTL_implementation_allowed: false
+  reviewed: false
+  blockers: [NR-DEC-01, NR-DEC-02, NR-DEC-03, NR-TECH-01, NR-TECH-02, NR-TECH-03, NR-TECH-04]
+
+owners:
+  Endpoint:
+    responsibilities:
+      - Host packet stream to ordered N-Chars; received EOP/EEP retained in host completion.
+      - Host time-code, interrupt and acknowledgement service adaptation.
+      - Node time-code register and valid/invalid indication policy.
+      - Source multicast and redundant master endpoint coordination.
+    references: [5.2.2, 5.6.2, 5.6.4.4, 5.6.4.8, 5.6.4.9, 5.6.5.4, 5.6.5.6, 5.6.6, 6.1]
+  DataLink:
+    responsibilities:
+      - Per-port 128-entry TX and RX N-Char FIFOs, credit and link FSM.
+      - Link-error current-packet spill and direct-drain, pending RX EEP.
+      - Encoding acceptance/commit accounting; broadcast transport only.
+    contract: rtl_contract/5.5_data_link_rtl_contract.yaml
+  Router:
+    responsibilities:
+      - Header decode, routing table lookup, output allocation and packet locking.
+      - Fair arbitration, adaptive routing and all-output atomic multicast.
+      - Timeout detection and coordination with the Data Link-owned storage.
+      - Shared router time-code register and 32-IID relay state.
+    references: [5.6.3, 5.6.4.6, 5.6.4.7, 5.6.5.5, 5.6.5.7, 5.6.8]
+  ConfigurationManagement:
+    responsibilities:
+      - Port-0 configuration endpoint and host configuration application boundary.
+      - Routing table, timeout and per-port management access.
+      - Consistent table updates, reset commands and event/status readout.
+    references: [5.6.6.k, 5.6.7, 5.6.9]
+  SystemIntegration:
+    responsibilities:
+      - Single time master, per-IID source/acknowledger constraints, repeat intervals.
+      - Network propagation budgets, topology and loopback verification.
+      - Upstream packet termination and receive-consumer progress assumptions.
+    note: These are system obligations, not fictitious internal RTL blocks.
+
+inherited_interfaces:
+  clock: spw_core_clk
+  frequency_hz: 100000000
+  sample_edge: rising
+  input_from_DataLink:
+    fields: [net_rx_nchar_valid, net_rx_nchar_ready, net_rx_nchar_kind, net_rx_nchar_data_7_0]
+    owner_direction: DataLink_producer_Router_or_Endpoint_consumer
+    event: valid_and_ready
+    availability: independent_of_Run
+  output_to_DataLink:
+    fields: [net_tx_nchar_valid, net_tx_nchar_ready, net_tx_nchar_kind, net_tx_nchar_data_7_0]
+    owner_direction: Router_or_Endpoint_producer_DataLink_consumer
+    event: valid_and_ready
+    meaning: ownership_transfer_not_wire_delivery
+    before_Run: queue_per_DataLink_contract
+    during_recovery: only_current_packet_remainder_may_be_direct_drained
+  broadcast_rx:
+    fields: [net_rx_bc_valid, net_rx_bc_value_7_0]
+    backpressure: none
+    obligation: capture_every_port_event_in_presented_cycle
+  broadcast_tx:
+    fields: [net_tx_bc_valid, net_tx_bc_ready, net_tx_bc_value_7_0]
+    priority: [TIME_CODE, INTERRUPT_ACK, INTERRUPT]
+    not_Run: DataLink_accepts_and_discards_per_existing_choice
+    unresolved: NR-TECH-03
+  streaming_safety:
+    - Producer holds valid, kind and data stable while stalled except agreed reset/abort.
+    - Packet termination is a handshake event, not merely EOP/EEP visible on the bus.
+    - Router acceptance and Encoding commit are distinct events.
+    - No packet-length limit is inferred from FIFO depth.
+    - Packet boundary tracking must survive FIFO empty bubbles.
+
+recovery_ownership:
+  inherited_decision: DataLink_owned_DirectDrain
+  requirement: SPW-5.5.8.4-a1
+  upstream_obligation: >
+    Once a packet remainder is owed to an output, its upstream owner must supply
+    that packet through EOP/EEP, without interleaving, even when link_state != Run.
+    Flow into the recovering output must not be gated solely by Run.
+  distinction: >
+    Router input packet, packet queued in output TX FIFO, and packet committed
+    to Encoding can be different packets. Per-output queue and packet boundaries
+    must not be collapsed into a single packet_open flag.
+  termination_boundary: >
+    First recovery terminator ends that drain epoch; subsequent packet data
+    must never enter its discard path. Normal enqueue resumes only under
+    the existing DataLink Recovery==Normal acceptance rule.
+  assumptions:
+    - Original producer eventually terminates, or an approved router-timeout abort path substitutes an EEP.
+    - RX consumer eventually makes space for any pending recovery EEP.
+  not_guaranteed: bounded_recovery_without_environment_progress
+  unresolved: NR-DEC-02
+
+endpoint_proposals:
+  classification: proposed_implementation_not_new_normative_rule
+  host_packet: >
+    N-Char valid/ready stream plus end-status indication on terminal handshake.
+    Host adapter owns memory descriptors; this contract does not require
+    whole-packet buffering or choose AXI/DMA.
+  host_broadcast: >
+    Separate request classes and a lossless event capture interface under an
+    explicitly bounded traffic envelope; queue sizes remain NR-TECH-03.
+  source_multicast: >
+    Endpoint coordinator owes exactly one full copy to each selected endpoint.
+    Shared redundant time-code masters use one register and a coordinated launch.
+  management: >
+    Port-0 N-Char stream connects to the configuration application; CSR transport
+    and packet framing must be specified before reviewed status (NR-DEC-03).
+
+verification:
+  status: planned_not_executed
+  pass_conditions:
+    - All 123 network requirements allocated, including explicit N/A and system obligations.
+    - No orphan producer, storage owner, recovery owner or event consumer.
+    - Stalled DATA/EOP/EEP remains stable and no packet interleaving occurs.
+    - A packet exceeding 128 entries drains correctly without requiring Run.
+    - EOP/EEP followed immediately by next packet is not over-drained.
+    - Simultaneous per-port broadcasts are captured without silent loss under approved load.
+    - Reaching Run while Recovery remains active does not transmit a new packet.
+    - Host completion preserves EOP versus EEP and time-code validity semantics.
+    - All decisions accepted and all technical blockers closed with evidence.
