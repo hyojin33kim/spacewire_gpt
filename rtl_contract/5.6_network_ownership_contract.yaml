@@ -14,7 +14,22 @@ execution_order: [Network_contract, Router_contract, cross_layer_review, separat
 hard_gate:
   RTL_implementation_allowed: false
   reviewed: false
-  blockers: [NR-DEC-01, NR-DEC-02, NR-DEC-03, NR-TECH-01, NR-TECH-02, NR-TECH-03, NR-TECH-04]
+  blockers: [NR-DEC-02, NR-DEC-03, NR-TECH-01, NR-TECH-03, NR-TECH-04]
+
+closure_inherited_from_lower_layers:
+  branch_base: contracts/dl-encoding-cross-layer-v0.1
+  base_head: 83c424fe7eab6dd1293591930fbb7a9d1f1af923
+  closed:
+    NR-DEC-01: >
+      User-approved architecture direction: four external ports plus Port 0,
+      reuse existing per-port Data Link FIFOs, rotating-order packet arbitration.
+    NR-TECH-02: >
+      Lower-layer cross-layer draft now defines N-Char FIFO reservation until
+      Encoding commit, pre-commit EOP/EEP flush resolution, and same-edge
+      commit/error precedence. Main merge remains verification-gated.
+  note: >
+    Closing NR-TECH-02 here means the contract hazard has a coherent lower-layer
+    resolution; directed verification is still required before Reviewed status.
 
 owners:
   Endpoint:
