@@ -86,6 +86,36 @@ data_link_to_encoding_tx:
       - no_duplicate_commit
       - commit_kind_matches_accepted_kind
       - committed_item_cannot_be_canceled_by_same_edge_link_error
+  completion_feedback:
+    fields:
+      - enc_tx_complete_valid
+      - enc_tx_complete_kind
+    definition: >
+      enc_tx_complete_valid pulses exactly once when a committed external protocol
+      item has completed serial emission and the transmitter reaches the boundary
+      at which another protocol item can begin. This is local transmitter
+      completion, not remote reception acknowledgement.
+    ordering: same_as_commit_order
+    relation_to_commit:
+      - completion_occurs_same_cycle_or_later_than_matching_commit
+      - no_completion_without_matching_commit
+      - no_duplicate_completion
+    terminal_use: >
+      EOP/EEP completion provides the Data Link with the packet-transmission
+      completion event needed by Router wormhole output ownership.
+  pending_cancel:
+    request_field: enc_tx_cancel_pending
+    acknowledge_field: enc_tx_cancel_ack
+    scope: oldest_accepted_but_uncommitted_external_item_only
+    use_case: DataLink_packet_abort_without_disabling_the_link
+    edge_precedence: >
+      A matching commit on the same edge is irrevocable and wins over cancel.
+      If no matching commit occurs, cancel removes the pending item without
+      commit or completion and enc_tx_cancel_ack pulses.
+    safety:
+      - cancel_never_removes_a_committed_item
+      - cancel_never_generates_completion
+      - cancel_does_not_reset_serializer_or_link_state
   pending_acceptance:
     max_items: 1
     ready_rule: "tx_item_ready shall be low while one accepted item is uncommitted"
@@ -198,6 +228,7 @@ tx_state_and_storage:
     - accepted_pending_item_valid
     - accepted_pending_item_kind
     - accepted_pending_item_data
+    - current_committed_external_item_kind_for_completion
   protocol_item_pending_depth: 1
   buffering: one_accepted_but_uncommitted_item
   deeper_protocol_item_prefetch: prohibited_in_v0_1
