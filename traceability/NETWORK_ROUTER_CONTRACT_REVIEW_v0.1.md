@@ -1,7 +1,7 @@
 # Network / Router RTL Contract v0.1 — 초안 검토 및 승인 목록
 
 기준: `eabd632b6e055758c371781fd10610e0c73e8d23` (main 확인).
-상태: **Draft / 승인 및 기술 검증 대기. Reviewed 아님. RTL 구현 금지.**
+상태: **Draft / 하위 X1~X3 closure 반영. Reviewed 아님. RTL 구현 금지.**
 순서: Network Contract → Router Contract → 계층 간 통합 리뷰 → 별도 RTL 착수 승인.
 기존 Notion의 Data Link RTL 병렬 착수 제안은 사용자의 최신 지시에 따라 보류한다.
 
@@ -19,10 +19,10 @@ time-code, 32-IID interrupt/ack 및 relay를 포함한다.
 이것은 모든 기능의 FPGA 비용이나 RTL 구조가 승인됐다는 뜻이 아니다.
 현 초안은 subset을 임의로 선택하지 않고 기존 기능을 유지한다.
 
-## 승인 묶음 — 모두 proposed
+## 승인 / 결정 상태
 | ID | 권고안 | 대안 / 주요 위험 |
 |---|---|---|
-| NR-DEC-01 | 외부 4포트 기본 + 내부 Port 0, 포트 수 parameter; 기존 Data Link FIFO와 ingress head register 재사용; 회전 순서 기반 packet 중재 | 2포트 축소는 자원 절약이나 경합 검증 제한. 추가 packet buffer는 면적·ownership 비용. 4포트는 Golden 기본값일 뿐 200 Mbps FPGA feasibility 보장 아님. |
+| NR-DEC-01 | **CLOSED — 사용자 승인 방향.** 외부 4포트 기본 + 내부 Port 0, 기존 Data Link FIFO 재사용, 회전 순서 기반 packet 중재. 포트 parameter range와 FPGA resource feasibility는 검증 항목. | 2포트 축소는 자원 절약이나 경합 검증 제한. 추가 packet buffer는 면적·ownership 비용. |
 | NR-DEC-02 | Router timeout/abort를 Data Link에 packet-associated 요청하고 Data Link가 자기 FIFO/Encoding pending을 정리. Router는 원 입력 remainder를 EOP/EEP까지 quarantine/drain. Multicast 중간 출력 장애의 전체 종료 방안을 우선 검토 | 기존 FIFO 뒤 EEP 추가만 하는 방안은 backlog discard/packet association을 보장하지 못함. 끝없는 upstream을 자동 새 packet으로 취급하지 않음. timeout 폭·기본 disable·실제 시간값은 기술안에 명시 후 확정. |
 | NR-DEC-03 | Port-0 packet service + 문서화된 configuration application/CSR 경계; AXI-only 대체 금지. Broadcast는 승인된 burst/rate envelope에서 무손실 처리하도록 event capture와 per-egress queue 설계 | RMAP 채택은 추가 범위이므로 자동 선택 안 함. 유한 버퍼로 무제한 no-backpressure broadcast를 보장할 수 없음. Traffic envelope/queue 크기와 설정 protocol은 확정 전 승인 항목. |
 
@@ -44,14 +44,16 @@ packet-aware abort가 어느 queued packet을 대상으로 하는지 명시가 �
 - Pass: 영향을 받는 packet만 spill, EEP 중복/누락 없음, 다음 packet 손상 없음.
 - 기존 Data Link RTL Contract extension/review 필요. 기존 architecture 선택은 유지.
 
-### NR-TECH-02: accepted-but-uncommitted terminal의 flush
-Encoding contract에 flush 자체는 이미 정의돼 있다. 하지만 오류 순간 Encoding이 소유한
-EOP/EEP가 flush되고 TX FIFO에서는 이미 제거됐다면, Data Link가 FIFO의 다음 terminator까지
-drain하여 다음 packet을 버릴 위험이 있다.
-이는 구현 버그를 관찰한 결과가 아니라 **아직 RTL이 없는 상태에서 발견한 계약상 경계 위험**이다.
-- 확인: FIFO pop은 accept/commit 중 언제인가, pending terminal의 packet membership은 어디에 남는가.
-- Pass: open packet의 pending EOP flush 후 다음 packet DATA/EOP가 보존됨.
-- 같은 cycle error/commit/PortReset의 우선순위와 packet tracking을 양쪽 계약에 맞출 것.
+### NR-TECH-02: accepted-but-uncommitted terminal의 flush — **CLOSED BY CONTRACT DRAFT**
+하위 cross-layer branch `contracts/dl-encoding-cross-layer-v0.1`에서 다음을 고정했다.
+- FIFO-backed N-Char는 accept 시 head reserve, commit 시 pop.
+- accepted-uncommitted EOP/EEP가 packet-open 상태에서 flush되면 reserved terminator를 정확히 1회 discard하고 spill 종료.
+- packet-closed 상태의 accepted-uncommitted N-Char는 reservation 취소 후 FIFO에 보존하여 retry.
+- same-edge commit+error는 commit을 먼저 irrevocable accounting하고 post-commit packet state로 Recovery 판단.
+- `pending_is_terminator`는 pending kind에서 derive.
+
+이로써 **계약상 hazard는 닫혔으나**, directed boundary test PASS 전에는 전체 Network/Router Reviewed 상태로 올리지 않는다.
+Evidence: `traceability/DATALINK_ENCODING_CROSSLAYER_REVIEW_v0.1.md`, branch HEAD `83c424fe7eab6dd1293591930fbb7a9d1f1af923`.
 
 ### NR-TECH-03: broadcast simultaneous events / priority / finite capacity
 근거: §5.6.3.d, §5.6.4.6–7, §5.6.5.5/.7.
@@ -79,8 +81,8 @@ Network priority를 어느 acceptance boundary에서 보장할지 명시 없이 
 - Pass: cycle table 및 signal schema 완성, 위 directed boundary 사례 통과.
 
 ## 완료 Gate
-1. NR-DEC-01~03의 선택/값/범위가 명시 승인되고 trade-off 기록됨.
-2. NR-TECH-01~04의 counterexample과 검증 결과가 첨부됨.
+1. NR-DEC-01은 CLOSED. NR-DEC-02~03의 선택/값/범위가 명시 승인되고 trade-off 기록됨.
+2. NR-TECH-02 contract hazard는 CLOSED. NR-TECH-01/03/04의 counterexample과 검증 결과가 첨부됨.
 3. 224개 requirement owner row 수작업 검토, N/A/시스템 의무 포함 disposition 완료.
 4. 기존 Golden regression 재실행 및 contract 구조 검사 통과.
 5. 영향받은 Data Link/Encoding 계약의 cross-reference와 timing 일치 확인.
