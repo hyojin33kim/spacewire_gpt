@@ -1,6 +1,6 @@
 schema_version: 1
 artifact_id: RTL-CONTRACT-ROUTER-V0.1
-status: draft_pending_decisions
+status: design_closed_verification_pending
 source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
 semantic_baseline: semantic-router-v0.1
 semantic_contract: contracts/5.6_router.yaml
@@ -9,7 +9,15 @@ requirement_allocation: traceability/network_router_owner_map_v0.1.json
 hard_gate:
   RTL_implementation_allowed: false
   reviewed: false
-  blockers: [NR-DEC-03, NR-TECH-03, NR-TECH-04]
+  design_blockers: []
+  verification_blockers:
+    - lower_layer_X1_X3_directed_verification
+    - output_ownership_timeout_abort_directed_verification
+    - port0_configuration_directed_verification
+    - broadcast_capture_priority_capacity_directed_verification
+    - multicast_atomicity_failure_and_pipeline_directed_verification
+    - requirement_owner_manual_disposition_review
+    - contract_lint_clean
 
 closure_status:
   NR-DEC-01:
@@ -41,6 +49,30 @@ closure_status:
       synthetic EEP through the normal credited Encoding path without resetting
       the link. Multicast interaction remains under NR-TECH-04.
 
+  NR-DEC-03:
+    status: design_closed_verification_pending
+    decision: >
+      Port 0 uses the project-local SPCFG-v0.1 configuration application protocol.
+      Requests carry transaction ID and explicit return path; routing-table writes
+      use shadow plus atomic commit; RMAP is not required.
+    contract: rtl_contract/5.6_port0_configuration_rtl_contract.yaml
+  NR-TECH-03:
+    status: design_closed_verification_pending
+    decision: >
+      One capture slot per external port plus one-event-per-cycle semantic processing
+      captures all simultaneous broadcasts for the selected 100-MHz/200-Mbit/s profile.
+      Egress class queues enforce TIME_CODE > INTERRUPT_ACK > INTERRUPT at the
+      Network-to-DataLink acceptance boundary with non-silent overflow telemetry.
+    contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
+  NR-TECH-04:
+    status: design_closed_verification_pending
+    decision: >
+      Multicast allocation and each N-Char handoff are all-selected-output atomic.
+      The selected mask is frozen for the packet. Any member failure aborts the whole
+      active multicast packet. Router pipeline is fixed as C0 ingress head, C1 route
+      snapshot, C2 registered grant, C3 first handoff.
+    contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
+
 inherited_semantics:
   source: contracts/5.6_router.yaml
   features: [path, logical, logical_deletion, adaptive_logical, multicast, per_port_timeout, timecode_relay, interrupt_and_ack_relay]
@@ -61,10 +93,13 @@ implementation_proposal:
   storage: DataLink_RX_TX_FIFOs_plus_one_registered_ingress_head_per_input
   no_additional_whole_packet_buffer: true
   blocks: [ingress_head, route_lookup, allocator, crossbar, timeout_control, broadcast_engine, configuration_adapter]
-  timing: >
-    Transfer at rising core edge only. Head register is filled independently of
-    downstream ready. Lookup and grant are registered; no same-edge release/regrant.
-    Exact pipeline latency and table implementation require NR-TECH-04 closure.
+  timing:
+    C0: capture_or_present_ingress_head
+    C1: registered_route_lookup_and_route_snapshot
+    C2: registered_allocator_grant_if_required_outputs_free
+    C3: first_forwardable_NChar_handshake_if_required_outputs_ready
+    no_same_edge_release_and_regrant: true
+    stalled_route_and_grant_stable: true
   reset: >
     RouterReset resets all ports, clears head/ownership/event state, invalidates
     logical entries and disables adaptive/multicast. Partial PortReset requires
@@ -90,9 +125,10 @@ addressing:
     EOP/EEP in the header-wait state is consumed locally without allocating output;
     follow CR-NET-001. Deleting a real header is distinct from receiving an empty packet.
   updates: >
-    Proposed route snapshot at allocation, frozen for the packet. Management writes
-    must be atomic; lookup/write collision, invalid combination handling and table
-    versioning require NR-DEC-03 and NR-TECH-04.
+    Route-table updates use SPCFG-v0.1 shadow writes followed by atomic COMMIT.
+    C1 lookup snapshots the pre-edge active entry; a same-edge COMMIT is visible
+    only to lookups beginning on the following cycle. An already allocated packet
+    keeps its frozen route snapshot.
 
 allocation:
   inherited: fair_packet_level_wormhole
@@ -127,17 +163,22 @@ allocation:
       and prevents a following packet from entering the output while the previous
       packet is still being transmitted.
   multicast_transfer:
+    contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
+    selected_mask: frozen_at_allocation
     all_ready: every_selected_output_can_accept_same_NChar
-    fire: head_valid_and_all_ready
+    fire: input_head_valid_and_all_selected_outputs_ready
+    valid_generation: assert_to_all_selected_outputs_only_on_atomic_fire_opportunity
     all_outputs_receive_same_kind_and_data: true
     subset_handshake_forbidden: true
-    unresolved: >
-      A conventional per-output stable-valid interface must not accept a subset.
-      Define a group acceptance/reservation adapter or justify simultaneous gated
-      valid with DataLink ready independent of valid. NR-TECH-04.
   disabled_output:
     at_packet_start: omit_disabled_multicast_ports_per_selected_SHOULD
-    mid_packet: NR-DEC-02
+    mid_packet: fail_whole_active_multicast_packet
+  multicast_failure:
+    timeout_or_link_error_or_disable_on_any_selected_output: >
+      Stop forwarding the common input packet, abort every still-healthy active
+      member, let the failed member terminate through its native error/reset path,
+      drain the input tail through EOP/EEP, and release the group only after all
+      selected output packet ownerships have terminated.
   progress_tracking:
     passed_to_output: "net_tx_nchar_valid && net_tx_nchar_ready"
     encoding_commit: distinct_later_DataLink_accounting_event
@@ -205,51 +246,24 @@ timeout:
   unresolved: []
 
 broadcast:
+  contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
   references: [5.6.3, 5.6.4.6, 5.6.4.7, 5.6.5.5, 5.6.5.7]
-  event_capture: all_per_port_DataLink_event_valid_inputs_in_same_cycle
-  priority: [TIME_CODE, INTERRUPT_ACK, INTERRUPT]
-  reserved_types: delete_without_relay
-  timecode:
-    register_bits: 6
-    valid: received_equals_previous_plus_one_modulo_64
-    valid_action: update_and_relay_except_ingress
-    invalid_action: update_without_relay
-  interrupt:
-    IID_bits: 5
-    active_bits: 32
-    timers: one_per_IID
-    inactive_interrupt: set_bit_relay_start_timer
-    active_interrupt: discard_duplicate
-    active_ack: clear_bit_relay_stop_and_reset_timer
-    inactive_ack: ignore
-    timeout: clear_bit
-    per_port_masks: [interrupt_rx, interrupt_tx, ack_rx, ack_tx]
-  proposed_collision_order: >
-    Capture all arrivals first. Establish deterministic processing of same-cycle
-    events against shared state; ACK/interrupt/timeout on one IID and multiple
-    time-codes need explicit precedence, golden event serialization and tests.
-  capacity: >
-    No-backpressure reception does not imply unbounded storage. Derive event burst,
-    aggregate arrival and per-egress service bounds before selecting FIFO depths.
-    Silent overwrite/coalescing or unrestricted lossless relay is not assumed.
-  DataLink_priority_dependency: >
-    A lower-priority BC already accepted by the one-entry DataLink pending register
-    cannot be preempted by a newly arrived time-code. Define the actual Network
-    arbitration/transfer boundary; acceptance-order priority is not automatically
-    next-character wire priority.
-  unresolved: [NR-DEC-03, NR-TECH-03]
+  ingress_capture: one_slot_per_external_port_all_same_cycle
+  semantic_service: one_event_per_core_cycle_rotating_ingress_order
+  priority_at_DataLink_acceptance: [TIME_CODE, INTERRUPT_ACK, INTERRUPT]
+  egress_queue_depths: {TIME_CODE: 4, INTERRUPT_ACK: 32, INTERRUPT: 32}
+  silent_overflow: forbidden
+  qualification: zero_overflow_required_for_approved_mission_traffic_profile
 
 configuration:
+  contract: rtl_contract/5.6_port0_configuration_rtl_contract.yaml
   port0_path_only: true
+  protocol: SPCFG-v0.1
   required_access: [routing_table, per_port_status, per_port_timeout, interrupt_parameters]
-  application_protocol: unresolved_NR_DEC_03
-  proposal: >
-    Port-0 packet service plus a documented configuration application/CSR adapter.
-    Do not assume RMAP is required by this ECSS contract, and do not substitute
-    AXI-only access for the required port-0 access.
-  safety: no_torn_entry_updates_and_no_midpacket_route_change
-  reset_values: logical_entries_invalid_adaptive_and_multicast_disabled
-  remaining: register_map_transaction_schema_reset_and_write_collision_rules
+  route_update: shadow_then_atomic_commit
+  same_cycle_lookup_and_commit: lookup_uses_pre_edge_entry_commit_visible_next_cycle
+  response_route: explicit_return_path_from_request
+  safety: [no_torn_entry_updates, no_midpacket_route_change, no_partial_request_side_effect]
 
 verification:
   status: planned_not_executed
