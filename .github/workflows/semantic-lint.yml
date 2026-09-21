@@ -2,6 +2,8 @@ name: Semantic Lint
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "ontology/**"
       - "requirements/**"
@@ -12,6 +14,8 @@ on:
       - "tools/semantic_lint.py"
       - ".github/workflows/semantic-lint.yml"
   pull_request:
+    branches:
+      - main
     paths:
       - "ontology/**"
       - "requirements/**"
@@ -20,6 +24,7 @@ on:
       - "traceability/**"
       - "rtl_contract/**"
       - "tools/semantic_lint.py"
+      - ".github/workflows/semantic-lint.yml"
 
 jobs:
   semantic-lint:
