@@ -1,3 +1,22 @@
+## 2026-09-21 — Remaining design blockers closed
+
+**Status: DESIGN CLOSURE COMPLETE / verification pending / RTL not authorized.**
+
+The remaining items are now dispositioned on this branch:
+
+- **NR-DEC-03** — Port 0 uses project-local `SPCFG-v0.1`; path-0 only, explicit return path, transaction ID, resource/register addressing, route-table shadow+COMMIT, one-entry reply buffer.
+- **NR-TECH-03** — four one-entry ingress BC capture slots + one-event/core-cycle semantic engine. At 100 MHz and 200 Mbit/s, the 14-bit broadcast code gives at least seven core cycles between BCs from the same port, while a four-port simultaneous burst drains in four cycles. Per-egress class queues: TC=4, ACK=32, INT=32; priority TC > ACK > INT at Network→DataLink acceptance; overflow is never silent.
+- **NR-TECH-04** — multicast all-output atomic allocation/handoff, frozen selected mask, fail-whole active packet on any member timeout/link-error/disable/reset; exact Router pipeline C0 ingress → C1 route snapshot → C2 grant → C3 first handoff.
+
+Supporting contracts:
+- `rtl_contract/5.6_port0_configuration_rtl_contract.yaml`
+- `rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml`
+- `traceability/RTL_CONTRACT_FREEZE_CANDIDATE_v0.1.md`
+
+**Important:** all design blockers are closed, but Reviewed status is still blocked by directed verification, owner-map manual review, Golden regression, and clean Semantic Lint after the known decision-ID regex false positive is corrected.
+
+---
+
 # Network / Router RTL Contract v0.1 — 초안 검토 및 승인 목록
 
 기준: `eabd632b6e055758c371781fd10610e0c73e8d23` (main 확인).
