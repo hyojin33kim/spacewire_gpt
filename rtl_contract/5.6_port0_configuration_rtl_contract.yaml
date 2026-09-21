@@ -1,0 +1,182 @@
+schema_version: 1
+artifact_id: RTL-CONTRACT-PORT0-CONFIG-V0.1
+status: design_closed_verification_pending
+source_spec: ECSS-E-ST-50-12C-Rev.1
+parent_router_contract: rtl_contract/5.6_router_rtl_contract.yaml
+source_requirements:
+  - SPW-RTR-5.6.8.1-b4
+  - SPW-RTR-5.6.8.1-e
+  - SPW-RTR-5.6.8.2-a
+  - SPW-RTR-5.6.8.3-b
+  - SPW-RTR-5.6.8.3-e
+  - SPW-RTR-5.6.8.3-f
+  - SPW-RTR-5.6.9-a
+  - SPW-RTR-5.6.9-b
+  - SPW-RTR-5.6.9-c
+  - SPW-RTR-5.6.9-d
+  - SPW-RTR-5.6.9-e
+
+normative_boundary:
+  configuration_port_number: 0
+  access_method: path_addressing_only
+  path_zero_action: route_to_internal_configuration_node_and_delete_zero
+  logical_address_access_to_port0: forbidden
+  management_via_port0:
+    - per_port_physical_encoding_and_datalink_parameters
+    - routing_table
+    - per_port_timeout
+    - distributed_interrupt_parameters
+
+implementation_profile:
+  protocol_name: SPCFG-v0.1
+  classification: project_local_configuration_application_protocol
+  rmap_required: false
+  note: >
+    ECSS requires management access through the routing-switch configuration
+    port but does not prescribe the configuration application's packet format.
+    SPCFG-v0.1 therefore defines the project-local packet framing used by RTL.
+
+request_packet:
+  arrival: >
+    The Router consumes the leading path-address byte 0 before presenting the
+    remaining packet cargo to the configuration parser.
+  fields_in_order:
+    - {name: protocol_version, bytes: 1, value: 1}
+    - {name: opcode, bytes: 1}
+    - {name: transaction_id, bytes: 1}
+    - {name: return_path_length, bytes: 1}
+    - {name: return_path, bytes: variable, max_bytes: 16}
+    - {name: resource_id, bytes: 1}
+    - {name: instance_index, bytes: 1}
+    - {name: register_offset, bytes: 2, endian: big}
+    - {name: write_data, bytes: 4, endian: big, present_for: [WRITE_SHADOW, WRITE_DIRECT]}
+    - {name: write_mask, bytes: 4, endian: big, present_for: [WRITE_SHADOW, WRITE_DIRECT]}
+    - {name: terminator, kind: [EOP, EEP]}
+  opcodes:
+    READ: 1
+    WRITE_SHADOW: 2
+    COMMIT: 3
+    WRITE_DIRECT: 4
+    PORT_RESET: 5
+  resource_id:
+    ROUTER_STATUS: 1
+    PORT_MANAGEMENT: 2
+    ROUTE_TABLE: 3
+    PORT_TIMEOUT: 4
+    INTERRUPT_CONTROL: 5
+  malformed_or_EEP_request:
+    side_effect: none
+    action: discard_through_packet_terminator
+    status: latch_configuration_protocol_error
+
+response_packet:
+  required_for: [READ, WRITE_SHADOW, COMMIT, WRITE_DIRECT, PORT_RESET]
+  destination_address: exact_return_path_bytes_from_request
+  fields_after_return_path:
+    - {name: protocol_version, bytes: 1, value: 1}
+    - {name: response_opcode, bytes: 1, definition: "request opcode OR 0x80"}
+    - {name: transaction_id, bytes: 1}
+    - {name: status_code, bytes: 1}
+    - {name: read_data, bytes: 4, endian: big, present_for: [READ]}
+    - {name: terminator, kind: EOP}
+  status_codes:
+    OK: 0
+    BAD_OPCODE: 1
+    BAD_RESOURCE: 2
+    BAD_INDEX: 3
+    BAD_OFFSET: 4
+    BAD_LENGTH: 5
+    ACCESS_DENIED: 6
+    BUSY: 7
+  return_path_rule: >
+    A request that requires a response shall carry at least one valid path byte
+    in return_path. Each byte shall be 1..31. Path byte 0 is not accepted in a
+    response route because it would target another configuration port.
+  response_buffer:
+    entries: 1
+    admission_rule: >
+      A new Port-0 packet shall not be granted unless the configuration parser
+      is idle and the response buffer is available for the resulting response.
+    ownership: configuration_node
+
+register_update_model:
+  route_table:
+    entry_fields: [valid, output_mask, delete_header, adaptive, multicast]
+    write_path: WRITE_SHADOW_then_COMMIT
+    active_table_update: atomic_single_core_edge
+    lookup_snapshot: >
+      A packet snapshots the active routing entry when route lookup completes.
+      A later COMMIT shall not alter the route of an already allocated packet.
+  timeout:
+    write_path: WRITE_DIRECT
+    fields: [enable, period_core_cycles]
+  interrupt_control:
+    write_path: WRITE_DIRECT
+    fields: [mode, per_port_rx_enable, per_port_tx_enable, ack_rx_enable, ack_tx_enable, timeout_value]
+  port_management:
+    write_path: WRITE_DIRECT
+    includes: [LinkDisabled, LinkStart, AutoStart, operational_link_rate]
+  status:
+    read_only:
+      - link_state
+      - recovery_state
+      - current_error_flags
+      - recovery_cause_flags
+      - stuck_packet_error
+      - invalid_address_error
+      - broadcast_overflow_error
+
+cycle_and_precedence:
+  parser_clock: spw_core_clk
+  sample_edge: rising
+  request_byte_accept: cfg_rx_valid_and_cfg_rx_ready
+  response_byte_accept: cfg_tx_valid_and_cfg_tx_ready
+  command_execute: >
+    Execute only after a complete EOP-terminated request passes syntax and
+    access checks. No management state changes while the packet is partial.
+  reset_precedence:
+    - RouterReset
+    - PortReset_for_target_port
+    - accepted_configuration_command
+    - normal_operation
+  same_cycle_route_lookup_and_commit: >
+    Lookup uses the pre-edge active routing table; COMMIT becomes visible to
+    lookups beginning on the following cycle.
+  port_reset_command: >
+    PORT_RESET generates a one-cycle reset request for the selected external
+    port after the command packet is fully validated. Port 0 itself cannot be
+    reset through PORT_RESET.
+
+safety:
+  - no_partial_request_side_effect
+  - no_torn_route_table_entry
+  - no_midpacket_route_change
+  - transaction_id_echoed_in_response
+  - logical_address_can_never_select_port0
+  - invalid_response_return_path_has_no_management_side_effect
+  - reset_dominates_same_cycle_configuration_write
+
+verification:
+  directed:
+    - path_zero_deleted_and_request_delivered_to_config_node
+    - logical_address_cannot_reach_port0
+    - read_write_response_transaction_id
+    - EEP_request_has_no_side_effect
+    - malformed_length_has_no_side_effect
+    - route_shadow_write_without_commit_not_visible
+    - route_commit_atomic_and_next_lookup_only
+    - route_commit_does_not_change_active_packet
+    - same_cycle_reset_and_write_reset_wins
+    - port_reset_targets_exactly_one_external_port
+    - response_backpressure_blocks_next_config_packet_start
+  assertions:
+    - config_write_only_after_complete_valid_request
+    - active_route_entry_changes_atomically
+    - config_parser_single_packet_ownership
+    - response_buffer_never_overwritten
+    - port0_never_selected_by_logical_route
+
+hard_gate:
+  design_closed: true
+  verification_passed: false
+  RTL_implementation_allowed: false
