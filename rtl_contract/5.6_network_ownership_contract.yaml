@@ -1,6 +1,6 @@
 schema_version: 1
 artifact_id: RTL-CONTRACT-NETWORK-OWNERSHIP-V0.1
-status: draft_pending_decisions
+status: design_closed_verification_pending
 source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
 semantic_baseline: semantic-network-v0.1
 semantic_contract: contracts/5.6_network.yaml
@@ -14,7 +14,15 @@ execution_order: [Network_contract, Router_contract, cross_layer_review, separat
 hard_gate:
   RTL_implementation_allowed: false
   reviewed: false
-  blockers: [NR-DEC-03, NR-TECH-03, NR-TECH-04]
+  design_blockers: []
+  verification_blockers:
+    - lower_layer_X1_X3_directed_verification
+    - router_timeout_abort_directed_verification
+    - port0_configuration_directed_verification
+    - broadcast_capture_priority_capacity_directed_verification
+    - multicast_atomicity_and_failure_directed_verification
+    - requirement_owner_manual_disposition_review
+    - contract_lint_clean
 
 closure_inherited_from_lower_layers:
   branch_base: contracts/dl-encoding-cross-layer-v0.1
@@ -38,6 +46,23 @@ closure_inherited_from_lower_layers:
       discards unsent buffered remainder, and sends a synthetic EEP through the
       normal credited Encoding path without resetting the link. Multicast failure
       interaction remains under NR-TECH-04.
+    NR-DEC-03: >
+      Port 0 uses project-local SPCFG-v0.1 packet framing with explicit return
+      path, transaction ID, resource/index/register addressing, shadow-plus-commit
+      route-table updates and one-entry response buffering. RMAP is not required.
+    NR-TECH-03: >
+      Broadcast ingress uses one capture slot per external port and a one-event-per-
+      cycle semantic engine. With four ports, 100-MHz core and 200-Mbit/s maximum
+      links, the 14-bit broadcast code gives at least seven core cycles between
+      events from one port, so four simultaneous capture slots drain within the
+      bound. Egress class queues implement TC > ACK > INT priority with explicit
+      non-silent overflow telemetry.
+    NR-TECH-04: >
+      Multicast uses frozen all-output allocation and all-or-none per-NChar handoff.
+      Mid-packet failure is fail-whole-packet: abort healthy members, terminate the
+      failed member through its native error path, drain the input tail, then release
+      the group only after every selected output ownership terminates. Exact router
+      pipeline is C0 ingress, C1 route snapshot, C2 grant, C3 first handoff.
   note: >
     Closing NR-TECH-02 here means the contract hazard has a coherent lower-layer
     resolution; directed verification is still required before Reviewed status.
@@ -160,14 +185,18 @@ endpoint_proposals:
     Host adapter owns memory descriptors; this contract does not require
     whole-packet buffering or choose AXI/DMA.
   host_broadcast: >
-    Separate request classes and a lossless event capture interface under an
-    explicitly bounded traffic envelope; queue sizes remain NR-TECH-03.
+    Broadcast capture and relay use the closed contract in
+    rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml. Queue overflow is
+    never silent and product qualification shall prove zero overflow for the
+    approved mission traffic envelope.
   source_multicast: >
     Endpoint coordinator owes exactly one full copy to each selected endpoint.
     Shared redundant time-code masters use one register and a coordinated launch.
   management: >
-    Port-0 N-Char stream connects to the configuration application; CSR transport
-    and packet framing must be specified before reviewed status (NR-DEC-03).
+    Port-0 N-Char stream connects to SPCFG-v0.1 as defined in
+    rtl_contract/5.6_port0_configuration_rtl_contract.yaml. The path-address zero
+    is consumed before the configuration parser and logical addressing cannot
+    select Port 0.
 
 verification:
   status: planned_not_executed
