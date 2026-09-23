@@ -287,10 +287,11 @@
       "selected": "true",
       "primary_owner": "Router",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Endpoint"
       ],
       "contract_group": "network_router_shared",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -1262,10 +1263,12 @@
       "selected": null,
       "primary_owner": "ConfigurationManagement",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Encoding",
+        "Physical"
       ],
       "contract_group": "management",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -3737,5 +3740,20 @@
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     }
-  ]
+  ],
+  "owner_review": {
+    "decisions_2026_09_23": [
+      {
+        "requirement_id": "SPW-5.6.4.1-a",
+        "disposition": "retain Router as primary owner; add Endpoint collaborator; retain DataLink collaborator",
+        "approval": "user_approved"
+      },
+      {
+        "requirement_id": "SPW-5.6.7-a",
+        "disposition": "retain ConfigurationManagement as primary owner; add Encoding and Physical source collaborators; retain DataLink collaborator",
+        "approval": "user_approved"
+      }
+    ],
+    "overall_manual_review_status": "pending_full_224_row_disposition"
+  }
 }

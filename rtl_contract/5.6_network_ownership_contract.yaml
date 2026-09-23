@@ -81,6 +81,18 @@ owners:
       - Link-error current-packet spill and direct-drain, pending RX EEP.
       - Encoding acceptance/commit accounting; broadcast transport only.
     contract: rtl_contract/5.5_data_link_rtl_contract.yaml
+  Encoding:
+    responsibilities:
+      - Per-port character/control-code encoding and receive-decode status source.
+      - Encoding-layer management/status source exposed through ConfigurationManagement.
+    contract: rtl_contract/5.4_encoding_rtl_contract.yaml
+  Physical:
+    responsibilities:
+      - Physical-layer per-port management/status source required by node/router management visibility.
+      - Electrical/physical implementation remains a lower-layer integration boundary, not a new monolithic Network RTL block.
+    note: >
+      Added as an explicit ownership taxonomy entry so SPW-5.6.7-a can name the
+      Physical-layer source without implying that Network owns the physical implementation.
   Router:
     responsibilities:
       - Header decode, routing table lookup, output allocation and packet locking.

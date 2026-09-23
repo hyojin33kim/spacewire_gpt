@@ -23,6 +23,7 @@ ALLOWED_OWNERS = {
     "ConfigurationManagement",
     "SystemIntegration",
     "Encoding",
+    "Physical",
 }
 
 

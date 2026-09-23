@@ -104,37 +104,25 @@ Primary-owner distribution:
 
 Group-level review is internally coherent for packet, host-service, time-code, interrupt, routing, timeout, management, relay, and system-obligation groups.
 
-## Manual owner-map findings requiring approval
-
-Two rows require an ownership-policy decision before the owner map can be marked reviewed. No change was made.
+## Manual owner-map findings — approved dispositions applied
 
 ### OWN-RVW-001 — SPW-5.6.4.1-a
 
-Current allocation:
-- behavior: `timecodes_optional_in_nodes_and_routers`
-- primary owner: Router
-- collaborators: DataLink
+Approved disposition:
+- primary owner remains **Router**,
+- collaborators are **DataLink + Endpoint**,
+- no split derived requirement is introduced in v0.1.
 
-Review finding:
-The requirement explicitly spans **nodes and routers**, while Endpoint is not represented as a collaborating owner. The current allocation can be read as Router-only accountability even though node time-code behavior exists elsewhere in the contract set.
-
-Possible disposition requires approval:
-- retain Router primary but add Endpoint collaborator, or
-- explicitly split/node-and-router accountability in the ownership contract.
+Rationale:
+The source requirement spans nodes and routers. Router remains the single accountable primary owner in this owner map, while Endpoint now makes the node-side applicability explicit.
 
 ### OWN-RVW-002 — SPW-5.6.7-a
 
-Current allocation:
-- behavior: `node_provides_port_management_parameters_from_data_link_encoding_and_physical_layers`
-- primary owner: ConfigurationManagement
-- collaborators: DataLink
+Approved disposition:
+- primary owner remains **ConfigurationManagement**,
+- collaborators are **DataLink + Encoding + Physical**.
 
-Review finding:
-The requirement explicitly names Data Link, Encoding and Physical-layer management parameters. The analogous Router management requirement `SPW-RTR-5.6.9-b` already lists Router/DataLink/Encoding collaborators. The node allocation currently omits Encoding and has no explicit Physical-layer ownership representation.
-
-Possible disposition requires approval:
-- add Encoding collaboration and define how Physical-layer parameters are represented, or
-- document that the selected management wrapper intentionally subsumes those lower-layer sources.
+The ownership taxonomy now includes an explicit **Physical** source-layer entry. This exposes the source of Physical-layer management parameters without implying that Network owns the physical implementation.
 
 ## Findings reviewed and not considered blockers
 
@@ -146,11 +134,11 @@ These are Router-internal Port-0 configuration-node requirements and already inc
 
 ## Remaining gate
 
-At this point the no-approval verification work is complete.
+OWN-RVW-001 and OWN-RVW-002 are resolved by user-approved ownership dispositions.
 
 Remaining approval-gated items are:
-1. disposition OWN-RVW-001 and OWN-RVW-002,
-2. mark owner-map rows / Network and Router contracts Reviewed if accepted,
+1. complete/accept the full 224-row manual owner-map review,
+2. mark Network/Router contracts Reviewed if accepted,
 3. authorize merge sequence to `main`,
 4. authorize RTL implementation.
 
