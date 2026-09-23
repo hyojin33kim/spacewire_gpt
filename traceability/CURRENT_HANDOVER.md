@@ -5,9 +5,9 @@
 **Engineering Source of Truth:** GitHub `main` for approved baseline; active integration evidence is on the working branch below.  
 **Approved baseline HEAD:** `main@4a1465b085d204b115bf5b1ea8cb99fad675db70`  
 **Current working branch:** `verify/network-router-closure-v0.1`  
-**State verified through branch commit:** `bce8ce71ba6efab2cab758b838999009f9c5a53e`  
+**State verified through branch commit:** `6593ca587c4518c0c88f577de5a2231f229112c1`  
 **Integration PR:** #3 — *Verify Network Router RTL contract design closure* — Draft  
-**Current next gate:** formal acceptance of the complete Network/Router review package.
+**Current next gate:** final CI confirmation and explicit user approval for PR #3 → `main` merge.
 
 > This file is the compact restart point for a new Chat. If this file, Notion, and Git artifacts disagree, verify the current Git branch/PR first. Do not infer approval from a design or verification PASS.
 
@@ -48,8 +48,8 @@ Golden Model must remain implementation-independent. AI must not silently resolv
 |---|---|---|---|
 | Encoding §5.4 | Frozen / Golden PASS | `draft_blocked`; PHY feasibility blockers remain | Not authorized |
 | Data Link §5.5 | `semantic-datalink-v0.1.1` / Golden PASS | reviewed baseline; X1/X2/X3 closure verified on integration branch | Not started |
-| Network §5.6 | Frozen / Golden PASS | design closure + verification candidate complete; not yet `Reviewed` | Not started |
-| Router | Frozen / Golden PASS | design closure + verification candidate complete; not yet `Reviewed` | Not started |
+| Network §5.6 | Frozen / Golden PASS | **Reviewed**; verification evidence closed | Not started |
+| Router | Frozen / Golden PASS | **Reviewed**; verification evidence closed | Not started |
 
 Important governance distinction:
 
@@ -172,15 +172,15 @@ Current sequence from here:
 ```text
 CURRENT
   ↓
-1. Formal acceptance of complete Network/Router review package
+1. Formal acceptance of complete Network/Router review package — DONE
   ↓
-2. Gate-only commit: Network/Router status → REVIEWED
+2. Gate-only commit: Network/Router status → REVIEWED — DONE (`0a9deba10cb901f4e01b0bc638fade957cace336`)
   ↓
-3. Sync current main history into integration branch
+3. Sync current main history into integration branch — DONE (`6593ca587c4518c0c88f577de5a2231f229112c1`)
   ↓
-4. Full final CI
+4. Full final CI — PENDING confirmation on current HEAD
   ↓
-5. PR #3 → main using merge commit
+5. PR #3 → main using merge commit — REQUIRES explicit user approval
   ↓
 6. main post-merge clean regression
   ↓
@@ -237,4 +237,4 @@ Use this as the first message in a new Chat:
 
 ## 9. One-line state
 
-> **Network/Router design, owner map, modality normalization, directed contract verification, Golden regression, and trace checks are complete as an integration candidate; the next step is formal review acceptance, not RTL implementation.**
+> **Network/Router contracts are Reviewed and main history is synchronized into the integration branch; the next gate is final CI confirmation followed by explicit user approval for PR #3 → main merge. RTL implementation remains unauthorized.**
