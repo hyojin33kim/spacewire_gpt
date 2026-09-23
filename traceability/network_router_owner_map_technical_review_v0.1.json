@@ -1,0 +1,2857 @@
+{
+  "schema_version": 1,
+  "artifact_id": "NETWORK-ROUTER-OWNER-MAP-TECH-REVIEW-V0.1",
+  "branch": "verify/network-router-closure-v0.1",
+  "basis": {
+    "owner_map": "traceability/network_router_owner_map_v0.1.json",
+    "spec": "ECSS-E-ST-50-12C Rev.1",
+    "review_scope": "all 224 owner-map rows",
+    "gate_note": "This is technical review evidence only. It does not mark the owner map or contracts Reviewed."
+  },
+  "summary": {
+    "total": 224,
+    "no_owner_gap_detected": 203,
+    "approved_disposition_applied": 2,
+    "approval_required": 19,
+    "unresolved_approval_required": 19
+  },
+  "methodology": [
+    "Check every row for a primary owner and collaborator set consistent with clause scope and project owner taxonomy.",
+    "Review packet/service/node-only/router-only/system groups for owner-boundary consistency.",
+    "Cross-check shared time-code and distributed-interrupt clauses against ECSS clause wording.",
+    "Do not modify unapproved ownership assignments."
+  ],
+  "rows": [
+    {
+      "requirement_id": "SPW-5.2.2-a1",
+      "clause": "5.2.2.a.1",
+      "source_behavior": "provide_packet_service",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.2.2-a2",
+      "clause": "5.2.2.a.2",
+      "source_behavior": "provide_time_code_service",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.2.2-a3",
+      "clause": "5.2.2.a.3",
+      "source_behavior": "provide_distributed_interrupt_service",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.2.2-b",
+      "clause": "5.2.2.b",
+      "source_behavior": "packet_mandatory_timecode_interrupt_optional",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.2.2-c",
+      "clause": "5.2.2.c",
+      "source_behavior": "accept_service_requests_from_user",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.2.2-d",
+      "clause": "5.2.2.d",
+      "source_behavior": "transfer_packets_timecodes_interrupts_over_network",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.2.2-e",
+      "clause": "5.2.2.e",
+      "source_behavior": "use_data_link_services",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.2.1-a",
+      "clause": "5.6.2.1.a",
+      "source_behavior": "packet_is_data_characters_followed_by_EOP_or_EEP",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.2.1-b",
+      "clause": "5.6.2.1.b",
+      "source_behavior": "packet_start_first_data_after_init_or_after_previous_EOP_EEP",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.2.1-c",
+      "clause": "5.6.2.1.c",
+      "source_behavior": "packet_end_EOP_or_EEP",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.2.1-d",
+      "clause": "5.6.2.1.d",
+      "source_behavior": "packet_may_have_zero_data_characters",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.2.1-e",
+      "clause": "5.6.2.1.e",
+      "source_behavior": "leading_zero_or_more_data_characters_form_destination_address",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.2.1-f",
+      "clause": "5.6.2.1.f",
+      "source_behavior": "remaining_data_characters_form_cargo",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.2.2-a",
+      "clause": "5.6.2.2.a",
+      "source_behavior": "packet_NChars_not_interleaved_with_other_packet_NChars",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.3-a",
+      "clause": "5.6.3.a",
+      "source_behavior": "time_code_broadcast_type_00",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.3-b",
+      "clause": "5.6.3.b",
+      "source_behavior": "distributed_interrupt_broadcast_type_10",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.1-a",
+      "clause": "5.6.4.1.a",
+      "source_behavior": "timecodes_optional_in_nodes_and_routers",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "Endpoint"
+      ],
+      "review_status": "approved_disposition_applied",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.1-b",
+      "clause": "5.6.4.1.b",
+      "source_behavior": "unsupported_timecodes_ignored",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set; current profile marks this unsupported-feature behavior not applicable, so this is traceability/accountability cleanup rather than active implementation behavior",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.4.2-a",
+      "clause": "5.6.4.2.a",
+      "source_behavior": "time_code_value_is_6_bits_0_to_63",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.4.3-a",
+      "clause": "5.6.4.3.a",
+      "source_behavior": "node_supporting_timecode_has_one_or_more_registers",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.3-b",
+      "clause": "5.6.4.3.b",
+      "source_behavior": "register_holds_last_timecode_value",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.3-c",
+      "clause": "5.6.4.3.c",
+      "source_behavior": "router_supporting_timecode_has_one_register",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.3-d",
+      "clause": "5.6.4.3.d",
+      "source_behavior": "port_reset_initializes_timecode_register_as_specified",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.4.4-a",
+      "clause": "5.6.4.4.a",
+      "source_behavior": "timecode_network_has_single_timecode_master",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.4-b",
+      "clause": "5.6.4.4.b",
+      "source_behavior": "master_passes_timecodes_to_one_or_more_endpoints",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.5-a",
+      "clause": "5.6.4.5.a",
+      "source_behavior": "compare_received_timecode_to_register",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.4.5-b",
+      "clause": "5.6.4.5.b",
+      "source_behavior": "valid_if_received_equals_register_plus_one_mod64",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.4.5-c",
+      "clause": "5.6.4.5.c",
+      "source_behavior": "otherwise_invalid",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.4.8-a",
+      "clause": "5.6.4.8.a",
+      "source_behavior": "node_valid_timecode_indicates_host_and_updates_register",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.9-a",
+      "clause": "5.6.4.9.a",
+      "source_behavior": "node_invalid_timecode_updates_register_without_valid_indication",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.1-a",
+      "clause": "5.6.5.1.a",
+      "source_behavior": "distributed_interrupt_optional",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.1-c",
+      "clause": "5.6.5.1.c",
+      "source_behavior": "interrupt_modes_interrupt_and_interrupt_with_ack",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.1-d",
+      "clause": "5.6.5.1.d",
+      "source_behavior": "supporting_entity_operates_in_one_or_configurable_modes",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.1-e",
+      "clause": "5.6.5.1.e",
+      "source_behavior": "ack_mode_has_one_source_and_one_acknowledger_per_interrupt",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.2-a",
+      "clause": "5.6.5.2.a",
+      "source_behavior": "interrupt_code_broadcasts_interrupt",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.2-b",
+      "clause": "5.6.5.2.b",
+      "source_behavior": "IID_bits_0_4_range_0_31",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.2-c",
+      "clause": "5.6.5.2.c",
+      "source_behavior": "interrupt_value_bit5_zero",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.3-a",
+      "clause": "5.6.5.3.a",
+      "source_behavior": "ack_code_returns_interrupt_ack",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.3-b",
+      "clause": "5.6.5.3.b",
+      "source_behavior": "ack_IID_bits_0_4_range_0_31",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.3-c",
+      "clause": "5.6.5.3.c",
+      "source_behavior": "ack_value_bit5_one",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.3-d",
+      "clause": "5.6.5.3.d",
+      "source_behavior": "ack_IID_matches_interrupt_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.4-a",
+      "clause": "5.6.5.4.a",
+      "source_behavior": "node_may_send_receive_or_both_interrupt_codes",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.4-b",
+      "clause": "5.6.5.4.b",
+      "source_behavior": "host_send_request_emits_matching_interrupt_code",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.4-c",
+      "clause": "5.6.5.4.c",
+      "source_behavior": "interrupt_mode_repeat_interval_exceeds_network_propagation",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.4-d",
+      "clause": "5.6.5.4.d",
+      "source_behavior": "ack_mode_repeat_interval_exceeds_round_trip_plus_ack_generation",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-b",
+      "clause": "5.6.5.6.b",
+      "source_behavior": "ack_mode_node_support_send_receive_or_both_ack_codes",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-c",
+      "clause": "5.6.5.6.c",
+      "source_behavior": "host_ack_request_emits_matching_ack_code",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-e",
+      "clause": "5.6.5.6.e",
+      "source_behavior": "ack_generated_after_interrupt_has_propagated_network",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-f",
+      "clause": "5.6.5.6.f",
+      "source_behavior": "ack_generation_before_router_defined_maximum",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-g",
+      "clause": "5.6.5.6.g",
+      "source_behavior": "received_ack_informs_host_matching_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-a",
+      "clause": "5.6.6.a",
+      "source_behavior": "node_acts_as_source_destination_or_both",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-b",
+      "clause": "5.6.6.b",
+      "source_behavior": "node_comprises_one_or_more_endpoints_and_zero_or_more_timecode_registers",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-d",
+      "clause": "5.6.6.d",
+      "source_behavior": "endpoint_accepts_host_packets_for_send",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-e",
+      "clause": "5.6.6.e",
+      "source_behavior": "endpoint_passes_received_packets_to_host",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-f",
+      "clause": "5.6.6.f",
+      "source_behavior": "timecode_master_endpoint_accepts_host_timecodes",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-g",
+      "clause": "5.6.6.g",
+      "source_behavior": "timecode_endpoint_passes_received_timecodes_to_host",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-h",
+      "clause": "5.6.6.h",
+      "source_behavior": "endpoint_optional_timecode_register",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-i",
+      "clause": "5.6.6.i",
+      "source_behavior": "interrupt_endpoint_passes_received_interrupts_to_host",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-j",
+      "clause": "5.6.6.j",
+      "source_behavior": "interrupt_endpoint_accepts_interrupt_and_ack_codes_from_host",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.10-a",
+      "clause": "5.6.10.a",
+      "source_behavior": "network_has_one_or_more_nodes_zero_or_more_routing_switches",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.3-c",
+      "clause": "5.6.3.c",
+      "source_behavior": "distributed_interrupt_codes_have_interrupt_and_acknowledgement_types",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.3-d",
+      "clause": "5.6.3.d",
+      "source_behavior": "network_broadcast_priority_timecode_then_interrupt_ack_then_interrupt",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.3-e",
+      "clause": "5.6.3.e",
+      "source_behavior": "router_deletes_and_does_not_forward_reserved_broadcast_types_01_or_11",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.3-f",
+      "clause": "5.6.3.f",
+      "source_behavior": "node_discards_reserved_broadcast_types_01_or_11",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "Router",
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.4-c1",
+      "clause": "5.6.4.4.c.1",
+      "source_behavior": "redundant_timecode_master_endpoints_share_same_timecode_register",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.4-c2",
+      "clause": "5.6.4.4.c.2",
+      "source_behavior": "timecode_master_loads_register_with_value_to_send",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.4.4-c3",
+      "clause": "5.6.4.4.c.3",
+      "source_behavior": "timecode_master_requests_redundant_endpoints_to_send_same_value_at_same_time",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.1-b",
+      "clause": "5.6.5.1.b",
+      "source_behavior": "unsupported_distributed_interrupts_are_ignored",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set; current profile marks this unsupported-feature behavior not applicable, so this is traceability/accountability cleanup rather than active implementation behavior",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.2-d",
+      "clause": "5.6.5.2.d",
+      "source_behavior": "interrupt_code_associated_with_one_of_32_interrupts_by_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
+      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+    },
+    {
+      "requirement_id": "SPW-5.6.5.4-e",
+      "clause": "5.6.5.4.e",
+      "source_behavior": "received_interrupt_code_informs_host_of_matching_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-a",
+      "clause": "5.6.5.6.a",
+      "source_behavior": "ack_mode_node_conforms_to_interrupt_node_rules",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-d",
+      "clause": "5.6.5.6.d",
+      "source_behavior": "node_without_ack_send_support_discards_host_ack_requests",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.5.6-h",
+      "clause": "5.6.5.6.h",
+      "source_behavior": "node_without_ack_receive_support_discards_received_ack_codes",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-c1",
+      "clause": "5.6.6.c.1",
+      "source_behavior": "endpoint_has_one_host_interface",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-c2",
+      "clause": "5.6.6.c.2",
+      "source_behavior": "endpoint_has_one_port_of_spacewire_fifo_or_configuration_type",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.6-k",
+      "clause": "5.6.6.k",
+      "source_behavior": "configuration_port_connects_to_host_configuration_application",
+      "primary_owner": "ConfigurationManagement",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.7-a",
+      "clause": "5.6.7.a",
+      "source_behavior": "node_provides_port_management_parameters_from_data_link_encoding_and_physical_layers",
+      "primary_owner": "ConfigurationManagement",
+      "collaborating_owners": [
+        "DataLink",
+        "Encoding",
+        "Physical"
+      ],
+      "review_status": "approved_disposition_applied",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.8.10-a",
+      "clause": "5.6.8.10.a",
+      "source_behavior": "source_node_packet_multicast_optional",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.10-b",
+      "clause": "5.6.10.b",
+      "source_behavior": "network_sends_packets_from_each_source_to_one_or_more_destination_nodes",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.10-c",
+      "clause": "5.6.10.c",
+      "source_behavior": "source_node_packets_travel_over_link_to_router_or_destination",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.10-d",
+      "clause": "5.6.10.d",
+      "source_behavior": "router_packets_travel_over_links_to_router_or_destination",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.10-e",
+      "clause": "5.6.10.e",
+      "source_behavior": "network_supports_timecode_and_distributed_interrupt_broadcast_as_options",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-5.6.10-f",
+      "clause": "5.6.10.f",
+      "source_behavior": "test_loopback_port_should_be_possible",
+      "primary_owner": "SystemIntegration",
+      "collaborating_owners": [
+        "Endpoint",
+        "Router",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.1-a1",
+      "clause": "6.1.1.1.a.1",
+      "source_behavior": "associate_SEND_PACKET_request_with_packet_service",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.1-a2",
+      "clause": "6.1.1.1.a.2",
+      "source_behavior": "associate_RECEIVE_PACKET_indication_with_packet_service",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.2.1-a",
+      "clause": "6.1.1.2.1.a",
+      "source_behavior": "SEND_PACKET_request_sends_packet_across_network",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.2.2-a",
+      "clause": "6.1.1.2.2.a",
+      "source_behavior": "SEND_PACKET_request_parameters_endpoint_and_packet",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.2.3-a",
+      "clause": "6.1.1.2.3.a",
+      "source_behavior": "user_generates_SEND_PACKET_request",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.2.4-a",
+      "clause": "6.1.1.2.4.a",
+      "source_behavior": "endpoint_sends_requested_packet_through_port",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.3.1-a",
+      "clause": "6.1.1.3.1.a",
+      "source_behavior": "endpoint_passes_RECEIVE_PACKET_indication_for_received_packet",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.3.2-a",
+      "clause": "6.1.1.3.2.a",
+      "source_behavior": "RECEIVE_PACKET_indication_parameters_endpoint_packet_EOP_EEP",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.3.3-a",
+      "clause": "6.1.1.3.3.a",
+      "source_behavior": "indication_generated_when_packet_received",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.1.3.4-a",
+      "clause": "6.1.1.3.4.a",
+      "source_behavior": "service_user_reads_received_packet",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.1-a1",
+      "clause": "6.1.2.1.a.1",
+      "source_behavior": "associate_TIME_CODE_request_with_timecode_service",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.1-a2",
+      "clause": "6.1.2.1.a.2",
+      "source_behavior": "associate_TIME_CODE_indication_with_timecode_service",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.2.1-a",
+      "clause": "6.1.2.2.1.a",
+      "source_behavior": "TIME_CODE_request_requests_endpoint_broadcast",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.2.2-a",
+      "clause": "6.1.2.2.2.a",
+      "source_behavior": "TIME_CODE_request_parameters_endpoint_and_value",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.2.3-a",
+      "clause": "6.1.2.2.3.a",
+      "source_behavior": "user_generates_TIME_CODE_request",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.2.4-a",
+      "clause": "6.1.2.2.4.a",
+      "source_behavior": "endpoint_sends_timecode_through_port",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.3.1-a",
+      "clause": "6.1.2.3.1.a",
+      "source_behavior": "TIME_CODE_indication_reports_valid_timecode",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.3.2-a",
+      "clause": "6.1.2.3.2.a",
+      "source_behavior": "TIME_CODE_indication_parameters_endpoint_and_value",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.3.3-a",
+      "clause": "6.1.2.3.3.a",
+      "source_behavior": "TIME_CODE_indication_generated_on_valid_timecode",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.2.3.4-a",
+      "clause": "6.1.2.3.4.a",
+      "source_behavior": "TIME_CODE_indication_effect_application_dependent",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.1-a1",
+      "clause": "6.1.3.1.a.1",
+      "source_behavior": "associate_DISTRIBUTED_INTERRUPT_request",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.1-a2",
+      "clause": "6.1.3.1.a.2",
+      "source_behavior": "associate_DISTRIBUTED_INTERRUPT_indication",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.1-a3",
+      "clause": "6.1.3.1.a.3",
+      "source_behavior": "associate_DISTRIBUTED_INTERRUPT_ACK_request",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.1-a4",
+      "clause": "6.1.3.1.a.4",
+      "source_behavior": "associate_DISTRIBUTED_INTERRUPT_ACK_indication",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.2.1-a",
+      "clause": "6.1.3.2.1.a",
+      "source_behavior": "interrupt_request_asks_endpoint_to_send_interrupt_code",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.2.2-a",
+      "clause": "6.1.3.2.2.a",
+      "source_behavior": "interrupt_request_parameters_endpoint_and_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.2.3-a",
+      "clause": "6.1.3.2.3.a",
+      "source_behavior": "user_generates_interrupt_request",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.2.4-a",
+      "clause": "6.1.3.2.4.a",
+      "source_behavior": "endpoint_immediately_sends_interrupt_code",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.3.1-a",
+      "clause": "6.1.3.3.1.a",
+      "source_behavior": "interrupt_indication_reports_interrupt_arrival",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.3.2-a",
+      "clause": "6.1.3.3.2.a",
+      "source_behavior": "interrupt_indication_parameters_endpoint_and_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.3.3-a",
+      "clause": "6.1.3.3.3.a",
+      "source_behavior": "interrupt_indication_generated_on_valid_interrupt_code",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.3.4-a",
+      "clause": "6.1.3.3.4.a",
+      "source_behavior": "interrupt_indication_effect_application_dependent",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.4.1-a",
+      "clause": "6.1.3.4.1.a",
+      "source_behavior": "interrupt_ACK_request_clears_interrupt_locally_or_networkwide",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.4.2-a",
+      "clause": "6.1.3.4.2.a",
+      "source_behavior": "interrupt_ACK_request_parameters_endpoint_and_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.4.3-a",
+      "clause": "6.1.3.4.3.a",
+      "source_behavior": "host_acknowledges_received_interrupt_with_ACK_request",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.4.4-a",
+      "clause": "6.1.3.4.4.a",
+      "source_behavior": "endpoint_clears_interrupt_and_sends_ACK_if_enabled",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.5.1-a",
+      "clause": "6.1.3.5.1.a",
+      "source_behavior": "ACK_indication_reports_acknowledgement_arrival",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.5.2-a",
+      "clause": "6.1.3.5.2.a",
+      "source_behavior": "ACK_indication_parameters_endpoint_and_IID",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.5.3-a",
+      "clause": "6.1.3.5.3.a",
+      "source_behavior": "ACK_indication_generated_on_valid_ack_code",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-NET-6.1.3.5.4-a",
+      "clause": "6.1.3.5.4.a",
+      "source_behavior": "ACK_indication_effect_application_dependent",
+      "primary_owner": "Endpoint",
+      "collaborating_owners": [
+        "DataLink"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-a",
+      "clause": "5.6.8.1.a",
+      "source_behavior": "forward_packet_based_on_leading_data_character_and_routing_table",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-b1",
+      "clause": "5.6.8.1.b.1",
+      "source_behavior": "comprise_one_or_more_SpaceWire_or_FIFO_ports",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-b2",
+      "clause": "5.6.8.1.b.2",
+      "source_behavior": "comprise_switch_matrix",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-b3",
+      "clause": "5.6.8.1.b.3",
+      "source_behavior": "comprise_routing_table",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-b4",
+      "clause": "5.6.8.1.b.4",
+      "source_behavior": "comprise_configuration_node_at_port_0",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-b5",
+      "clause": "5.6.8.1.b.5",
+      "source_behavior": "zero_or_one_timecode_register",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-b6",
+      "clause": "5.6.8.1.b.6",
+      "source_behavior": "zero_or_one_interrupt_relay_register",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-c",
+      "clause": "5.6.8.1.c",
+      "source_behavior": "relay_valid_timecodes",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-d",
+      "clause": "5.6.8.1.d",
+      "source_behavior": "relay_distributed_interrupts",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.2-a",
+      "clause": "5.6.8.2.a",
+      "source_behavior": "config_port_address_0",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.2-b",
+      "clause": "5.6.8.2.b",
+      "source_behavior": "external_ports_addresses_1_to_31",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.2-c",
+      "clause": "5.6.8.2.c",
+      "source_behavior": "leading_data_character_determines_output_port",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.3-a",
+      "clause": "5.6.8.3.a",
+      "source_behavior": "leading_0_to_31_is_path_address",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.3-b",
+      "clause": "5.6.8.3.b",
+      "source_behavior": "path_0_routes_to_config_port",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.3-c",
+      "clause": "5.6.8.3.c",
+      "source_behavior": "path_1_to_31_routes_to_corresponding_port",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.3-d",
+      "clause": "5.6.8.3.d",
+      "source_behavior": "path_address_is_one_or_more_leading_characters",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.3-e",
+      "clause": "5.6.8.3.e",
+      "source_behavior": "consume_used_path_address_character",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.3-f",
+      "clause": "5.6.8.3.f",
+      "source_behavior": "config_port_access_path_address_only",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.4-a",
+      "clause": "5.6.8.4.a",
+      "source_behavior": "leading_32_to_255_is_logical_address",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.4-b",
+      "clause": "5.6.8.4.b",
+      "source_behavior": "routing_table_maps_logical_address_and_deletion_control",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.4-c",
+      "clause": "5.6.8.4.c",
+      "source_behavior": "logical_address_routes_per_table",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.4-d",
+      "clause": "5.6.8.4.d",
+      "source_behavior": "logical_address_255_reserved_not_used",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.4-e",
+      "clause": "5.6.8.4.e",
+      "source_behavior": "logical_address_single_leading_character",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.4-f",
+      "clause": "5.6.8.4.f",
+      "source_behavior": "retain_logical_address_unless_deletion_enabled",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.5-a",
+      "clause": "5.6.8.5.a",
+      "source_behavior": "nonexistent_path_port_discards_packet",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.5-b",
+      "clause": "5.6.8.5.b",
+      "source_behavior": "nonexistent_port_registers_invalid_address",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.5-c",
+      "clause": "5.6.8.5.c",
+      "source_behavior": "invalid_logical_table_entry_discards_packet",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.5-d",
+      "clause": "5.6.8.5.d",
+      "source_behavior": "invalid_logical_entry_registers_invalid_address",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.6-a",
+      "clause": "5.6.8.6.a",
+      "source_behavior": "logical_deletion_configurable",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.6-b",
+      "clause": "5.6.8.6.b",
+      "source_behavior": "at_most_one_leading_logical_character_deleted_per_router",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.6-c",
+      "clause": "5.6.8.6.c",
+      "source_behavior": "route_then_optional_delete_then_forward",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-a",
+      "clause": "5.6.8.7.a",
+      "source_behavior": "determine_and_allocate_output_on_packet_arrival",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-b",
+      "clause": "5.6.8.7.b",
+      "source_behavior": "connect_if_output_can_accept_packet_start",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-c",
+      "clause": "5.6.8.7.c",
+      "source_behavior": "transfer_each_NChar_through_allocated_connection",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-d",
+      "clause": "5.6.8.7.d",
+      "source_behavior": "output_locked_to_packet_until_end_or_error",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-e",
+      "clause": "5.6.8.7.e",
+      "source_behavior": "downstream_wait_propagates_to_output",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-f",
+      "clause": "5.6.8.7.f",
+      "source_behavior": "output_backpressure_propagates_to_input",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-g",
+      "clause": "5.6.8.7.g",
+      "source_behavior": "packet_waits_if_allocated_output_busy",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.7-h",
+      "clause": "5.6.8.7.h",
+      "source_behavior": "output_free_after_packet_finishes",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.8-a",
+      "clause": "5.6.8.8.a",
+      "source_behavior": "contenders_compete_when_output_becomes_free",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.8-b",
+      "clause": "5.6.8.8.b",
+      "source_behavior": "arbitrate_to_choose_next_input",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.8-c",
+      "clause": "5.6.8.8.c",
+      "source_behavior": "arbitration_is_fair",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.8-d",
+      "clause": "5.6.8.8.d",
+      "source_behavior": "winner_transfers_one_packet_then_output_freed",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.9-a",
+      "clause": "5.6.8.9.a",
+      "source_behavior": "group_adaptive_optional",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.9-b",
+      "clause": "5.6.8.9.b",
+      "source_behavior": "logical_address_may_route_to_one_of_several_ports",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.9-c",
+      "clause": "5.6.8.9.c",
+      "source_behavior": "choose_free_port_from_configured_set_else_arbitrate_when_ports_free",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.9-d",
+      "clause": "5.6.8.9.d",
+      "source_behavior": "legacy_path_adaptive",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.10-b",
+      "clause": "5.6.8.10.b",
+      "source_behavior": "router_multicast_optional",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.10-c1",
+      "clause": "5.6.8.10.c.1",
+      "source_behavior": "table_configures_multicast_port_set",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.10-c2",
+      "clause": "5.6.8.10.c.2",
+      "source_behavior": "multicast_packet_to_each_port_in_set",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.10-c3",
+      "clause": "5.6.8.10.c.3",
+      "source_behavior": "start_multicast_only_when_all_designated_ports_ready",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.10-c4",
+      "clause": "5.6.8.10.c.4",
+      "source_behavior": "during_multicast_wait_until_all_ports_ready_for_each_NChar",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.10-d",
+      "clause": "5.6.8.10.d",
+      "source_behavior": "disabled_multicast_ports_omitted",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.11-a",
+      "clause": "5.6.8.11.a",
+      "source_behavior": "reset_ports_invalidate_logical_table_disable_adaptive_and_multicast",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.12-a",
+      "clause": "5.6.8.12.a",
+      "source_behavior": "configurable_port_timeout",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.12-b",
+      "clause": "5.6.8.12.b",
+      "source_behavior": "separate_timeout_per_port",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.12-c",
+      "clause": "5.6.8.12.c",
+      "source_behavior": "packet_stuck_if_started_not_ended_and_no_data_longer_than_timeout",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.12-d",
+      "clause": "5.6.8.12.d",
+      "source_behavior": "stuck_packet_discard_send_EEP_register_error",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.12-e",
+      "clause": "5.6.8.12.e",
+      "source_behavior": "timeout_can_be_disabled",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.9-a",
+      "clause": "5.6.9.a",
+      "source_behavior": "management_via_configuration_port",
+      "primary_owner": "ConfigurationManagement",
+      "collaborating_owners": [
+        "Router",
+        "DataLink",
+        "Encoding"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.9-c",
+      "clause": "5.6.9.c",
+      "source_behavior": "routing_table_configurable_via_configuration_port",
+      "primary_owner": "ConfigurationManagement",
+      "collaborating_owners": [
+        "Router",
+        "DataLink",
+        "Encoding"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.9-d",
+      "clause": "5.6.9.d",
+      "source_behavior": "port_timeout_configurable_via_configuration_port",
+      "primary_owner": "ConfigurationManagement",
+      "collaborating_owners": [
+        "Router",
+        "DataLink",
+        "Encoding"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.9-e",
+      "clause": "5.6.9.e",
+      "source_behavior": "distributed_interrupt_parameters_configurable_via_configuration_port",
+      "primary_owner": "ConfigurationManagement",
+      "collaborating_owners": [
+        "Router",
+        "DataLink",
+        "Encoding"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-TC-VALID",
+      "clause": "5.6.4.6",
+      "source_behavior": "valid_timecode_relay_all_enabled_outputs_except_ingress_and_update_register",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-TC-INVALID",
+      "clause": "5.6.4.7",
+      "source_behavior": "invalid_timecode_update_register_without_relay",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-INT-RELAY",
+      "clause": "5.6.5.5",
+      "source_behavior": "first_interrupt_sets_IID_bit_relays_except_ingress_then_timeout_clears_duplicate",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-ACK-RELAY",
+      "clause": "5.6.5.7",
+      "source_behavior": "ack_for_active_IID_clears_bit_and_relays_except_ingress",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.8.1-e",
+      "clause": "5.6.8.1.e",
+      "source_behavior": "configuration_node_accessed_via_configuration_port_connected_to_switch_matrix",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.9-b",
+      "clause": "5.6.9.b",
+      "source_behavior": "router_provides_data_link_encoding_and_physical_management_parameters_per_port",
+      "primary_owner": "ConfigurationManagement",
+      "collaborating_owners": [
+        "Router",
+        "DataLink",
+        "Encoding"
+      ],
+      "review_status": "approval_required",
+      "finding": "source clause explicitly includes physical-layer management parameters, but Physical is absent from the current collaborators",
+      "candidate_disposition": "retain ConfigurationManagement primary and existing collaborators; add Physical collaborator"
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.4.6-a1",
+      "clause": "5.6.4.6.a.1",
+      "source_behavior": "valid_timecode_relay_same_value_to_all_outputs_except_ingress",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.4.6-a2",
+      "clause": "5.6.4.6.a.2",
+      "source_behavior": "valid_timecode_updates_router_timecode_register",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-a",
+      "clause": "5.6.5.5.a",
+      "source_behavior": "each_port_configurable_interrupt_receive_and_send_enable",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-b",
+      "clause": "5.6.5.5.b",
+      "source_behavior": "interrupt_receive_disabled_port_discards_interrupt_codes",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-c",
+      "clause": "5.6.5.5.c",
+      "source_behavior": "interrupt_send_disabled_port_sends_no_interrupt_codes",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-d",
+      "clause": "5.6.5.5.d",
+      "source_behavior": "interrupt_relay_register_has_32_bits_one_per_IID",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-e",
+      "clause": "5.6.5.5.e",
+      "source_behavior": "interrupt_relay_register_may_be_less_than_32_bits",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-f",
+      "clause": "5.6.5.5.f",
+      "source_behavior": "reset_clears_interrupt_relay_register",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-g",
+      "clause": "5.6.5.5.g",
+      "source_behavior": "relay_register_bit_N_represents_IID_N_state",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-h",
+      "clause": "5.6.5.5.h",
+      "source_behavior": "each_interrupt_relay_bit_has_own_timeout_timer",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-i",
+      "clause": "5.6.5.5.i",
+      "source_behavior": "interrupt_timeout_interval_configurable",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-j",
+      "clause": "5.6.5.5.j",
+      "source_behavior": "interrupt_mode_TR_exceeds_worst_case_interrupt_propagation",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-k",
+      "clause": "5.6.5.5.k",
+      "source_behavior": "ack_mode_TRA_exceeds_interrupt_propagation_plus_ack_generation_plus_ack_propagation",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-l1",
+      "clause": "5.6.5.5.l.1",
+      "source_behavior": "received_interrupt_checks_IID_relay_bit",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-l2",
+      "clause": "5.6.5.5.l.2",
+      "source_behavior": "unsupported_IID_is_discarded_if_relay_register_shorter",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-l3a",
+      "clause": "5.6.5.5.l.3.a",
+      "source_behavior": "inactive_IID_bit_set_on_first_interrupt",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-l3b",
+      "clause": "5.6.5.5.l.3.b",
+      "source_behavior": "first_interrupt_relayed_to_all_enabled_outputs_except_ingress",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-l3c",
+      "clause": "5.6.5.5.l.3.c",
+      "source_behavior": "first_interrupt_starts_IID_timeout_timer",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-l4",
+      "clause": "5.6.5.5.l.4",
+      "source_behavior": "duplicate_active_interrupt_discarded",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.5-m",
+      "clause": "5.6.5.5.m",
+      "source_behavior": "interrupt_timeout_clears_corresponding_relay_bit",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-a",
+      "clause": "5.6.5.7.a",
+      "source_behavior": "router_without_ack_mode_discards_received_ack_codes",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-b",
+      "clause": "5.6.5.7.b",
+      "source_behavior": "each_port_configurable_ack_receive_and_send_enable",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-c",
+      "clause": "5.6.5.7.c",
+      "source_behavior": "ack_receive_disabled_port_discards_ack_codes",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-d",
+      "clause": "5.6.5.7.d",
+      "source_behavior": "ack_send_disabled_port_sends_no_ack_codes",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-e",
+      "clause": "5.6.5.7.e",
+      "source_behavior": "ack_mode_uses_configurable_TRA_timeout",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-f",
+      "clause": "5.6.5.7.f",
+      "source_behavior": "TRA_exceeds_network_interrupt_propagation_plus_handler_delay_plus_ack_propagation",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-g1",
+      "clause": "5.6.5.7.g.1",
+      "source_behavior": "unsupported_ack_IID_discarded_if_register_shorter",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-g2a",
+      "clause": "5.6.5.7.g.2.a",
+      "source_behavior": "active_IID_ack_clears_relay_bit",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-g2b",
+      "clause": "5.6.5.7.g.2.b",
+      "source_behavior": "active_IID_ack_relayed_to_all_enabled_outputs_except_ingress",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-g2c",
+      "clause": "5.6.5.7.g.2.c",
+      "source_behavior": "active_IID_ack_stops_and_resets_timeout_timer",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-g3",
+      "clause": "5.6.5.7.g.3",
+      "source_behavior": "ack_for_inactive_IID_is_ignored",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    },
+    {
+      "requirement_id": "SPW-RTR-5.6.5.7-h",
+      "clause": "5.6.5.7.h",
+      "source_behavior": "timeout_clears_relay_bit_in_ack_mode",
+      "primary_owner": "Router",
+      "collaborating_owners": [
+        "DataLink",
+        "ConfigurationManagement"
+      ],
+      "review_status": "no_owner_gap_detected",
+      "finding": null,
+      "candidate_disposition": null
+    }
+  ]
+}
