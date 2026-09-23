@@ -138,13 +138,15 @@ class TestNetworkRouterStaticContracts(unittest.TestCase):
         cls.p0 = load("rtl_contract/5.6_port0_configuration_rtl_contract.yaml")
         cls.bc = load("rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml")
 
-    def test_design_closed_but_review_and_rtl_gate_remain_closed(self):
+    def test_reviewed_gate_open_but_rtl_gate_remains_closed(self):
         self.assertFalse(self.net["hard_gate"]["RTL_implementation_allowed"])
-        self.assertFalse(self.net["hard_gate"]["reviewed"])
+        self.assertTrue(self.net["hard_gate"]["reviewed"])
         self.assertEqual(self.net["hard_gate"]["design_blockers"], [])
+        self.assertEqual(self.net["hard_gate"]["verification_blockers"], [])
         self.assertFalse(self.rtr["hard_gate"]["RTL_implementation_allowed"])
-        self.assertFalse(self.rtr["hard_gate"]["reviewed"])
+        self.assertTrue(self.rtr["hard_gate"]["reviewed"])
         self.assertEqual(self.rtr["hard_gate"]["design_blockers"], [])
+        self.assertEqual(self.rtr["hard_gate"]["verification_blockers"], [])
 
     def test_router_pipeline_is_c0_c1_c2_c3(self):
         t = self.rtr["implementation_proposal"]["timing"]
