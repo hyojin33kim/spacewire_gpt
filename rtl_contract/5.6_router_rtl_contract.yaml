@@ -1,0 +1,319 @@
+schema_version: 1
+artifact_id: RTL-CONTRACT-ROUTER-V0.1
+status: reviewed
+source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
+semantic_baseline: semantic-router-v0.1
+semantic_contract: contracts/5.6_router.yaml
+network_contract: rtl_contract/5.6_network_ownership_contract.yaml
+requirement_allocation: traceability/network_router_owner_map_v0.1.json
+hard_gate:
+  RTL_implementation_allowed: false
+  reviewed: true
+  design_blockers: []
+  verification_blockers: []
+  verification_evidence:
+    - traceability/NETWORK_ROUTER_VERIFICATION_EVIDENCE_v0.1.md
+    - traceability/NETWORK_ROUTER_OWNER_MAP_TECHNICAL_REVIEW_v0.1.md
+    - traceability/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md
+
+closure_status:
+  NR-DEC-01:
+    status: closed_user_approved_direction
+    scope: >
+      Four external ports plus Port 0; reuse Data Link FIFOs; rotating-order
+      packet arbitration. Parameter range and final FPGA resource feasibility
+      remain implementation/verification concerns, not a reopened architecture choice.
+  NR-TECH-02:
+    status: closed_verified
+    evidence_branch: contracts/dl-encoding-cross-layer-v0.1
+    evidence_head: 83c424fe7eab6dd1293591930fbb7a9d1f1af923
+    note: >
+      Accepted-but-uncommitted EOP/EEP is retained as a reserved TX FIFO head
+      until commit or explicit pre-commit flush resolution, preventing accidental
+      discard of a following packet.
+
+  NR-TECH-01:
+    status: closed_verified
+    decision: >
+      Output ownership is held through local terminal serial completion, not merely
+      terminal acceptance into the DataLink TX FIFO and not merely Encoding commit.
+      Per-N-Char ready and new-packet ready are distinct.
+  NR-DEC-02:
+    status: closed_verified
+    decision: >
+      Per-output Router timeout uses a Router-to-DataLink abort handshake. DataLink
+      discards only the unsent current output packet remainder and emits one
+      synthetic EEP through the normal credited Encoding path without resetting
+      the link. Multicast interaction remains under NR-TECH-04.
+
+  NR-DEC-03:
+    status: closed_verified
+    decision: >
+      Port 0 uses the project-local SPCFG-v0.1 configuration application protocol.
+      Requests carry transaction ID and explicit return path; routing-table writes
+      use shadow plus atomic commit; RMAP is not required.
+    contract: rtl_contract/5.6_port0_configuration_rtl_contract.yaml
+  NR-TECH-03:
+    status: closed_verified
+    decision: >
+      One capture slot per external port plus one-event-per-cycle semantic processing
+      captures all simultaneous broadcasts for the selected 100-MHz/200-Mbit/s profile.
+      Egress class queues enforce TIME_CODE > INTERRUPT_ACK > INTERRUPT at the
+      Network-to-DataLink acceptance boundary with non-silent overflow telemetry.
+    contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
+  NR-TECH-04:
+    status: closed_verified
+    decision: >
+      Multicast allocation and each N-Char handoff are all-selected-output atomic.
+      The selected mask is frozen for the packet. Any member failure aborts the whole
+      active multicast packet. Router pipeline is fixed as C0 ingress head, C1 route
+      snapshot, C2 registered grant, C3 first handoff.
+    contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
+
+inherited_semantics:
+  source: contracts/5.6_router.yaml
+  features: [path, logical, logical_deletion, adaptive_logical, multicast, per_port_timeout, timecode_relay, interrupt_and_ack_relay]
+  legacy_path_adaptive: false
+  packet_length_limit: none
+  FIFO_depth_per_DataLink_TX_RX: 128
+  DataLink_credit_max: 56
+  note: This draft proposes no removal of existing reference features.
+
+implementation_proposal:
+  decision: NR-DEC-01
+  decision_status: closed_user_approved_direction
+  clock_hz: 100000000
+  external_ports_default: 4
+  external_ports_parameter_range: [1, 31]
+  configuration_port: 0
+  count_rationale: Matches current RouterModel default, not an approved FPGA resource estimate.
+  storage: DataLink_RX_TX_FIFOs_plus_one_registered_ingress_head_per_input
+  no_additional_whole_packet_buffer: true
+  blocks: [ingress_head, route_lookup, allocator, crossbar, timeout_control, broadcast_engine, configuration_adapter]
+  timing:
+    C0: capture_or_present_ingress_head
+    C1: registered_route_lookup_and_route_snapshot
+    C2: registered_allocator_grant_if_required_outputs_free
+    C3: first_forwardable_NChar_handshake_if_required_outputs_ready
+    no_same_edge_release_and_regrant: true
+    stalled_route_and_grant_stable: true
+  reset: >
+    RouterReset resets all ports, clears head/ownership/event state, invalidates
+    logical entries and disables adaptive/multicast. Partial PortReset requires
+    packet-aware coordination; it is not implicitly a global RouterReset.
+
+addressing:
+  references: [5.6.8.2, 5.6.8.3, 5.6.8.4, 5.6.8.5, 5.6.8.6]
+  path:
+    zero: configuration_endpoint_only
+    external: ports_1_through_configured_N
+    absent_port: discard_through_first_terminator_and_record_invalid_address
+    header: consume_exactly_once
+  logical:
+    usable_addresses: [32, 254]
+    address_255: discard_and_record_invalid_address_per_frozen_semantics
+    entry_fields_proposed: [valid, output_mask, delete_header, adaptive, multicast]
+    retained_unless_deletion_enabled: true
+    deletion_count_max_per_hop: 1
+    invalid_entry: discard_through_first_terminator_and_record_invalid_address
+    configuration_port_target: prohibited_by_5_6_8_3_f
+    conflicting_mode_bits: configuration_write_rejected_proposal
+  empty_packet: >
+    EOP/EEP in the header-wait state is consumed locally without allocating output;
+    follow CR-NET-001. Deleting a real header is distinct from receiving an empty packet.
+  updates: >
+    Route-table updates use SPCFG-v0.1 shadow writes followed by atomic COMMIT.
+    C1 lookup snapshots the pre-edge active entry; a same-edge COMMIT is visible
+    only to lookups beginning on the following cycle. An already allocated packet
+    keeps its frozen route snapshot.
+
+allocation:
+  inherited: fair_packet_level_wormhole
+  proposal: >
+    A rotating input-order allocator scans eligible packet requests and grants
+    disjoint free output sets. Adaptive chooses one eligible output with a rotating
+    candidate cursor. Multicast reserves its complete eligible set atomically,
+    never a partial subset. Disjoint unicasts may proceed together.
+  fairness: >
+    Exact Golden round-robin winners are not normative. Prove no permanent
+    exclusion under recurrent eligibility and completed competing packets;
+    do not promise a cycle bound for unbounded packets or blocked sinks.
+    Multicast starvation under asymmetric port availability is NR-TECH-04.
+  ownership_release:
+    acquire: >
+      Allocate only when net_tx_new_packet_ready is asserted. The winning input
+      owns the output for the packet.
+    normal_release: >
+      Release ownership when net_tx_packet_done_valid reports local serial completion
+      of the packet's EOP/EEP. EOP/EEP acceptance into the DataLink FIFO and
+      Encoding commit are earlier boundaries and do not by themselves free the output.
+    timeout_release: >
+      On Router timeout, retain ownership until net_tx_abort_done reports completion
+      of the synthetic EEP, unless a qualified link error terminates the packet first.
+    link_error_release: >
+      net_tx_link_abort_valid terminates the current output packet ownership. The
+      output is not considered free for a new packet until net_tx_new_packet_ready
+      later reasserts after recovery.
+    port_free_definition: "!owner_valid && net_tx_new_packet_ready"
+    rationale: >
+      This directly separates SpaceWire wormhole packet ownership from FIFO capacity
+      and prevents a following packet from entering the output while the previous
+      packet is still being transmitted.
+  multicast_transfer:
+    contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
+    selected_mask: frozen_at_allocation
+    all_ready: every_selected_output_can_accept_same_NChar
+    fire: input_head_valid_and_all_selected_outputs_ready
+    valid_generation: assert_to_all_selected_outputs_only_on_atomic_fire_opportunity
+    all_outputs_receive_same_kind_and_data: true
+    subset_handshake_forbidden: true
+  disabled_output:
+    at_packet_start: omit_disabled_multicast_ports_per_selected_SHOULD
+    mid_packet: fail_whole_active_multicast_packet
+  multicast_failure:
+    timeout_or_link_error_or_disable_on_any_selected_output: >
+      Stop forwarding the common input packet, abort every still-healthy active
+      member, let the failed member terminate through its native error/reset path,
+      drain the input tail through EOP/EEP, and release the group only after all
+      selected output packet ownerships have terminated.
+  progress_tracking:
+    passed_to_output: "net_tx_nchar_valid && net_tx_nchar_ready"
+    encoding_commit: distinct_later_DataLink_accounting_event
+    local_serial_complete: distinct_later_Encoding_completion_event
+    packet_context: one_active_Router_packet_per_output
+    timeout_start: first_DATA_passed_to_output
+    timeout_end: EOP_or_EEP_passed_to_output
+    ownership_end: normal_terminal_local_serial_complete_or_abort_termination
+
+timeout:
+  references: [5.6.8.12, CR-RTR-001]
+  inherited: configurable_per_port_and_disable_supported
+  implementation_choice:
+    counter_per_output: true
+    timebase: 100MHz_core_cycles
+    counter_width_bits: 32
+    counter_type: saturating
+    reset_default_enable: false
+    period_register_unit: core_cycles
+  normative_measurement: time_since_last_DATA_passed_from_input_port_to_output_port
+  activity_window:
+    starts: first_DATA_passed_to_output
+    ends: EOP_or_EEP_passed_to_output
+    passed_to_output_event: "net_tx_nchar_valid && net_tx_nchar_ready"
+  progress_rule:
+    DATA_handshake: "reset idle-cycle counter to zero"
+    terminal_handshake: "end timeout monitoring for this packet"
+    no_progress: "increment saturating idle-cycle counter"
+  expiry:
+    comparison: strictly_greater_than_configured_period
+    same_edge_precedence: >
+      A DATA progress handshake or EOP/EEP terminal handshake on the sampling edge
+      suppresses timeout expiry on that edge. PortReset/RouterReset and qualified
+      link error also dominate timeout generation.
+  action:
+    - latch_stuck_packet_error_for_output_port
+    - stop_normal_input_to_output_forwarding_for_the_affected_packet
+    - assert_net_tx_abort_valid_reason_ROUTER_TIMEOUT_until_accepted
+    - drain_original_input_tail_locally_through_first_EOP_or_EEP
+    - wait_for_net_tx_abort_done_or_link_error_termination
+    - release_output_ownership_then_wait_for_net_tx_new_packet_ready
+  DataLink_abort_contract:
+    association: implicit_current_output_packet
+    packet_tag: not_required_in_v0_1
+    reason: >
+      Wormhole ownership permits only one active Router packet per output and
+      no following packet may start before completion/termination.
+    output_remainder: >
+      DataLink resolves any accepted-uncommitted current-packet N-Char, discards
+      the unsent buffered remainder, and issues one synthetic EEP.
+    synthetic_EEP: >
+      Uses normal DataLink N-Char credit accounting and Encoding path. It is not
+      allowed to bypass tx_credit.
+    completion: >
+      net_tx_abort_done occurs only after the synthetic EEP completes local serial
+      emission. A later qualified link error supersedes the timeout abort and
+      prevents a duplicate timeout EEP.
+  upstream_tail: >
+    Router discards the original input remainder through its first EOP/EEP without
+    forwarding it to the timed-out output. The following packet is not consumed or
+    reframed as part of the timed-out packet.
+  multicast_scope: >
+    This closes unicast/per-output timeout semantics. How one timed-out member of
+    an active multicast set affects the remaining members is deferred to NR-TECH-04.
+  unresolved: []
+
+broadcast:
+  contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
+  references: [5.6.3, 5.6.4.6, 5.6.4.7, 5.6.5.5, 5.6.5.7]
+  ingress_capture: one_slot_per_external_port_all_same_cycle
+  semantic_service: one_event_per_core_cycle_rotating_ingress_order
+  priority_at_DataLink_acceptance: [TIME_CODE, INTERRUPT_ACK, INTERRUPT]
+  egress_queue_depths: {TIME_CODE: 4, INTERRUPT_ACK: 32, INTERRUPT: 32}
+  silent_overflow: forbidden
+  qualification: zero_overflow_required_for_approved_mission_traffic_profile
+
+configuration:
+  contract: rtl_contract/5.6_port0_configuration_rtl_contract.yaml
+  port0_path_only: true
+  protocol: SPCFG-v0.1
+  required_access: [routing_table, per_port_status, per_port_timeout, interrupt_parameters]
+  route_update: shadow_then_atomic_commit
+  same_cycle_lookup_and_commit: lookup_uses_pre_edge_entry_commit_visible_next_cycle
+  response_route: explicit_return_path_from_request
+  safety: [no_torn_entry_updates, no_midpacket_route_change, no_partial_request_side_effect]
+
+verification:
+  status: planned_not_executed
+  NR_TECH_01_NR_DEC_02_cases:
+    - terminal_FIFO_accept_does_not_release_output
+    - terminal_Encoding_commit_does_not_release_output
+    - terminal_serial_completion_releases_output
+    - next_packet_cannot_start_until_net_tx_new_packet_ready
+    - timeout_counter_resets_on_each_DATA_passed_to_output
+    - timeout_stops_on_terminal_passed_to_output_even_if_wire_completion_is_later
+    - same_edge_progress_or_terminal_suppresses_timeout
+    - timeout_abort_with_FIFO_backlog_discards_only_current_packet
+    - timeout_abort_with_accepted_uncommitted_DATA_commit_cancel_race
+    - timeout_with_zero_tx_credit_waits_for_credit_before_EEP
+    - synthetic_EEP_completion_releases_output
+    - link_error_supersedes_timeout_abort_without_duplicate_EEP
+  existing_semantic_evidence:
+    router_vectors_mapped: 34
+    network_vectors_mapped: 29
+    caution: Mapping counts are not proof of cycle-level or integration coverage.
+  directed_cases:
+    - path_0_configuration_and_absent_port_discard
+    - logical_keep_delete_reserved255_and_empty_packet
+    - logical_port0_rejected_against_normative_requirement
+    - two_inputs_one_output_packet_lock_and_fairness
+    - disjoint_outputs_concurrent_and_adaptive_contention
+    - multicast_one_sink_stalled_no_subset_handshake
+    - multicast_port_failure_midpacket
+    - long_packet_with_FIFO_empty_bubbles_and_recovery
+    - timeout_at_threshold_and_threshold_plus_one
+    - timeout_with_TX_FIFO_backlog_and_following_packet
+    - EOP_accepted_not_committed_then_link_error
+    - same_cycle_reset_error_commit_and_terminator
+    - pending_Encoding_EOP_flushed_while_packet_open
+    - simultaneous_broadcasts_same_IID_and_different_IIDs
+    - BC_pending_interrupt_then_new_timecode
+    - configuration_write_vs_lookup_and_reset
+  assertions:
+    - one_owner_per_output_and_no_NChar_interleaving
+    - no_transfer_without_handshake_and_stable_stalled_item
+    - exactly_one_header_deletion_when_selected
+    - multicast_all_or_none_same_NChar
+    - no_old_epoch_commit_after_flush
+    - recovery_never_discards_next_packet
+    - timeout_EEP_at_most_once_per_affected_output_packet
+    - event_capture_and_no_silent_overflow_within_approved_envelope
+    - fairness_under_explicit_progress_assumptions
+  scoreboard: >
+    Compare ordered semantic events and per-packet payload/end status using the
+    implementation-independent Golden model. Do not compare arbitrary cycle
+    latency or exact fair-scheduler winner identity. Adapter must expose any
+    assumed event order and may not hide dropped, duplicated or late events.
+  review_pass: >
+    All 101 Router requirements dispositioned; decisions approved; technical
+    blockers closed; contract lint and targeted boundary model checks pass.
+    No claims of RTL verification until separately authorized RTL exists.

@@ -1,0 +1,204 @@
+schema_version: 1
+artifact_id: RTL-CONTRACT-ROUTER-BC-MCAST-V0.1
+status: reviewed
+source_spec: ECSS-E-ST-50-12C-Rev.1
+parent_router_contract: rtl_contract/5.6_router_rtl_contract.yaml
+source_requirements:
+  - SPW-RTR-5.6.4.6-a1
+  - SPW-RTR-5.6.4.6-a2
+  - SPW-RTR-5.6.5.5-a
+  - SPW-RTR-5.6.5.5-b
+  - SPW-RTR-5.6.5.5-c
+  - SPW-RTR-5.6.5.5-d
+  - SPW-RTR-5.6.5.5-f
+  - SPW-RTR-5.6.5.5-g
+  - SPW-RTR-5.6.5.5-h
+  - SPW-RTR-5.6.5.5-i
+  - SPW-RTR-5.6.5.5-l3a
+  - SPW-RTR-5.6.5.5-l3b
+  - SPW-RTR-5.6.5.5-l3c
+  - SPW-RTR-5.6.5.5-l4
+  - SPW-RTR-5.6.5.7-b
+  - SPW-RTR-5.6.5.7-c
+  - SPW-RTR-5.6.5.7-d
+  - SPW-RTR-5.6.5.7-g2a
+  - SPW-RTR-5.6.5.7-g2b
+  - SPW-RTR-5.6.5.7-g2c
+  - SPW-RTR-5.6.5.7-g3
+  - SPW-RTR-5.6.8.10-b
+  - SPW-RTR-5.6.8.10-c1
+  - SPW-RTR-5.6.8.10-c2
+  - SPW-RTR-5.6.8.10-c3
+  - SPW-RTR-5.6.8.10-c4
+  - SPW-RTR-5.6.8.10-d
+
+clock_profile:
+  core_hz: 100000000
+  max_link_mbps: 200
+  broadcast_serial_bits: 14
+  minimum_same_port_broadcast_spacing_core_cycles: 7
+  derivation: >
+    A broadcast code is ESC plus one data character. At 200 Mbit/s this occupies
+    14 serial bit periods = 70 ns, i.e. at least seven 100-MHz core cycles.
+
+broadcast_ingress_capture:
+  external_ports_default: 4
+  per_port_capture_slots: 1
+  capture_event: net_rx_bc_valid
+  capture_all_ports_same_cycle: true
+  semantic_engine_service: one_captured_event_per_core_cycle
+  arbitration: rotating_port_order
+  lossless_bound: >
+    Four ports can create at most four simultaneous capture events. The semantic
+    engine drains all four slots within four cycles, while the same physical port
+    cannot present another broadcast code for at least seven core cycles at the
+    selected 200-Mbit/s maximum link rate.
+  overflow_action:
+    impossible_within_selected_clock_and_link_profile_if_contract_holds: true
+    violation: latch_broadcast_ingress_overflow_error
+
+broadcast_semantic_processing:
+  reserved_types_01_and_11: delete_without_relay
+  timecode:
+    register_bits: 6
+    valid_test: received_value_equals_previous_plus_one_modulo_64
+    valid_action:
+      - update_timecode_register
+      - enqueue_same_value_to_all_enabled_egresses_except_ingress
+    invalid_action:
+      - update_timecode_register
+      - no_relay
+    system_constraint: single_timecode_master_application
+  interrupt:
+    relay_register_bits: 32
+    inactive_IID:
+      - set_relay_bit
+      - start_IID_timer
+      - enqueue_interrupt_to_enabled_egresses_except_ingress
+    active_IID: discard_duplicate
+  acknowledgement:
+    active_IID:
+      - clear_relay_bit
+      - stop_and_reset_IID_timer
+      - enqueue_ack_to_enabled_egresses_except_ingress
+    inactive_IID: ignore
+  same_cycle_state_order:
+    phase_1: capture_all_ingress_events
+    phase_2: select_one_captured_event_by_rotating_port_order
+    phase_3: apply_semantic_state_transition_and_generate_egress_enqueue_requests
+    phase_4: independently_service_each_egress_class_queue
+  note: >
+    Simultaneous events are serialized by deterministic ingress-port order.
+    This order is an RTL choice; the semantic result and all relayed events
+    remain observable for scoreboard checking.
+
+broadcast_egress_storage:
+  per_egress:
+    timecode_fifo_depth: 4
+    ack_fifo_depth: 32
+    interrupt_fifo_depth: 32
+    parameterizable: true
+  enqueue_width: one_event_per_class_per_egress_per_core_cycle
+  dequeue_boundary: DataLink_net_tx_bc_valid_and_ready
+  scheduler_priority:
+    - TIME_CODE
+    - INTERRUPT_ACK
+    - INTERRUPT
+  accepted_event_is_irrevocable: true
+  preemption_rule: >
+    Priority is evaluated when the Network layer passes a new broadcast event to
+    Data Link. An event already accepted by Data Link is not canceled when a
+    higher-priority event later arrives.
+  overflow_policy:
+    silent_loss: forbidden
+    action:
+      - latch_broadcast_overflow_error
+      - increment_saturating_overflow_counter
+    qualification_rule: >
+      Product qualification shall demonstrate zero overflow for the approved
+      mission traffic envelope. The finite queue depths are project architecture
+      choices, not ECSS-defined values.
+
+multicast:
+  route_table_fields: [valid, output_mask, multicast, delete_header]
+  allocation:
+    enabled_mask_snapshot: "configured multicast mask AND current enabled-port mask"
+    disabled_at_start: omit_from_snapshot
+    start_condition: all_selected_outputs_assert_net_tx_new_packet_ready
+    allocation_atomic: true
+    partial_allocation_forbidden: true
+    selected_mask_frozen_until_packet_termination: true
+  transfer:
+    event: input_head_valid_and_all_selected_outputs_net_tx_nchar_ready
+    output_valid_rule: >
+      Assert the current N-Char to all selected outputs only on the atomic transfer
+      opportunity. No selected output may handshake a subset copy.
+    stalled_item_stable: true
+    same_kind_and_data_to_all_selected_outputs: true
+  packet_completion:
+    normal: >
+      The multicast group remains owned until every selected output reports local
+      terminal serial completion for the common EOP/EEP.
+    release_all_together: true
+  midpacket_failure_policy:
+    policy: fail_whole_multicast_packet
+    triggers:
+      - selected_output_router_timeout
+      - selected_output_qualified_link_error
+      - selected_output_disabled_or_reset
+    actions:
+      - stop_forwarding_further_input_NChars_to_all_selected_outputs
+      - drain_original_input_tail_through_first_EOP_or_EEP
+      - request_abort_on_each_still_healthy_selected_output_with_active_packet
+      - failed_output_uses_its_link_error_or_reset_termination_path
+      - wait_until_all_selected_output_packet_ownerships_are_terminated
+      - release_multicast_group
+    rationale: >
+      The ECSS multicast transfer is all-selected-output atomic. Failing the whole
+      active multicast packet avoids silently creating divergent packet copies after
+      a member fails mid-packet. This failure policy is an implementation choice
+      because the standard does not define this mid-packet fault case.
+  future_packets_after_failure: >
+    A later packet performs a new enabled-port snapshot. Ports disabled before that
+    new packet starts may be omitted from the multicast set.
+
+router_pipeline:
+  C0: capture_or_present_ingress_head
+  C1: registered_route_lookup_and_route_snapshot
+  C2: registered_allocator_grant_if_required_outputs_free
+  C3: first_forwardable_NChar_handshake_if_all_required_outputs_ready
+  no_same_edge_release_and_regrant: true
+  route_update_visibility: next_lookup_after_configuration_commit
+  stalled_grant_and_route_snapshot_stable: true
+
+verification:
+  broadcast_directed:
+    - four_ports_broadcast_same_core_cycle_all_captured
+    - maximum_200Mbps_repeated_broadcasts_no_ingress_capture_overflow
+    - timecode_valid_invalid_register_and_relay
+    - interrupt_duplicate_suppression_per_IID
+    - ack_active_vs_inactive_IID
+    - priority_timecode_over_ack_over_interrupt_at_DataLink_accept_boundary
+    - lower_priority_already_accepted_not_preempted
+    - egress_queue_overflow_latches_error_and_is_never_silent
+  multicast_directed:
+    - packet_start_waits_for_all_selected_outputs
+    - per_NChar_waits_for_all_selected_outputs
+    - no_subset_handshake
+    - disabled_output_omitted_before_packet_start
+    - output_mask_frozen_midpacket
+    - one_member_timeout_aborts_all_active_members
+    - one_member_link_error_aborts_all_active_members
+    - next_packet_uses_new_enabled_mask
+    - all_terminal_completions_required_before_group_release
+  assertions:
+    - each_ingress_BC_event_captured_exactly_once
+    - BC_priority_applies_at_network_to_datalink_acceptance
+    - multicast_transfer_is_all_or_none
+    - multicast_selected_mask_stable_while_active
+    - multicast_no_following_packet_before_group_release
+
+hard_gate:
+  design_closed: true
+  verification_passed: true
+  RTL_implementation_allowed: false

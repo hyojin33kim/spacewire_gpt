@@ -38,17 +38,25 @@ data_link_to_encoding_tx:
   handshake: valid_ready_accept_plus_commit_feedback
   accepted_on: rising_clk_when_valid_and_ready
   acceptance_meaning: >
-    Transfer one protocol item into Encoding ownership. Acceptance is not a
-    declaration that the item has been sent.
+    Accept one Data Link protocol item for the next Encoding transmission
+    opportunity. Acceptance is not a declaration that the item has been sent.
+    For FIFO-backed N-Chars, Data Link may retain an immutable rollback copy
+    until commit; that copy is reserved and shall not be scheduled twice.
   ordering: preserve_accept_order
   item_union:
     - DATA_CHARACTER
     - FCT
     - EOP
     - EEP
-    - ESC
     - NULL
     - BROADCAST_CODE
+  prohibited_external_request_kind:
+    - raw_ESC
+  internal_symbol_ownership:
+    ESC: Encoding_internal_only
+    rule: >
+      Data Link never requests a raw ESC item. Encoding may generate ESC
+      internally as required by the character/control-code encoding rules.
   request_fields:
     - enc_tx_item_valid
     - enc_tx_item_ready
@@ -65,14 +73,49 @@ data_link_to_encoding_tx:
       - enc_tx_commit_valid
       - enc_tx_commit_kind
     definition: >
-      tx_commit_valid pulses when the oldest accepted item is irrevocably
-      consumed as the next serial character/control-code at a character/control-code
-      boundary. This is not wire-transmission completion.
+      tx_commit_valid pulses when the selected item is irrevocably consumed as
+      the next serial character/control-code at a character/control-code boundary.
+      This is not wire-transmission completion.
     ordering: same_as_accept_order
+    same_edge_bypass: >
+      Acceptance and commit may occur on the same rising edge when Encoding can
+      consume the just-accepted item directly at the selection boundary. Otherwise
+      the item occupies the single pending slot until a later commit.
     safety:
-      - no_commit_without_prior_uncommitted_accept
+      - commit_requires_matching_same_edge_accept_or_prior_pending_accept
       - no_duplicate_commit
       - commit_kind_matches_accepted_kind
+      - committed_item_cannot_be_canceled_by_same_edge_link_error
+  completion_feedback:
+    fields:
+      - enc_tx_complete_valid
+      - enc_tx_complete_kind
+    definition: >
+      enc_tx_complete_valid pulses exactly once when a committed external protocol
+      item has completed serial emission and the transmitter reaches the boundary
+      at which another protocol item can begin. This is local transmitter
+      completion, not remote reception acknowledgement.
+    ordering: same_as_commit_order
+    relation_to_commit:
+      - completion_occurs_same_cycle_or_later_than_matching_commit
+      - no_completion_without_matching_commit
+      - no_duplicate_completion
+    terminal_use: >
+      EOP/EEP completion provides the Data Link with the packet-transmission
+      completion event needed by Router wormhole output ownership.
+  pending_cancel:
+    request_field: enc_tx_cancel_pending
+    acknowledge_field: enc_tx_cancel_ack
+    scope: oldest_accepted_but_uncommitted_external_item_only
+    use_case: DataLink_packet_abort_without_disabling_the_link
+    edge_precedence: >
+      A matching commit on the same edge is irrevocable and wins over cancel.
+      If no matching commit occurs, cancel removes the pending item without
+      commit or completion and enc_tx_cancel_ack pulses.
+    safety:
+      - cancel_never_removes_a_committed_item
+      - cancel_never_generates_completion
+      - cancel_does_not_reset_serializer_or_link_state
   pending_acceptance:
     max_items: 1
     ready_rule: "tx_item_ready shall be low while one accepted item is uncommitted"
@@ -84,7 +127,8 @@ data_link_to_encoding_tx:
     accepted_uncommitted_action: flush
     cross_layer_rule: >
       Data Link and Encoding shall clear the matching pending-accept bookkeeping
-      on the same reset/TX-disable cause.
+      on the same reset/TX-disable cause. A commit already asserted on that edge
+      is irrevocable and is accounted before recovery handling of later work.
   note: >
     Union item interface is an RTL implementation choice that preserves §5.4.2
     character/control-code semantics despite the narrower TX_CHAR.request wording
@@ -184,6 +228,7 @@ tx_state_and_storage:
     - accepted_pending_item_valid
     - accepted_pending_item_kind
     - accepted_pending_item_data
+    - current_committed_external_item_kind_for_completion
   protocol_item_pending_depth: 1
   buffering: one_accepted_but_uncommitted_item
   deeper_protocol_item_prefetch: prohibited_in_v0_1

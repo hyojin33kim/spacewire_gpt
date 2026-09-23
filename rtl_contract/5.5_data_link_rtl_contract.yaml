@@ -78,6 +78,49 @@ network_to_datalink_tx_nchar:
     Implements 5.5.2.e and 6.2 SEND_NCHAR while allowing 5.5.8.4 packet-spill
     recovery to complete even when the full packet was not already buffered.
 
+datalink_to_network_tx_packet_status:
+  signals:
+    - net_tx_new_packet_ready
+    - net_tx_packet_done_valid
+    - net_tx_packet_done_kind
+    - net_tx_link_abort_valid
+  semantics:
+    net_tx_new_packet_ready: >
+      Packet-level permission for a Router/Network owner to start a new packet
+      on this output. It is distinct from per-N-Char net_tx_nchar_ready and shall
+      be low while a Router packet is active, while a Router-timeout abort is
+      active, or while link-error recovery prevents a new packet from starting.
+    net_tx_packet_done_valid: >
+      One-cycle pulse when the EOP/EEP that terminates the active Router packet
+      completes serial emission according to enc_tx_complete feedback.
+    net_tx_packet_done_kind: [EOP, EEP]
+    net_tx_link_abort_valid: >
+      One-cycle indication that an active output packet has been terminated by
+      a qualified link error rather than by normal EOP/EEP completion. The Router
+      may release packet ownership, but the port is not eligible for a new packet
+      until net_tx_new_packet_ready is asserted again.
+
+network_to_datalink_tx_abort:
+  handshake: valid_ready
+  signals:
+    - net_tx_abort_valid
+    - net_tx_abort_ready
+    - net_tx_abort_reason
+  reason: [ROUTER_TIMEOUT]
+  acceptance: >
+    Accept only while a Router packet is active, Link FSM is in Run, Recovery is
+    Normal, and no prior Router abort is active. PortReset or a qualified link
+    error on the same edge dominates and prevents Router-abort acceptance.
+  packet_association: >
+    v0.1 carries no packet tag because Router ownership permits at most one
+    active Router packet per output and net_tx_new_packet_ready forbids starting
+    the next packet before completion/termination of the current one.
+  completion:
+    signal: net_tx_abort_done
+    definition: >
+      Pulse when the synthetic EEP generated for the accepted timeout abort has
+      completed serial emission. This is the Router's abort-completion event.
+
 network_to_datalink_tx_broadcast:
   handshake: valid_ready
   signals:
@@ -124,10 +167,11 @@ datalink_to_encoding_tx:
     - enc_tx_item_valid
     - enc_tx_item_ready
     - enc_tx_item_kind
-    - enc_tx_data_7_0
+    - enc_tx_item_data_7_0
   item_kind: [DATA, EOP, EEP, FCT, NULL, BROADCAST_CODE]
   prohibited_request_kind:
     - raw_ESC
+  raw_ESC_owner: Encoding_internal_only
   acceptance: "request accepted on valid && ready"
   ready_semantics: >
     enc_tx_item_ready is not a generic buffer-space indication. It shall assert
@@ -139,25 +183,54 @@ datalink_to_encoding_tx:
   commit_feedback_required:
     - enc_tx_commit_valid
     - enc_tx_commit_kind
+  completion_feedback_required:
+    - enc_tx_complete_valid
+    - enc_tx_complete_kind
+  pending_cancel_interface:
+    request: enc_tx_cancel_pending
+    acknowledge: enc_tx_cancel_ack
+    scope: accepted_uncommitted_NChar_of_current_packet_only
+    precedence: "matching commit on the same edge wins; otherwise cancel ack resolves the pending item"
   accept_definition: >
-    valid && ready transfers one protocol item into Encoding ownership but does
-    not mean that the item has been sent.
+    valid && ready accepts one protocol item for Encoding transmission but does
+    not mean that the item has been sent. For FIFO-backed N-Chars the selected
+    FIFO head becomes reserved and unavailable to the scheduler until commit or
+    an explicit pre-commit flush resolution.
   commit_definition: >
-    Pulse when the Encoding layer irrevocably removes the accepted item from its
-    pending slot and consumes it as the next serial character/control-code at a
-    character/control-code boundary. Commit is not wire-transmission completion.
+    Pulse when Encoding irrevocably consumes the accepted item as the next serial
+    character/control-code at a character/control-code boundary. Commit is not
+    wire-transmission completion.
+  same_edge_accept_commit:
+    allowed: true
+    rule: >
+      If accept and matching commit occur on the same rising edge, the item is
+      committed directly and never remains in accepted-uncommitted state.
   pending_rule:
     max_accepted_but_uncommitted_items: 1
     while_pending: "enc_tx_item_ready shall be deasserted"
+    pending_metadata: [valid, kind]
+    pending_is_terminator: "derived from pending kind == EOP or EEP; not an independent sticky state"
     rationale: >
       The Data Link scheduler must re-evaluate BC > FCT > NChar > Null at every
       character boundary. Deeper in-order protocol-item prefetch could prevent a
       newly arrived higher-priority item from winning the next boundary.
   commit_order: preserve_accept_order
   commit_safety:
-    - no_commit_without_a_prior_uncommitted_accept
+    - commit_requires_matching_same_edge_accept_or_prior_pending_accept
     - no_duplicate_commit
     - accepted_item_kind_equals_committed_item_kind
+  nchar_fifo_reservation:
+    accept_without_same_edge_commit: "reserve TX FIFO head; do not pop"
+    while_reserved: "head remains immutable and shall not be re-issued or skipped"
+    matching_commit: "pop exactly one reserved TX FIFO entry on the commit edge"
+    same_edge_accept_commit: "pop exactly one selected TX FIFO entry on that edge"
+    accounting: "no tx_credit or tx_packet_open update on accept alone"
+  same_cycle_link_error_precedence:
+    rule: >
+      A matching commit asserted on the error-entry edge is irrevocable and is
+      accounted first. Link/Recovery error handling then uses the post-commit
+      tx_packet_open state. If no commit is asserted, the accepted-uncommitted
+      item is resolved by the pre-commit flush rules.
   semantic_use_of_commit:
     - TX_NChar_commit_decrements_tx_credit
     - FCT_commit_increments_rx_credit
@@ -171,7 +244,7 @@ encoding_to_datalink_rx:
   signals:
     - enc_rx_item_valid
     - enc_rx_item_kind
-    - enc_rx_data_7_0
+    - enc_rx_item_data_7_0
     - enc_got_null
     - enc_disconnect
     - enc_rx_error_valid
@@ -195,6 +268,23 @@ fifo_contract:
     depth_entries: 128
     depth_status: confirmed_v0_1_architecture_choice
     PortReset_action: clear
+    dequeue_contract:
+      accept: "reserve selected head; no pop unless matching commit is same-edge"
+      commit: "pop exactly one matching reserved/selected N-Char"
+      level_semantics: "physical occupancy includes an accepted-but-uncommitted reserved head"
+      reservation_blocks_reissue: true
+    precommit_flush_resolution:
+      packet_closed: >
+        Cancel the reservation and retain the N-Char in the TX FIFO for retry
+        after link re-initialisation. This covers a first DATA or empty-packet
+        terminator that was accepted but never committed.
+      packet_open: >
+        The reserved N-Char belongs to the unsent remainder of the current packet.
+        Discard it exactly once. If it is EOP/EEP, that discard terminates the
+        TX recovery spill; otherwise continue discarding through the first EOP/EEP.
+      non_FIFO_item: >
+        Flush pending FCT/NULL/BROADCAST_CODE without FIFO action or commit-side
+        accounting.
     recovery_behavior: >
       When a transmitted packet is open at error entry, discard queued entries
       through and including the first EOP or EEP belonging to that packet.
@@ -241,6 +331,65 @@ fifo_contract:
   broadcast_storage:
     tx: separate_one_entry_register_not_in_TX_FIFO
     rx: not_stored_in_NChar_RX_FIFO
+
+router_timeout_abort_engine:
+  classification: network_layer_timeout_support_without_link_reset
+  states: [IDLE, RESOLVE_PENDING, DISCARD_BUFFERED, ISSUE_EEP, WAIT_EEP_COMPLETE]
+  entry: "accepted net_tx_abort_valid && net_tx_abort_ready"
+  entry_actions:
+    - block_normal_net_tx_nchar_acceptance_for_this_output
+    - latch_abort_reason_ROUTER_TIMEOUT
+    - keep_LinkFSM_and_rx_path_operational
+  pending_resolution: >
+    If an accepted-but-uncommitted FIFO-backed N-Char of the active packet exists,
+    assert enc_tx_cancel_pending. A same-edge matching commit wins and is accounted;
+    otherwise enc_tx_cancel_ack allows the reserved FIFO entry to be discarded.
+    Pending FCT/NULL/BROADCAST_CODE is not canceled by Router timeout.
+  buffered_remainder: >
+    Discard all unsent FIFO-backed N-Chars belonging to the active Router packet.
+    Under the Router packet-level ownership contract no following Router packet
+    can already be queued on this output, so no packet tag is required for v0.1.
+  synthetic_EEP:
+    source: dedicated_abort_EEP_pending
+    fifo_storage: false
+    scheduler_class: NCHAR
+    prerequisites:
+      - LinkFSM_is_Run
+      - Recovery_is_Normal
+      - tx_credit_greater_than_zero
+      - no_accepted_uncommitted_external_item
+    accounting:
+      - EEP_commit_decrements_tx_credit
+      - EEP_commit_clears_tx_packet_open
+      - EEP_completion_generates_net_tx_packet_done_valid_kind_EEP
+      - EEP_completion_generates_net_tx_abort_done
+    credit_bypass: forbidden
+  link_error_collision: >
+    If a qualified link error occurs before synthetic EEP completion, link-error
+    recovery supersedes the Router-abort engine. No duplicate timeout EEP is sent;
+    net_tx_link_abort_valid terminates Router ownership and new-packet permission
+    remains low until normal link recovery permits it.
+  reset_priority:
+    - PortReset_or_external_reset
+    - qualified_link_error
+    - Router_timeout_abort
+    - normal_TX_operation
+
+router_packet_output_tracking:
+  active_set: "first DATA accepted from Network/Router while no Router packet active"
+  active_clear:
+    - matching_EOP_or_EEP_enc_tx_complete
+    - synthetic_abort_EEP_enc_tx_complete
+    - qualified_link_error_terminates_active_output_packet
+    - PortReset
+  distinction: >
+    router_packet_active tracks output-port packet ownership through local serial
+    transmission completion. It is deliberately distinct from tx_packet_open,
+    which tracks commit-level Data Link recovery state.
+  new_packet_ready_rule: >
+    Assert net_tx_new_packet_ready only when router_packet_active is false,
+    Router-timeout abort is idle, link-error Recovery permits a new packet, and
+    the normal Network-to-DataLink acceptance path has capacity.
 
 credit_contract:
   counter_width_bits: 6
@@ -295,10 +444,12 @@ tx_scheduler:
     - NCHAR
     - NULL
   NChar_enable:
-    all:
+    common:
       - "tx_credit > 0"
       - "Recovery == Normal"
-      - "tx_fifo_not_empty"
+    sources_in_order:
+      - "router_timeout_abort_EEP_pending"
+      - "normal_TX_FIFO_head_when_not_router_abort_active"
   recovery_note: >
     Link re-initialisation may proceed while TX packet spill is still active.
     FCT/Null and broadcast operation may continue according to link state, but no
@@ -412,10 +563,29 @@ reset_contract:
     enc_link_left_error_reset: "one-cycle pulse on ErrorReset -> ErrorWait transition"
     enc_link_rate_setting: "initial rate outside Run; configured operational rate in Run"
 
+packet_completion_events:
+  normal_terminal: >
+    A committed EOP/EEP closes tx_packet_open, but Router packet ownership remains
+    active until the matching enc_tx_complete_valid event confirms local serial
+    emission completion.
+  router_timeout_terminal: >
+    Synthetic EEP commit performs normal N-Char accounting; matching EEP completion
+    generates both net_tx_packet_done_valid and net_tx_abort_done.
+  wire_scope: >
+    Completion means the final symbol bits have been launched by the local
+    transmitter; it is not acknowledgement of remote reception.
+
 packet_tracking:
   tx_packet_open:
     set_on: "TX_DATA_commit when previously closed"
-    clear_on: "TX_EOP_or_EEP_commit"
+    clear_on:
+      - TX_EOP_or_EEP_commit
+      - recovery_discards_current_packet_EOP_or_EEP
+    error_entry_basis: >
+      Evaluate TX recovery spill after applying any same-edge irrevocable commit.
+      Therefore EOP/EEP commit on the error-entry edge closes the packet before
+      spill determination, while an accepted-but-uncommitted terminator is handled
+      by pre-commit flush/discard.
     purpose: recovery_remainder_discard
   rx_packet_open:
     set_on: "RX_DATA_written_to_RX_FIFO when previously closed"
@@ -423,7 +593,8 @@ packet_tracking:
     purpose: recovery_EEP_insertion
   note: >
     N-Chars from different packets shall never be interleaved. Recovery discard
-    stops exactly at the current packet terminator.
+    stops exactly at the current packet terminator and shall never consume the
+    first item of the following packet.
 
 management_and_status:
   control_inputs:
@@ -550,6 +721,44 @@ resolved_blocking_decisions:
     status: closed
 
 remaining_blocking_decisions_before_review: []
+
+network_router_timeout_closure:
+  review_ids: [NR-TECH-01, NR-DEC-02]
+  status: design_closed_verification_pending
+  decisions:
+    - packet_level_new_packet_ready_distinct_from_character_ready
+    - output_ownership_released_on_terminal_serial_completion_not_FIFO_enqueue
+    - router_timeout_abort_uses_explicit_DataLink_abort_handshake
+    - timeout_abort_does_not_reset_the_link
+    - synthetic_EEP_uses_normal_NChar_credit_and_Encoding_path
+    - one_active_Router_packet_per_output_removes_v0_1_packet_tag_requirement
+  directed_verification:
+    - normal_packet_terminal_enqueue_commit_complete_then_next_packet_start
+    - FIFO_full_current_packet_timeout_discard_buffered_remainder_and_send_EEP
+    - timeout_with_accepted_uncommitted_DATA_cancel_or_commit_race
+    - no_credit_at_timeout_EEP_waits_without_credit_bypass
+    - same_edge_DATA_progress_or_terminal_handshake_suppresses_timeout
+    - link_error_supersedes_timeout_abort_without_duplicate_EEP
+    - next_packet_never_enters_aborted_packet_discard_path
+
+cross_layer_closure:
+  review_id: CONTRACT-RVW-002
+  decisions:
+    - RTL-IF-X1_signal_and_item_kind_canonicalization_closed
+    - RTL-IF-X2_FIFO_reserve_pop_commit_timing_closed
+    - RTL-IF-X3_error_commit_and_EOP_flush_precedence_closed
+  semantic_baseline_changed: false
+  implementation_effect: >
+    Clarifies cycle-level ownership, rollback and recovery behavior only; no new
+    ECSS protocol behavior is introduced.
+  verification_required_before_main_merge:
+    - contract_YAML_parse
+    - directed_normal_DATA_accept_commit_pop_credit
+    - directed_normal_EOP_commit_closes_packet
+    - directed_pending_EOP_error_flush_preserves_next_packet
+    - directed_same_edge_EOP_commit_and_error_uses_post_commit_state
+    - directed_first_DATA_pending_error_retries_without_loss
+    - assertions_no_duplicate_pop_no_old_epoch_commit_recovery_never_discards_next_packet
 
 review_findings:
   - id: DL-RVW-001
