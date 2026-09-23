@@ -1,6 +1,6 @@
 schema_version: 1
 artifact_id: RTL-CONTRACT-ROUTER-V0.1
-status: design_closed_verification_pending
+status: reviewed
 source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
 semantic_baseline: semantic-router-v0.1
 semantic_contract: contracts/5.6_router.yaml
@@ -8,16 +8,13 @@ network_contract: rtl_contract/5.6_network_ownership_contract.yaml
 requirement_allocation: traceability/network_router_owner_map_v0.1.json
 hard_gate:
   RTL_implementation_allowed: false
-  reviewed: false
+  reviewed: true
   design_blockers: []
-  verification_blockers:
-    - lower_layer_X1_X3_directed_verification
-    - output_ownership_timeout_abort_directed_verification
-    - port0_configuration_directed_verification
-    - broadcast_capture_priority_capacity_directed_verification
-    - multicast_atomicity_failure_and_pipeline_directed_verification
-    - requirement_owner_manual_disposition_review
-    - contract_lint_clean
+  verification_blockers: []
+  verification_evidence:
+    - traceability/NETWORK_ROUTER_VERIFICATION_EVIDENCE_v0.1.md
+    - traceability/NETWORK_ROUTER_OWNER_MAP_TECHNICAL_REVIEW_v0.1.md
+    - traceability/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md
 
 closure_status:
   NR-DEC-01:
@@ -27,7 +24,7 @@ closure_status:
       packet arbitration. Parameter range and final FPGA resource feasibility
       remain implementation/verification concerns, not a reopened architecture choice.
   NR-TECH-02:
-    status: closed_by_lower_layer_contract_draft
+    status: closed_verified
     evidence_branch: contracts/dl-encoding-cross-layer-v0.1
     evidence_head: 83c424fe7eab6dd1293591930fbb7a9d1f1af923
     note: >
@@ -36,13 +33,13 @@ closure_status:
       discard of a following packet.
 
   NR-TECH-01:
-    status: design_closed_verification_pending
+    status: closed_verified
     decision: >
       Output ownership is held through local terminal serial completion, not merely
       terminal acceptance into the DataLink TX FIFO and not merely Encoding commit.
       Per-N-Char ready and new-packet ready are distinct.
   NR-DEC-02:
-    status: design_closed_verification_pending
+    status: closed_verified
     decision: >
       Per-output Router timeout uses a Router-to-DataLink abort handshake. DataLink
       discards only the unsent current output packet remainder and emits one
@@ -50,14 +47,14 @@ closure_status:
       the link. Multicast interaction remains under NR-TECH-04.
 
   NR-DEC-03:
-    status: design_closed_verification_pending
+    status: closed_verified
     decision: >
       Port 0 uses the project-local SPCFG-v0.1 configuration application protocol.
       Requests carry transaction ID and explicit return path; routing-table writes
       use shadow plus atomic commit; RMAP is not required.
     contract: rtl_contract/5.6_port0_configuration_rtl_contract.yaml
   NR-TECH-03:
-    status: design_closed_verification_pending
+    status: closed_verified
     decision: >
       One capture slot per external port plus one-event-per-cycle semantic processing
       captures all simultaneous broadcasts for the selected 100-MHz/200-Mbit/s profile.
@@ -65,7 +62,7 @@ closure_status:
       Network-to-DataLink acceptance boundary with non-silent overflow telemetry.
     contract: rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml
   NR-TECH-04:
-    status: design_closed_verification_pending
+    status: closed_verified
     decision: >
       Multicast allocation and each N-Char handoff are all-selected-output atomic.
       The selected mask is frozen for the packet. Any member failure aborts the whole

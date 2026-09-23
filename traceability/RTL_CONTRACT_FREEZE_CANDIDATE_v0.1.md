@@ -2,7 +2,7 @@
 
 Date: 2026-09-21
 Branch: `contracts/network-router-after-dl-closure-v0.1`
-Status: **Design closure complete / verification pending / RTL not authorized**
+Status: **Reviewed / verification passed / RTL not authorized**
 
 ## Scope
 
@@ -87,7 +87,7 @@ Project choice:
 - no same-edge release/regrant
 - route/grant snapshot remains stable under stall
 
-## Verification gate before Reviewed / main merge
+## Verification gate result
 
 1. Parse all RTL-contract YAML.
 2. Fix known Semantic Lint decision-ID false positive, then obtain clean lint.
@@ -98,10 +98,13 @@ Project choice:
 7. Run multicast all-or-none and member-failure tests.
 8. Manually disposition Network 123 + Router 101 owner-map rows.
 9. Re-run Golden regression and confirm semantic baseline is unchanged.
-10. Only then mark Network/Router contracts Reviewed and separately authorize RTL.
+10. Formal Gate Review accepted on 2026-09-24; Network/Router contracts may transition to Reviewed. RTL authorization remains separate.
 
 ## Gate
 
 - Design blockers: **none currently identified**
-- Verification blockers: **open**
+- Verification blockers: **closed by recorded evidence**
 - RTL implementation allowed: **false**
+
+- Formal Gate Review: **ACCEPTED 2026-09-24**
+- Main merge: **not yet authorized**

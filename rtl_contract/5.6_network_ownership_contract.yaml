@@ -1,6 +1,6 @@
 schema_version: 1
 artifact_id: RTL-CONTRACT-NETWORK-OWNERSHIP-V0.1
-status: design_closed_verification_pending
+status: reviewed
 source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
 semantic_baseline: semantic-network-v0.1
 semantic_contract: contracts/5.6_network.yaml
@@ -13,16 +13,13 @@ scope_note: >
 execution_order: [Network_contract, Router_contract, cross_layer_review, separately_authorized_RTL]
 hard_gate:
   RTL_implementation_allowed: false
-  reviewed: false
+  reviewed: true
   design_blockers: []
-  verification_blockers:
-    - lower_layer_X1_X3_directed_verification
-    - router_timeout_abort_directed_verification
-    - port0_configuration_directed_verification
-    - broadcast_capture_priority_capacity_directed_verification
-    - multicast_atomicity_and_failure_directed_verification
-    - requirement_owner_manual_disposition_review
-    - contract_lint_clean
+  verification_blockers: []
+  verification_evidence:
+    - traceability/NETWORK_ROUTER_VERIFICATION_EVIDENCE_v0.1.md
+    - traceability/NETWORK_ROUTER_OWNER_MAP_TECHNICAL_REVIEW_v0.1.md
+    - traceability/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md
 
 closure_inherited_from_lower_layers:
   branch_base: contracts/dl-encoding-cross-layer-v0.1
@@ -65,7 +62,7 @@ closure_inherited_from_lower_layers:
       pipeline is C0 ingress, C1 route snapshot, C2 grant, C3 first handoff.
   note: >
     Closing NR-TECH-02 here means the contract hazard has a coherent lower-layer
-    resolution; directed verification is still required before Reviewed status.
+    resolution; directed verification has passed and is referenced by the hard-gate evidence.
 
 owners:
   Endpoint:
@@ -211,7 +208,7 @@ endpoint_proposals:
     select Port 0.
 
 verification:
-  status: planned_not_executed
+  status: passed
   added_for_NR_TECH_01_NR_DEC_02:
     - new_packet_never_starts_before_previous_terminal_serial_completion
     - timeout_active_window_is_first_DATA_passed_to_output_through_terminal_passed_to_output

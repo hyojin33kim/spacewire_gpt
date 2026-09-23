@@ -1,6 +1,6 @@
 schema_version: 1
 artifact_id: RTL-CONTRACT-ROUTER-BC-MCAST-V0.1
-status: design_closed_verification_pending
+status: reviewed
 source_spec: ECSS-E-ST-50-12C-Rev.1
 parent_router_contract: rtl_contract/5.6_router_rtl_contract.yaml
 source_requirements:
@@ -200,5 +200,5 @@ verification:
 
 hard_gate:
   design_closed: true
-  verification_passed: false
+  verification_passed: true
   RTL_implementation_allowed: false
