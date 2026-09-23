@@ -33,7 +33,7 @@ YAML_DIRS = ("ontology", "requirements", "contracts", "verification", "traceabil
 ID_PATTERNS = {
     "requirement": re.compile(r"\bSPW-[A-Za-z0-9_.-]+\b"),
     "contract": re.compile(r"\bBC-[A-Za-z0-9_.-]+\b"),
-    "decision": re.compile(r"\bDEC-[A-Za-z0-9_.-]+\b"),
+    "decision": re.compile(r"(?<![A-Za-z0-9_-])DEC-[A-Za-z0-9_.-]+\b"),
     "issue": re.compile(r"\bCR-[A-Za-z0-9_.-]+\b"),
 }
 ENTITY_RE = re.compile(r"^[A-Z][A-Z0-9_]+$")
