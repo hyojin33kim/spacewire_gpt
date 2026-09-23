@@ -1,0 +1,40 @@
+name: RTL Contract Verification
+
+on:
+  push:
+    paths:
+      - "rtl_contract/**"
+      - "traceability/**"
+      - "verification/contracts/**"
+      - "tools/**"
+      - ".github/workflows/rtl-contract-verification.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "rtl_contract/**"
+      - "traceability/**"
+      - "verification/contracts/**"
+      - "tools/**"
+      - ".github/workflows/rtl-contract-verification.yml"
+
+jobs:
+  contract-verification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install YAML dependency
+        run: python -m pip install pyyaml
+      - name: Parse and run semantic structural lint
+        run: python tools/semantic_lint.py
+      - name: Run RTL contract directed tests
+        run: python -m unittest discover -s verification/contracts -p "test_*.py" -v
+      - name: Run Golden regression
+        run: python -m unittest discover -s verification/golden -p "test_*.py" -v
+      - name: Check Golden vector closure
+        run: python tools/golden_coverage_lint.py
+      - name: Check Golden invariant closure
+        run: python tools/golden_invariant_coverage_lint.py

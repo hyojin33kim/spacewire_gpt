@@ -124,10 +124,11 @@ datalink_to_encoding_tx:
     - enc_tx_item_valid
     - enc_tx_item_ready
     - enc_tx_item_kind
-    - enc_tx_data_7_0
+    - enc_tx_item_data_7_0
   item_kind: [DATA, EOP, EEP, FCT, NULL, BROADCAST_CODE]
   prohibited_request_kind:
     - raw_ESC
+  raw_ESC_owner: Encoding_internal_only
   acceptance: "request accepted on valid && ready"
   ready_semantics: >
     enc_tx_item_ready is not a generic buffer-space indication. It shall assert
@@ -140,24 +141,45 @@ datalink_to_encoding_tx:
     - enc_tx_commit_valid
     - enc_tx_commit_kind
   accept_definition: >
-    valid && ready transfers one protocol item into Encoding ownership but does
-    not mean that the item has been sent.
+    valid && ready accepts one protocol item for Encoding transmission but does
+    not mean that the item has been sent. For FIFO-backed N-Chars the selected
+    FIFO head becomes reserved and unavailable to the scheduler until commit or
+    an explicit pre-commit flush resolution.
   commit_definition: >
-    Pulse when the Encoding layer irrevocably removes the accepted item from its
-    pending slot and consumes it as the next serial character/control-code at a
-    character/control-code boundary. Commit is not wire-transmission completion.
+    Pulse when Encoding irrevocably consumes the accepted item as the next serial
+    character/control-code at a character/control-code boundary. Commit is not
+    wire-transmission completion.
+  same_edge_accept_commit:
+    allowed: true
+    rule: >
+      If accept and matching commit occur on the same rising edge, the item is
+      committed directly and never remains in accepted-uncommitted state.
   pending_rule:
     max_accepted_but_uncommitted_items: 1
     while_pending: "enc_tx_item_ready shall be deasserted"
+    pending_metadata: [valid, kind]
+    pending_is_terminator: "derived from pending kind == EOP or EEP; not an independent sticky state"
     rationale: >
       The Data Link scheduler must re-evaluate BC > FCT > NChar > Null at every
       character boundary. Deeper in-order protocol-item prefetch could prevent a
       newly arrived higher-priority item from winning the next boundary.
   commit_order: preserve_accept_order
   commit_safety:
-    - no_commit_without_a_prior_uncommitted_accept
+    - commit_requires_matching_same_edge_accept_or_prior_pending_accept
     - no_duplicate_commit
     - accepted_item_kind_equals_committed_item_kind
+  nchar_fifo_reservation:
+    accept_without_same_edge_commit: "reserve TX FIFO head; do not pop"
+    while_reserved: "head remains immutable and shall not be re-issued or skipped"
+    matching_commit: "pop exactly one reserved TX FIFO entry on the commit edge"
+    same_edge_accept_commit: "pop exactly one selected TX FIFO entry on that edge"
+    accounting: "no tx_credit or tx_packet_open update on accept alone"
+  same_cycle_link_error_precedence:
+    rule: >
+      A matching commit asserted on the error-entry edge is irrevocable and is
+      accounted first. Link/Recovery error handling then uses the post-commit
+      tx_packet_open state. If no commit is asserted, the accepted-uncommitted
+      item is resolved by the pre-commit flush rules.
   semantic_use_of_commit:
     - TX_NChar_commit_decrements_tx_credit
     - FCT_commit_increments_rx_credit
@@ -171,7 +193,7 @@ encoding_to_datalink_rx:
   signals:
     - enc_rx_item_valid
     - enc_rx_item_kind
-    - enc_rx_data_7_0
+    - enc_rx_item_data_7_0
     - enc_got_null
     - enc_disconnect
     - enc_rx_error_valid
@@ -195,6 +217,23 @@ fifo_contract:
     depth_entries: 128
     depth_status: confirmed_v0_1_architecture_choice
     PortReset_action: clear
+    dequeue_contract:
+      accept: "reserve selected head; no pop unless matching commit is same-edge"
+      commit: "pop exactly one matching reserved/selected N-Char"
+      level_semantics: "physical occupancy includes an accepted-but-uncommitted reserved head"
+      reservation_blocks_reissue: true
+    precommit_flush_resolution:
+      packet_closed: >
+        Cancel the reservation and retain the N-Char in the TX FIFO for retry
+        after link re-initialisation. This covers a first DATA or empty-packet
+        terminator that was accepted but never committed.
+      packet_open: >
+        The reserved N-Char belongs to the unsent remainder of the current packet.
+        Discard it exactly once. If it is EOP/EEP, that discard terminates the
+        TX recovery spill; otherwise continue discarding through the first EOP/EEP.
+      non_FIFO_item: >
+        Flush pending FCT/NULL/BROADCAST_CODE without FIFO action or commit-side
+        accounting.
     recovery_behavior: >
       When a transmitted packet is open at error entry, discard queued entries
       through and including the first EOP or EEP belonging to that packet.
@@ -415,7 +454,14 @@ reset_contract:
 packet_tracking:
   tx_packet_open:
     set_on: "TX_DATA_commit when previously closed"
-    clear_on: "TX_EOP_or_EEP_commit"
+    clear_on:
+      - TX_EOP_or_EEP_commit
+      - recovery_discards_current_packet_EOP_or_EEP
+    error_entry_basis: >
+      Evaluate TX recovery spill after applying any same-edge irrevocable commit.
+      Therefore EOP/EEP commit on the error-entry edge closes the packet before
+      spill determination, while an accepted-but-uncommitted terminator is handled
+      by pre-commit flush/discard.
     purpose: recovery_remainder_discard
   rx_packet_open:
     set_on: "RX_DATA_written_to_RX_FIFO when previously closed"
@@ -423,7 +469,8 @@ packet_tracking:
     purpose: recovery_EEP_insertion
   note: >
     N-Chars from different packets shall never be interleaved. Recovery discard
-    stops exactly at the current packet terminator.
+    stops exactly at the current packet terminator and shall never consume the
+    first item of the following packet.
 
 management_and_status:
   control_inputs:
@@ -550,6 +597,25 @@ resolved_blocking_decisions:
     status: closed
 
 remaining_blocking_decisions_before_review: []
+
+cross_layer_closure:
+  review_id: CONTRACT-RVW-002
+  decisions:
+    - RTL-IF-X1_signal_and_item_kind_canonicalization_closed
+    - RTL-IF-X2_FIFO_reserve_pop_commit_timing_closed
+    - RTL-IF-X3_error_commit_and_EOP_flush_precedence_closed
+  semantic_baseline_changed: false
+  implementation_effect: >
+    Clarifies cycle-level ownership, rollback and recovery behavior only; no new
+    ECSS protocol behavior is introduced.
+  verification_required_before_main_merge:
+    - contract_YAML_parse
+    - directed_normal_DATA_accept_commit_pop_credit
+    - directed_normal_EOP_commit_closes_packet
+    - directed_pending_EOP_error_flush_preserves_next_packet
+    - directed_same_edge_EOP_commit_and_error_uses_post_commit_state
+    - directed_first_DATA_pending_error_retries_without_loss
+    - assertions_no_duplicate_pop_no_old_epoch_commit_recovery_never_discards_next_packet
 
 review_findings:
   - id: DL-RVW-001
