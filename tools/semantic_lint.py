@@ -31,10 +31,10 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 YAML_DIRS = ("ontology", "requirements", "contracts", "verification", "traceability", "rtl_contract")
 ID_PATTERNS = {
-    "requirement": re.compile(r"\bSPW-[A-Za-z0-9_.-]+\b"),
-    "contract": re.compile(r"\bBC-[A-Za-z0-9_.-]+\b"),
+    "requirement": re.compile(r"(?<![A-Za-z0-9_-])SPW-[A-Za-z0-9_.-]+\b"),
+    "contract": re.compile(r"(?<![A-Za-z0-9_-])BC-[A-Za-z0-9_.-]+\b"),
     "decision": re.compile(r"(?<![A-Za-z0-9_-])DEC-[A-Za-z0-9_.-]+\b"),
-    "issue": re.compile(r"\bCR-[A-Za-z0-9_.-]+\b"),
+    "issue": re.compile(r"(?<![A-Za-z0-9_-])CR-[A-Za-z0-9_.-]+\b"),
 }
 ENTITY_RE = re.compile(r"^[A-Z][A-Z0-9_]+$")
 
