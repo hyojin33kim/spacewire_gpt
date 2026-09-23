@@ -36,5 +36,7 @@ jobs:
           python-version: "3.12"
       - name: Install linter dependency
         run: python -m pip install --disable-pip-version-check pyyaml
+      - name: Run semantic lint regex unit tests
+        run: python -m unittest tools/test_semantic_lint_regex.py -v
       - name: Run semantic structural lint
         run: python tools/semantic_lint.py
