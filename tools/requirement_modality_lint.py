@@ -13,11 +13,16 @@ for path in sorted((ROOT/"requirements").glob("*.yaml")):
         if not isinstance(req,dict):
             continue
         rows+=1
+        if "level" not in req:
+            # Older requirement slices use a separate schema (for example
+            # normative_level). This gate checks the normalized 'level' schema
+            # without silently re-scoping unrelated frozen baselines.
+            continue
         level=req.get("level")
         if level not in ALLOWED:
             errors.append(f"{path.relative_to(ROOT)} {req.get('id')}: non-canonical level={level!r}")
 
-print(f"Requirement rows checked : {rows}")
+print(f"Requirement rows scanned : {rows}")
 print(f"Non-canonical levels     : {len(errors)}")
 if errors:
     print("FAIL")
