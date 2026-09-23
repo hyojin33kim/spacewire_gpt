@@ -68,7 +68,7 @@ requirements:
   - {id: SPW-5.6.6-e, clause: "5.6.6.e", level: SHALL, behavior: endpoint_passes_received_packets_to_host}
   - {id: SPW-5.6.6-f, clause: "5.6.6.f", level: SHALL, behavior: timecode_master_endpoint_accepts_host_timecodes}
   - {id: SPW-5.6.6-g, clause: "5.6.6.g", level: SHALL, behavior: timecode_endpoint_passes_received_timecodes_to_host}
-  - {id: SPW-5.6.6-h, clause: "5.6.6.h", level: SHALL_OPTIONAL, behavior: endpoint_optional_timecode_register, selected: true}
+  - {id: SPW-5.6.6-h, clause: "5.6.6.h", level: SHALL, modality_origin: direct, applicability: optional_endpoint_timecode_register, behavior: endpoint_optional_timecode_register, selected: true}
   - {id: SPW-5.6.6-i, clause: "5.6.6.i", level: SHALL, behavior: interrupt_endpoint_passes_received_interrupts_to_host}
   - {id: SPW-5.6.6-j, clause: "5.6.6.j", level: SHALL, behavior: interrupt_endpoint_accepts_interrupt_and_ack_codes_from_host}
   - {id: SPW-5.6.10-a, clause: "5.6.10.a", level: SHALL, behavior: network_has_one_or_more_nodes_zero_or_more_routing_switches}
@@ -82,22 +82,22 @@ requirements:
   - {id: SPW-5.6.4.4-c2, clause: "5.6.4.4.c.2", level: SHALL, behavior: timecode_master_loads_register_with_value_to_send}
   - {id: SPW-5.6.4.4-c3, clause: "5.6.4.4.c.3", level: SHALL, behavior: timecode_master_requests_redundant_endpoints_to_send_same_value_at_same_time}
 
-  - {id: SPW-5.6.5.1-b, clause: "5.6.5.1.b", level: SHOULD_CONDITIONAL, behavior: unsupported_distributed_interrupts_are_ignored, selected: not_applicable_feature_enabled}
+  - {id: SPW-5.6.5.1-b, clause: "5.6.5.1.b", level: SHOULD, modality_origin: direct, applicability: distributed_interrupts_not_supported, behavior: unsupported_distributed_interrupts_are_ignored, selected: not_applicable_feature_enabled}
   - {id: SPW-5.6.5.2-d, clause: "5.6.5.2.d", level: SHALL, behavior: interrupt_code_associated_with_one_of_32_interrupts_by_IID}
   - {id: SPW-5.6.5.4-e, clause: "5.6.5.4.e", level: SHALL, behavior: received_interrupt_code_informs_host_of_matching_IID}
-  - {id: SPW-5.6.5.6-a, clause: "5.6.5.6.a", level: SHALL_CONDITIONAL, behavior: ack_mode_node_conforms_to_interrupt_node_rules, selected: true}
-  - {id: SPW-5.6.5.6-d, clause: "5.6.5.6.d", level: SHOULD_CONDITIONAL, behavior: node_without_ack_send_support_discards_host_ack_requests, selected: not_applicable_feature_enabled}
-  - {id: SPW-5.6.5.6-h, clause: "5.6.5.6.h", level: SHOULD_CONDITIONAL, behavior: node_without_ack_receive_support_discards_received_ack_codes, selected: not_applicable_feature_enabled}
+  - {id: SPW-5.6.5.6-a, clause: "5.6.5.6.a", level: SHALL, modality_origin: direct, applicability: node_supports_distributed_interrupts_in_acknowledgement_mode, behavior: ack_mode_node_conforms_to_interrupt_node_rules, selected: true}
+  - {id: SPW-5.6.5.6-d, clause: "5.6.5.6.d", level: SHOULD, modality_origin: direct, applicability: node_does_not_support_sending_interrupt_acknowledgements, behavior: node_without_ack_send_support_discards_host_ack_requests, selected: not_applicable_feature_enabled}
+  - {id: SPW-5.6.5.6-h, clause: "5.6.5.6.h", level: SHOULD, modality_origin: direct, applicability: node_does_not_support_receiving_interrupt_acknowledgements, behavior: node_without_ack_receive_support_discards_received_ack_codes, selected: not_applicable_feature_enabled}
 
   - {id: SPW-5.6.6-c1, clause: "5.6.6.c.1", level: SHALL, behavior: endpoint_has_one_host_interface}
   - {id: SPW-5.6.6-c2, clause: "5.6.6.c.2", level: SHALL, behavior: endpoint_has_one_port_of_spacewire_fifo_or_configuration_type}
-  - {id: SPW-5.6.6-k, clause: "5.6.6.k", level: SHALL_CONDITIONAL, behavior: configuration_port_connects_to_host_configuration_application, selected: supported_capability}
+  - {id: SPW-5.6.6-k, clause: "5.6.6.k", level: SHALL, modality_origin: direct, applicability: node_has_configuration_port, behavior: configuration_port_connects_to_host_configuration_application, selected: supported_capability}
   - {id: SPW-5.6.7-a, clause: "5.6.7.a", level: SHALL, behavior: node_provides_port_management_parameters_from_data_link_encoding_and_physical_layers}
 
-  - {id: SPW-5.6.8.10-a, clause: "5.6.8.10.a", level: SHALL_OPTIONAL, behavior: source_node_packet_multicast_optional, selected: true}
+  - {id: SPW-5.6.8.10-a, clause: "5.6.8.10.a", level: SHALL, modality_origin: direct, applicability: optional_source_node_packet_multicast, behavior: source_node_packet_multicast_optional, selected: true}
 
   - {id: SPW-5.6.10-b, clause: "5.6.10.b", level: SHALL, behavior: network_sends_packets_from_each_source_to_one_or_more_destination_nodes}
   - {id: SPW-5.6.10-c, clause: "5.6.10.c", level: SHALL, behavior: source_node_packets_travel_over_link_to_router_or_destination}
   - {id: SPW-5.6.10-d, clause: "5.6.10.d", level: SHALL, behavior: router_packets_travel_over_links_to_router_or_destination}
-  - {id: SPW-5.6.10-e, clause: "5.6.10.e", level: SHALL_OPTIONAL, behavior: network_supports_timecode_and_distributed_interrupt_broadcast_as_options, selected: true}
+  - {id: SPW-5.6.10-e, clause: "5.6.10.e", level: SHALL, modality_origin: direct, applicability: optional_network_timecode_and_distributed_interrupt_broadcast, behavior: network_supports_timecode_and_distributed_interrupt_broadcast_as_options, selected: true}
   - {id: SPW-5.6.10-f, clause: "5.6.10.f", level: SHOULD, behavior: test_loopback_port_should_be_possible, selected: true}

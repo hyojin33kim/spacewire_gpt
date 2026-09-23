@@ -304,10 +304,11 @@
       "selected": "false_as_not_applicable",
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "timecode",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -320,10 +321,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "timecode",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -384,10 +386,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "timecode",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -434,10 +437,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "timecode",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -450,10 +454,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "timecode",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -466,10 +471,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "timecode",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -514,10 +520,11 @@
       "selected": "true",
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -530,10 +537,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -546,10 +554,11 @@
       "selected": "both_configurable",
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -580,10 +589,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -596,10 +606,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -612,10 +623,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -628,10 +640,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -644,10 +657,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -660,10 +674,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -676,10 +691,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -933,7 +949,7 @@
       "requirement_id": "SPW-5.6.6-h",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.6.h",
-      "level": "SHALL_OPTIONAL",
+      "level": "SHALL",
       "source_behavior": "endpoint_optional_timecode_register",
       "selected": "true",
       "primary_owner": "Endpoint",
@@ -1114,15 +1130,16 @@
       "requirement_id": "SPW-5.6.5.1-b",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.5.1.b",
-      "level": "SHOULD_CONDITIONAL",
+      "level": "SHOULD",
       "source_behavior": "unsupported_distributed_interrupts_are_ignored",
       "selected": "not_applicable_feature_enabled",
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -1135,10 +1152,11 @@
       "selected": null,
       "primary_owner": "Endpoint",
       "collaborating_owners": [
-        "DataLink"
+        "DataLink",
+        "Router"
       ],
       "contract_group": "interrupt",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -1162,7 +1180,7 @@
       "requirement_id": "SPW-5.6.5.6-a",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.5.6.a",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "ack_mode_node_conforms_to_interrupt_node_rules",
       "selected": "true",
       "primary_owner": "Endpoint",
@@ -1178,7 +1196,7 @@
       "requirement_id": "SPW-5.6.5.6-d",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.5.6.d",
-      "level": "SHOULD_CONDITIONAL",
+      "level": "SHOULD",
       "source_behavior": "node_without_ack_send_support_discards_host_ack_requests",
       "selected": "not_applicable_feature_enabled",
       "primary_owner": "Endpoint",
@@ -1194,7 +1212,7 @@
       "requirement_id": "SPW-5.6.5.6-h",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.5.6.h",
-      "level": "SHOULD_CONDITIONAL",
+      "level": "SHOULD",
       "source_behavior": "node_without_ack_receive_support_discards_received_ack_codes",
       "selected": "not_applicable_feature_enabled",
       "primary_owner": "Endpoint",
@@ -1242,7 +1260,7 @@
       "requirement_id": "SPW-5.6.6-k",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.6.k",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "configuration_port_connects_to_host_configuration_application",
       "selected": "supported_capability",
       "primary_owner": "ConfigurationManagement",
@@ -1276,7 +1294,7 @@
       "requirement_id": "SPW-5.6.8.10-a",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.8.10.a",
-      "level": "SHALL_OPTIONAL",
+      "level": "SHALL",
       "source_behavior": "source_node_packet_multicast_optional",
       "selected": "true",
       "primary_owner": "Endpoint",
@@ -1346,7 +1364,7 @@
       "requirement_id": "SPW-5.6.10-e",
       "source_file": "requirements/5.6_network.yaml",
       "clause": "5.6.10.e",
-      "level": "SHALL_OPTIONAL",
+      "level": "SHALL",
       "source_behavior": "network_supports_timecode_and_distributed_interrupt_broadcast_as_options",
       "selected": "true",
       "primary_owner": "SystemIntegration",
@@ -2107,7 +2125,7 @@
       "requirement_id": "SPW-RTR-5.6.8.1-b5",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.1.b.5",
-      "level": "OPTIONAL_CARDINALITY",
+      "level": "SHALL",
       "source_behavior": "zero_or_one_timecode_register",
       "selected": "one",
       "primary_owner": "Router",
@@ -2124,7 +2142,7 @@
       "requirement_id": "SPW-RTR-5.6.8.1-b6",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.1.b.6",
-      "level": "OPTIONAL_CARDINALITY",
+      "level": "SHALL",
       "source_behavior": "zero_or_one_interrupt_relay_register",
       "selected": "one",
       "primary_owner": "Router",
@@ -2141,7 +2159,7 @@
       "requirement_id": "SPW-RTR-5.6.8.1-c",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.1.c",
-      "level": "SHALL_IF_PRESENT",
+      "level": "SHALL",
       "source_behavior": "relay_valid_timecodes",
       "selected": "true",
       "primary_owner": "Router",
@@ -2158,7 +2176,7 @@
       "requirement_id": "SPW-RTR-5.6.8.1-d",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.1.d",
-      "level": "SHALL_IF_PRESENT",
+      "level": "SHALL",
       "source_behavior": "relay_distributed_interrupts",
       "selected": "true",
       "primary_owner": "Router",
@@ -2753,7 +2771,7 @@
       "requirement_id": "SPW-RTR-5.6.8.9-a",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.9.a",
-      "level": "SHALL_OPTIONAL",
+      "level": "SHALL",
       "source_behavior": "group_adaptive_optional",
       "selected": "true",
       "primary_owner": "Router",
@@ -2770,7 +2788,7 @@
       "requirement_id": "SPW-RTR-5.6.8.9-b",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.9.b",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "logical_address_may_route_to_one_of_several_ports",
       "selected": null,
       "primary_owner": "Router",
@@ -2787,7 +2805,7 @@
       "requirement_id": "SPW-RTR-5.6.8.9-c",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.9.c",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "choose_free_port_from_configured_set_else_arbitrate_when_ports_free",
       "selected": null,
       "primary_owner": "Router",
@@ -2821,7 +2839,7 @@
       "requirement_id": "SPW-RTR-5.6.8.10-b",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.10.b",
-      "level": "SHALL_OPTIONAL",
+      "level": "SHALL",
       "source_behavior": "router_multicast_optional",
       "selected": "true",
       "primary_owner": "Router",
@@ -2838,7 +2856,7 @@
       "requirement_id": "SPW-RTR-5.6.8.10-c1",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.10.c.1",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "table_configures_multicast_port_set",
       "selected": null,
       "primary_owner": "Router",
@@ -2855,7 +2873,7 @@
       "requirement_id": "SPW-RTR-5.6.8.10-c2",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.10.c.2",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "multicast_packet_to_each_port_in_set",
       "selected": null,
       "primary_owner": "Router",
@@ -2872,7 +2890,7 @@
       "requirement_id": "SPW-RTR-5.6.8.10-c3",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.10.c.3",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "start_multicast_only_when_all_designated_ports_ready",
       "selected": null,
       "primary_owner": "Router",
@@ -2889,7 +2907,7 @@
       "requirement_id": "SPW-RTR-5.6.8.10-c4",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.8.10.c.4",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "during_multicast_wait_until_all_ports_ready_for_each_NChar",
       "selected": null,
       "primary_owner": "Router",
@@ -3131,7 +3149,7 @@
       "requirement_id": "SPW-RTR-INT-RELAY",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "first_interrupt_sets_IID_bit_relays_except_ingress_then_timeout_clears_duplicate",
       "selected": null,
       "primary_owner": "Router",
@@ -3148,7 +3166,7 @@
       "requirement_id": "SPW-RTR-ACK-RELAY",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7",
-      "level": "SHALL_IF_SUPPORTED",
+      "level": "SHALL",
       "source_behavior": "ack_for_active_IID_clears_bit_and_relays_except_ingress",
       "selected": null,
       "primary_owner": "Router",
@@ -3189,10 +3207,11 @@
       "collaborating_owners": [
         "Router",
         "DataLink",
-        "Encoding"
+        "Encoding",
+        "Physical"
       ],
       "contract_group": "management",
-      "allocation_status": "draft_requires_review",
+      "allocation_status": "approved_owner_disposition",
       "verification_status": "planned_not_executed",
       "evidence_status": "repository_requirement_imported_not_independently_revalidated"
     },
@@ -3200,7 +3219,7 @@
       "requirement_id": "SPW-RTR-5.6.4.6-a1",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.4.6.a.1",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "valid_timecode_relay_same_value_to_all_outputs_except_ingress",
       "selected": "true",
       "primary_owner": "Router",
@@ -3217,7 +3236,7 @@
       "requirement_id": "SPW-RTR-5.6.4.6-a2",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.4.6.a.2",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "valid_timecode_updates_router_timecode_register",
       "selected": "true",
       "primary_owner": "Router",
@@ -3234,7 +3253,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-a",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.a",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "each_port_configurable_interrupt_receive_and_send_enable",
       "selected": "true",
       "primary_owner": "Router",
@@ -3251,7 +3270,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-b",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.b",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "interrupt_receive_disabled_port_discards_interrupt_codes",
       "selected": "true",
       "primary_owner": "Router",
@@ -3268,7 +3287,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-c",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.c",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "interrupt_send_disabled_port_sends_no_interrupt_codes",
       "selected": "true",
       "primary_owner": "Router",
@@ -3285,7 +3304,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-d",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.d",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "interrupt_relay_register_has_32_bits_one_per_IID",
       "selected": "true",
       "primary_owner": "Router",
@@ -3319,7 +3338,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-f",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.f",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "reset_clears_interrupt_relay_register",
       "selected": "true",
       "primary_owner": "Router",
@@ -3336,7 +3355,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-g",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.g",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "relay_register_bit_N_represents_IID_N_state",
       "selected": "true",
       "primary_owner": "Router",
@@ -3353,7 +3372,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-h",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.h",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "each_interrupt_relay_bit_has_own_timeout_timer",
       "selected": "true",
       "primary_owner": "Router",
@@ -3370,7 +3389,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-i",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.i",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "interrupt_timeout_interval_configurable",
       "selected": "true",
       "primary_owner": "Router",
@@ -3387,7 +3406,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-j",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.j",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "interrupt_mode_TR_exceeds_worst_case_interrupt_propagation",
       "selected": "true",
       "primary_owner": "Router",
@@ -3404,7 +3423,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-k",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.k",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "ack_mode_TRA_exceeds_interrupt_propagation_plus_ack_generation_plus_ack_propagation",
       "selected": "true",
       "primary_owner": "Router",
@@ -3421,7 +3440,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-l1",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.l.1",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "received_interrupt_checks_IID_relay_bit",
       "selected": "true",
       "primary_owner": "Router",
@@ -3438,7 +3457,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-l2",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.l.2",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "unsupported_IID_is_discarded_if_relay_register_shorter",
       "selected": "not_applicable_full_32bit",
       "primary_owner": "Router",
@@ -3455,7 +3474,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-l3a",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.l.3.a",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "inactive_IID_bit_set_on_first_interrupt",
       "selected": "true",
       "primary_owner": "Router",
@@ -3472,7 +3491,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-l3b",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.l.3.b",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "first_interrupt_relayed_to_all_enabled_outputs_except_ingress",
       "selected": "true",
       "primary_owner": "Router",
@@ -3489,7 +3508,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-l3c",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.l.3.c",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "first_interrupt_starts_IID_timeout_timer",
       "selected": "true",
       "primary_owner": "Router",
@@ -3506,7 +3525,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-l4",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.l.4",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "duplicate_active_interrupt_discarded",
       "selected": "true",
       "primary_owner": "Router",
@@ -3523,7 +3542,7 @@
       "requirement_id": "SPW-RTR-5.6.5.5-m",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.5.m",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "interrupt_timeout_clears_corresponding_relay_bit",
       "selected": "true",
       "primary_owner": "Router",
@@ -3540,7 +3559,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-a",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.a",
-      "level": "SHOULD_CONDITIONAL",
+      "level": "SHOULD",
       "source_behavior": "router_without_ack_mode_discards_received_ack_codes",
       "selected": "not_applicable_feature_enabled",
       "primary_owner": "Router",
@@ -3557,7 +3576,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-b",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.b",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "each_port_configurable_ack_receive_and_send_enable",
       "selected": "true",
       "primary_owner": "Router",
@@ -3574,7 +3593,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-c",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.c",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "ack_receive_disabled_port_discards_ack_codes",
       "selected": "true",
       "primary_owner": "Router",
@@ -3591,7 +3610,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-d",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.d",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "ack_send_disabled_port_sends_no_ack_codes",
       "selected": "true",
       "primary_owner": "Router",
@@ -3608,7 +3627,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-e",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.e",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "ack_mode_uses_configurable_TRA_timeout",
       "selected": "true",
       "primary_owner": "Router",
@@ -3625,7 +3644,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-f",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.f",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "TRA_exceeds_network_interrupt_propagation_plus_handler_delay_plus_ack_propagation",
       "selected": "true",
       "primary_owner": "Router",
@@ -3642,7 +3661,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-g1",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.g.1",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "unsupported_ack_IID_discarded_if_register_shorter",
       "selected": "not_applicable_full_32bit",
       "primary_owner": "Router",
@@ -3659,7 +3678,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-g2a",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.g.2.a",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "active_IID_ack_clears_relay_bit",
       "selected": "true",
       "primary_owner": "Router",
@@ -3676,7 +3695,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-g2b",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.g.2.b",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "active_IID_ack_relayed_to_all_enabled_outputs_except_ingress",
       "selected": "true",
       "primary_owner": "Router",
@@ -3693,7 +3712,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-g2c",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.g.2.c",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "active_IID_ack_stops_and_resets_timeout_timer",
       "selected": "true",
       "primary_owner": "Router",
@@ -3710,7 +3729,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-g3",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.g.3",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "ack_for_inactive_IID_is_ignored",
       "selected": "true",
       "primary_owner": "Router",
@@ -3727,7 +3746,7 @@
       "requirement_id": "SPW-RTR-5.6.5.7-h",
       "source_file": "requirements/5.6_router.yaml",
       "clause": "5.6.5.7.h",
-      "level": "SHALL_CONDITIONAL",
+      "level": "SHALL",
       "source_behavior": "timeout_clears_relay_bit_in_ack_mode",
       "selected": "true",
       "primary_owner": "Router",
@@ -3754,6 +3773,11 @@
         "approval": "user_approved"
       }
     ],
-    "overall_manual_review_status": "pending_full_224_row_disposition"
+    "overall_manual_review_status": "technical_review_complete_all_dispositions_applied_pending_formal_acceptance",
+    "approved_2026_09_24": {
+      "owner_collaborator_dispositions": 19,
+      "modality_normalization_policy": "approved",
+      "behavior_change": false
+    }
   }
 }

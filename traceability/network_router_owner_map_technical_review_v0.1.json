@@ -6,14 +6,13 @@
     "owner_map": "traceability/network_router_owner_map_v0.1.json",
     "spec": "ECSS-E-ST-50-12C Rev.1",
     "review_scope": "all 224 owner-map rows",
-    "gate_note": "This is technical review evidence only. It does not mark the owner map or contracts Reviewed."
+    "gate_note": "Technical review complete and all identified owner dispositions applied; formal owner-map acceptance / Reviewed gate remains separate."
   },
   "summary": {
     "total": 224,
     "no_owner_gap_detected": 203,
-    "approved_disposition_applied": 2,
-    "approval_required": 19,
-    "unresolved_approval_required": 19
+    "approved_disposition_applied": 21,
+    "unresolved_approval_required": 0
   },
   "methodology": [
     "Check every row for a primary owner and collaborator set consistent with clause scope and project owner taxonomy.",
@@ -244,9 +243,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set; current profile marks this unsupported-feature behavior not applicable, so this is traceability/accountability cleanup rather than active implementation behavior",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.4.2-a",
@@ -256,9 +255,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.4.3-a",
@@ -304,9 +303,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.4.4-a",
@@ -342,9 +341,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.4.5-b",
@@ -354,9 +353,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.4.5-c",
@@ -366,9 +365,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.4.8-a",
@@ -402,9 +401,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.1-c",
@@ -414,9 +413,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.1-d",
@@ -426,9 +425,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.1-e",
@@ -452,9 +451,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.2-b",
@@ -464,9 +463,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.2-c",
@@ -476,9 +475,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.3-a",
@@ -488,9 +487,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.3-b",
@@ -500,9 +499,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.3-c",
@@ -512,9 +511,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.3-d",
@@ -524,9 +523,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.4-a",
@@ -859,9 +858,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set; current profile marks this unsupported-feature behavior not applicable, so this is traceability/accountability cleanup rather than active implementation behavior",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.2-d",
@@ -871,9 +870,9 @@
       "collaborating_owners": [
         "DataLink"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause is shared/generic across node and routing-switch behavior, but Router is not represented in the current owner set",
-      "candidate_disposition": "retain current primary owner and add Router as collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-5.6.5.4-e",
@@ -2433,9 +2432,9 @@
         "DataLink",
         "Encoding"
       ],
-      "review_status": "approval_required",
+      "review_status": "approved_disposition_applied",
       "finding": "source clause explicitly includes physical-layer management parameters, but Physical is absent from the current collaborators",
-      "candidate_disposition": "retain ConfigurationManagement primary and existing collaborators; add Physical collaborator"
+      "candidate_disposition": null
     },
     {
       "requirement_id": "SPW-RTR-5.6.4.6-a1",

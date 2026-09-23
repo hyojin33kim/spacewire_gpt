@@ -32,6 +32,8 @@ jobs:
         run: python -m unittest tools/test_semantic_lint_regex.py -v
       - name: Run semantic structural lint
         run: python tools/semantic_lint.py
+      - name: Check exact requirement modalities
+        run: python tools/requirement_modality_lint.py
       - name: Check Network Router owner map structural closure
         run: python tools/rtl_contract_owner_map_lint.py
       - name: Run RTL contract directed tests

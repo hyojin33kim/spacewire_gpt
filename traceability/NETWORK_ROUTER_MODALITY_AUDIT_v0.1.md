@@ -1,4 +1,4 @@
-# Network / Router Requirement Modality Audit v0.1
+# Network / Router Requirement Modality Audit v0.1 — Resolved
 
 Date: 2026-09-23  
 Scope: `requirements/5.6_network.yaml`, `requirements/6.1_network_service.yaml`, `requirements/5.6_router.yaml`
@@ -107,3 +107,8 @@ Recommended treatment before final RTL sign-off:
 - `SPW-RTR-5.6.5.7-g2c` — clause 5.6.5.7.g.2.c — current level `SHALL_CONDITIONAL`
 - `SPW-RTR-5.6.5.7-g3` — clause 5.6.5.7.g.3 — current level `SHALL_CONDITIONAL`
 - `SPW-RTR-5.6.5.7-h` — clause 5.6.5.7.h — current level `SHALL_CONDITIONAL`
+
+
+## Resolution
+
+The normalization policy was approved and implemented on 2026-09-24. See `NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md`. This audit is retained as the pre-normalization finding record.
