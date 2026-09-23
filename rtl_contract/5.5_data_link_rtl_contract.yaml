@@ -193,7 +193,7 @@ encoding_to_datalink_rx:
   signals:
     - enc_rx_item_valid
     - enc_rx_item_kind
-    - enc_rx_data_7_0
+    - enc_rx_item_data_7_0
     - enc_got_null
     - enc_disconnect
     - enc_rx_error_valid
