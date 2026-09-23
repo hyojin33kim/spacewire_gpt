@@ -10,7 +10,10 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 MAP_PATH = ROOT / "traceability" / "network_router_owner_map_v0.1.json"
-NETWORK_REQ = ROOT / "requirements" / "5.6_network.yaml"
+NETWORK_REQ_FILES = [
+    ROOT / "requirements" / "5.6_network.yaml",
+    ROOT / "requirements" / "6.1_network_service.yaml",
+]
 ROUTER_REQ = ROOT / "requirements" / "5.6_router.yaml"
 
 ALLOWED_OWNERS = {
@@ -37,8 +40,10 @@ def main() -> int:
     rows = data.get("requirements", [])
     errors: list[str] = []
 
-    network_ids = req_ids(NETWORK_REQ)
+    network_file_ids = {str(p.relative_to(ROOT)): req_ids(p) for p in NETWORK_REQ_FILES}
+    network_ids = set().union(*network_file_ids.values())
     router_ids = req_ids(ROUTER_REQ)
+    router_path = str(ROUTER_REQ.relative_to(ROOT))
     expected = network_ids | router_ids
     mapped = [r.get("requirement_id") for r in rows if isinstance(r, dict)]
     mapped_set = {x for x in mapped if isinstance(x, str)}
@@ -74,13 +79,13 @@ def main() -> int:
         src = row.get("source_file")
         source_counts[src] += 1
 
-        expected_src = (
-            "requirements/5.6_network.yaml"
-            if rid in network_ids
-            else "requirements/5.6_router.yaml"
-            if rid in router_ids
-            else None
-        )
+        expected_src = None
+        for path, ids in network_file_ids.items():
+            if rid in ids:
+                expected_src = path
+                break
+        if rid in router_ids:
+            expected_src = router_path
         if src != expected_src:
             errors.append(f"{rid}: source_file={src!r}, expected={expected_src!r}")
 
