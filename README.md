@@ -73,6 +73,6 @@ generated/
 
 ## Design Flow Diagram
 
-![SpaceWire Spec2RTL Design Flow](./docs/spacewire_spec2rtl_design_flow.png)
+![SpaceWire Spec2RTL Design Flow](./docs/SpaceWire%20Spec2RTL%20설계%20플로우%20인포그래픽.png)
 
 Detailed view: `docs/SpaceWire_Spec2RTL_Flow.md`
