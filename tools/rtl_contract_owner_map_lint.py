@@ -9,7 +9,7 @@ import sys
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-MAP_PATH = ROOT / "traceability" / "network_router_owner_map_v0.1.json"
+MAP_PATH = ROOT / "traceability" / "coverage" / "network_router_owner_map_v0.1.json"
 NETWORK_REQ_FILES = [
     ROOT / "requirements" / "5.6_network.yaml",
     ROOT / "requirements" / "6.1_network_service.yaml",
