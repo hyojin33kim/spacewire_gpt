@@ -54,5 +54,5 @@ coverage_rules:
   - every_atomic_requirement_maps_to_at_least_one_behavior_contract
   - every_concrete_pre_golden_vector_maps_to_a_Golden_validation_method
   - every_DataLink_Network_Router_pre_golden_invariant_maps_to_a_validation_method
-  - source_wording_anomalies_are_recorded_in_traceability/spec_issues.yaml
+  - source_wording_anomalies_are_recorded_in_traceability/decisions/spec_issues.yaml
   - optional_features_are_fixed_by_profiles/golden_optional_features_v0.1.yaml

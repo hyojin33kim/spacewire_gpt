@@ -24,11 +24,11 @@ frozen_artifacts:
   - {path: "contracts/5.4_serialization_interface.yaml", sha: "97a8eacd0e1a54a68b3af854aa2661fe02595052"}
   - {path: "contracts/5.4_signalling_rate.yaml", sha: "3da135c21878fabf2fcc6caf9b3a33f6b09457fe"}
   - {path: "verification/pre_golden/5.4_encoding_vectors.yaml", sha: "c0afcc9c1e80d4bafc5676ad8bfd95e0f13fac47"}
-  - {path: "traceability/5.4_encoding_coverage.yaml", sha: "d95829bf3165d12c9a9f012119a22440ac374fc1"}
-  - {path: "traceability/5.4_boundary_ownership.yaml", sha: "1c3071517cdca4f5c3da76d44e2891a68886f5a7"}
-  - {path: "traceability/interpretation_decisions.yaml", sha: "1624a409d6f3448b67f3b2917a0c23e1529292be"}
-  - {path: "traceability/spec_issues.yaml", sha: "748532367f3b2addb0e73edc8a99ad1f832a0c84"}
-  - {path: "traceability/ENCODING_V0.1_GATE_REVIEW.md", sha: "88f3bfc1ea0c9e11387cfadd9cd58eec6bd0c2d2"}
+  - {path: "traceability/coverage/5.4_encoding_coverage.yaml", sha: "d95829bf3165d12c9a9f012119a22440ac374fc1"}
+  - {path: "traceability/coverage/5.4_boundary_ownership.yaml", sha: "1c3071517cdca4f5c3da76d44e2891a68886f5a7"}
+  - {path: "traceability/decisions/interpretation_decisions.yaml", sha: "1624a409d6f3448b67f3b2917a0c23e1529292be"}
+  - {path: "traceability/decisions/spec_issues.yaml", sha: "748532367f3b2addb0e73edc8a99ad1f832a0c84"}
+  - {path: "traceability/reviews/ENCODING_V0.1_GATE_REVIEW.md", sha: "88f3bfc1ea0c9e11387cfadd9cd58eec6bd0c2d2"}
   - {path: "tools/semantic_lint.py", sha: "a03536ff452ca7f222061a6e3f0998273582263b"}
 
 non_blocking_source_issues:
