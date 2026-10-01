@@ -5,16 +5,16 @@ source_commit: eabd632b6e055758c371781fd10610e0c73e8d23
 semantic_baseline: semantic-router-v0.1
 semantic_contract: contracts/5.6_router.yaml
 network_contract: rtl_contract/5.6_network_ownership_contract.yaml
-requirement_allocation: traceability/network_router_owner_map_v0.1.json
+requirement_allocation: traceability/coverage/network_router_owner_map_v0.1.json
 hard_gate:
   RTL_implementation_allowed: false
   reviewed: true
   design_blockers: []
   verification_blockers: []
   verification_evidence:
-    - traceability/NETWORK_ROUTER_VERIFICATION_EVIDENCE_v0.1.md
-    - traceability/NETWORK_ROUTER_OWNER_MAP_TECHNICAL_REVIEW_v0.1.md
-    - traceability/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md
+    - traceability/reviews/NETWORK_ROUTER_VERIFICATION_EVIDENCE_v0.1.md
+    - traceability/reviews/NETWORK_ROUTER_OWNER_MAP_TECHNICAL_REVIEW_v0.1.md
+    - traceability/reviews/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md
 
 closure_status:
   NR-DEC-01:

@@ -1,15 +1,12 @@
 # Traceability
 
-Target chain:
+Evidence and governance for the Spec2RTL lifecycle.
 
-```
-Spec clause / Figure / Table
- -> Atomic Requirement
- -> Behavior Contract
- -> Golden Model behavior
- -> Test / Invariant
- -> RTL Contract
- -> RTL module/assertion
-```
+- `current/` — current handover / restart state
+- `decisions/` — interpretation decisions and specification issues
+- `coverage/` — ownership and semantic coverage evidence
+- `validation/` — Golden Model validation evidence
+- `freeze/` — semantic freeze manifests
+- `reviews/` — gate, consistency, contract and verification reviews
 
-Broken or unresolved links should remain visible.
+Behavior and implementation artifacts remain in `contracts/`, `golden_model/`, `rtl_contract/`, `rtl/`, and `verification/`.
