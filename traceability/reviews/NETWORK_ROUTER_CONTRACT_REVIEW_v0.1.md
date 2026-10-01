@@ -11,7 +11,7 @@ The remaining items are now dispositioned on this branch:
 Supporting contracts:
 - `rtl_contract/5.6_port0_configuration_rtl_contract.yaml`
 - `rtl_contract/5.6_broadcast_multicast_rtl_contract.yaml`
-- `traceability/RTL_CONTRACT_FREEZE_CANDIDATE_v0.1.md`
+- `traceability/reviews/RTL_CONTRACT_FREEZE_CANDIDATE_v0.1.md`
 
 **Important:** all design blockers are closed, but Reviewed status is still blocked by directed verification, owner-map manual review, Golden regression, and clean Semantic Lint after the known decision-ID regex false positive is corrected.
 
@@ -80,7 +80,7 @@ ECSS §5.6.8.7은 output port가 현재 packet을 다 보내거나 error로 term
 - `pending_is_terminator`는 pending kind에서 derive.
 
 이로써 **계약상 hazard는 닫혔으나**, directed boundary test PASS 전에는 전체 Network/Router Reviewed 상태로 올리지 않는다.
-Evidence: `traceability/DATALINK_ENCODING_CROSSLAYER_REVIEW_v0.1.md`, branch HEAD `83c424fe7eab6dd1293591930fbb7a9d1f1af923`.
+Evidence: `traceability/reviews/DATALINK_ENCODING_CROSSLAYER_REVIEW_v0.1.md`, branch HEAD `83c424fe7eab6dd1293591930fbb7a9d1f1af923`.
 
 ### NR-DEC-02 detail: Port timeout / abort — **DESIGN CLOSED / verification pending**
 **Timeout measurement**

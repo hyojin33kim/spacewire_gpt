@@ -21,7 +21,7 @@ For each clause and Figure 5-11..5-18, review side-by-side:
 2. **Over-interpretation:** Did we add behavior the source does not require?
 3. **Contradiction:** Does ontology/requirement/contract disagree with another clause, figure or service interface?
 
-Record every finding in `traceability/spec_issues.yaml`. Open high-impact issues block freeze.
+Record every finding in `traceability/decisions/spec_issues.yaml`. Open high-impact issues block freeze.
 
 ## C. Behavioral completeness — pre-Golden vectors
 
@@ -62,7 +62,7 @@ The reviewer must not use Golden Model or RTL code as evidence.
 When A–E PASS:
 
 1. Set reviewed artifacts to `status: frozen`.
-2. Create `traceability/freeze_manifest_encoding_v0.1.yaml` with hashes and open non-blocking issues.
+2. Create `traceability/freeze/freeze_manifest_encoding_v0.1.yaml` with hashes and open non-blocking issues.
 3. Git tag: `semantic-encoding-v0.1`.
 4. Golden Model must reference this tag/baseline.
 5. Later semantic change requires a new baseline version; never edit the meaning of the frozen tag.

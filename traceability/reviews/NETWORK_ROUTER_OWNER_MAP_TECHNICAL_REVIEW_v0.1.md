@@ -2,7 +2,7 @@
 
 Date: 2026-09-23  
 Branch: `verify/network-router-closure-v0.1`  
-Scope: all 224 rows in `traceability/network_router_owner_map_v0.1.json`
+Scope: all 224 rows in `traceability/coverage/network_router_owner_map_v0.1.json`
 
 ## Result
 
@@ -70,7 +70,7 @@ The previously reported 53 composite `level` values have been normalized under t
 - selected project profile values are preserved.
 - no Golden behavior is intentionally changed.
 
-See `traceability/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md`.
+See `traceability/reviews/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md`.
 
 ## Gate conclusion
 

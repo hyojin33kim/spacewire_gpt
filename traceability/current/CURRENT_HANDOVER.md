@@ -140,12 +140,12 @@ PR #3 consolidates the needed current evidence from draft PR #1 and #2. If PR #3
 ## 5. Key evidence artifacts to read first
 
 ```text
-traceability/CURRENT_HANDOVER.md
-traceability/NETWORK_ROUTER_MERGE_READY_CANDIDATE_v0.1.md
-traceability/NETWORK_ROUTER_OWNER_MAP_TECHNICAL_REVIEW_v0.1.md
-traceability/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md
-traceability/NETWORK_ROUTER_VERIFICATION_EVIDENCE_v0.1.md
-traceability/RTL_CONTRACT_FREEZE_CANDIDATE_v0.1.md
+traceability/current/CURRENT_HANDOVER.md
+traceability/reviews/NETWORK_ROUTER_MERGE_READY_CANDIDATE_v0.1.md
+traceability/reviews/NETWORK_ROUTER_OWNER_MAP_TECHNICAL_REVIEW_v0.1.md
+traceability/reviews/NETWORK_ROUTER_MODALITY_NORMALIZATION_v0.1.md
+traceability/reviews/NETWORK_ROUTER_VERIFICATION_EVIDENCE_v0.1.md
+traceability/reviews/RTL_CONTRACT_FREEZE_CANDIDATE_v0.1.md
 ```
 
 RTL contracts:
@@ -231,7 +231,7 @@ Do not claim the entire protocol RTL gate is open merely because Network/Router 
 
 Use this as the first message in a new Chat:
 
-> Continue the SpaceWire Spec2RTL project from GitHub `hyojin33kim/spacewire_gpt`. First read `traceability/CURRENT_HANDOVER.md` on branch `verify/network-router-closure-v0.1`, then verify the current branch HEAD, PR #3, and the evidence artifacts it references. Also check Notion `업무 → Spacewire 개념 → 00. Decision Log` and `01. Current State & Handover`. GitHub artifacts take precedence over conversational summaries. The next task is the **formal Network/Router review-package gate review**: check only for remaining contradictions, blockers, missing evidence, or stale gate fields and return a PASS/HOLD evidence assessment. Do not set `Reviewed`, merge to `main`, or start RTL without explicit approval.
+> Continue the SpaceWire Spec2RTL project from GitHub `hyojin33kim/spacewire_gpt`. First read `traceability/current/CURRENT_HANDOVER.md` on branch `verify/network-router-closure-v0.1`, then verify the current branch HEAD, PR #3, and the evidence artifacts it references. Also check Notion `업무 → Spacewire 개념 → 00. Decision Log` and `01. Current State & Handover`. GitHub artifacts take precedence over conversational summaries. The next task is the **formal Network/Router review-package gate review**: check only for remaining contradictions, blockers, missing evidence, or stale gate fields and return a PASS/HOLD evidence assessment. Do not set `Reviewed`, merge to `main`, or start RTL without explicit approval.
 
 ---
 
