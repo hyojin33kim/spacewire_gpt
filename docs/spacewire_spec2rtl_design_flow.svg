@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930">
+<style>
+  .title{font:700 44px Arial,sans-serif;fill:#10345f}
+  .sub{font:600 24px Arial,sans-serif;fill:#4c5d73}
+  .box-title{font:700 20px Arial,sans-serif;fill:#0d3971}
+  .box-sub{font:16px Arial,sans-serif;fill:#23364d}
+  .small{font:14px Arial,sans-serif;fill:#26384d}
+  .band-title{font:700 24px Arial,sans-serif;fill:#0d3971}
+  .band-sub{font:15px Arial,sans-serif;fill:#31455c}
+  .arrow{stroke:#1776bd;stroke-width:5;fill:none;marker-end:url(#arrow)}
+  .down{stroke:#6b7d90;stroke-width:3;fill:none;marker-end:url(#arrowGray)}
+  .dash{stroke:#1776bd;stroke-width:2.5;fill:none;stroke-dasharray:8 7;marker-end:url(#arrow)}
+</style>
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L10,5 L0,10 z" fill="#1776bd"/>
+  </marker>
+  <marker id="arrowGray" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L10,5 L0,10 z" fill="#6b7d90"/>
+  </marker>
+</defs>
+<rect width="1600" height="930" fill="#ffffff"/>
+<text x="800" y="58" text-anchor="middle" class="title">SpaceWire Spec2RTL Design Flow</text>
+<text x="800" y="96" text-anchor="middle" class="sub">ECSS requirements → Golden Model → RTL Contract → RTL → Verification</text>
+
+<!-- support boxes -->
+<rect x="90" y="125" rx="12" ry="12" width="330" height="128" fill="#f6fbff" stroke="#3086c8" stroke-width="2"/>
+<text x="120" y="158" class="box-title">profiles/</text>
+<text x="120" y="184" class="box-sub">feature / configuration profile</text>
+<text x="120" y="212" class="small">• Protocol profile  • Feature selection</text>
+<text x="120" y="236" class="small">• Configuration parameters</text>
+
+<rect x="480" y="125" rx="12" ry="12" width="360" height="128" fill="#f6fbff" stroke="#3086c8" stroke-width="2"/>
+<text x="510" y="158" class="box-title">tools/ + .github/</text>
+<text x="510" y="184" class="box-sub">lint / automation / CI</text>
+<text x="510" y="212" class="small">• Spec/Req lint  • Generation / audit</text>
+<text x="510" y="236" class="small">• CI build / test / report</text>
+
+<!-- main row -->
+<g>
+<rect x="35" y="315" rx="10" width="170" height="210" fill="#eef8ff" stroke="#4c9bd3" stroke-width="2"/>
+<text x="120" y="355" text-anchor="middle" class="box-title">spec/</text>
+<text x="120" y="382" text-anchor="middle" class="box-sub">ECSS source</text>
+<text x="55" y="425" class="small">• source manifest</text>
+<text x="55" y="450" class="small">• source identity/hash</text>
+<text x="55" y="475" class="small">• applicability scope</text>
+
+<rect x="225" y="315" rx="10" width="170" height="210" fill="#eef8ff" stroke="#4c9bd3" stroke-width="2"/>
+<text x="310" y="355" text-anchor="middle" class="box-title">ontology/</text>
+<text x="310" y="382" text-anchor="middle" class="box-sub">canonical vocabulary</text>
+<text x="245" y="425" class="small">• entities</text>
+<text x="245" y="450" class="small">• relations</text>
+<text x="245" y="475" class="small">• glossary / schema</text>
+
+<rect x="415" y="315" rx="10" width="170" height="210" fill="#effcf8" stroke="#4bbba8" stroke-width="2"/>
+<text x="500" y="355" text-anchor="middle" class="box-title">requirements/</text>
+<text x="500" y="382" text-anchor="middle" class="box-sub">Atomic Requirement</text>
+<text x="435" y="425" class="small">• atomic SHALL</text>
+<text x="435" y="450" class="small">• modality / IDs</text>
+<text x="435" y="475" class="small">• traceable source</text>
+
+<rect x="605" y="315" rx="10" width="170" height="210" fill="#f4f0ff" stroke="#8976d8" stroke-width="2"/>
+<text x="690" y="355" text-anchor="middle" class="box-title">contracts/</text>
+<text x="690" y="382" text-anchor="middle" class="box-sub">Behavior Contract</text>
+<text x="625" y="425" class="small">• behavior/state</text>
+<text x="625" y="450" class="small">• ownership/error</text>
+<text x="625" y="475" class="small">• implementation-free</text>
+
+<rect x="795" y="315" rx="10" width="170" height="210" fill="#fff9e8" stroke="#dbb23a" stroke-width="2"/>
+<text x="880" y="355" text-anchor="middle" class="box-title">golden_model/</text>
+<text x="880" y="382" text-anchor="middle" class="box-sub">Reference Behavior</text>
+<text x="815" y="425" class="small">• executable oracle</text>
+<text x="815" y="450" class="small">• normal behavior</text>
+<text x="815" y="475" class="small">• vector basis</text>
+
+<rect x="985" y="315" rx="10" width="170" height="210" fill="#eef8ff" stroke="#4c9bd3" stroke-width="2"/>
+<text x="1070" y="355" text-anchor="middle" class="box-title">rtl_contract/</text>
+<text x="1070" y="382" text-anchor="middle" class="box-sub">Cycle-level contract</text>
+<text x="1005" y="425" class="small">• valid/ready</text>
+<text x="1005" y="450" class="small">• accept/commit</text>
+<text x="1005" y="475" class="small">• ownership/timing</text>
+
+<rect x="1175" y="315" rx="10" width="170" height="210" fill="#fff1f1" stroke="#df7777" stroke-width="2"/>
+<text x="1260" y="355" text-anchor="middle" class="box-title">rtl/</text>
+<text x="1260" y="382" text-anchor="middle" class="box-sub">Synthesizable RTL</text>
+<text x="1195" y="425" class="small">• structured RTL</text>
+<text x="1195" y="450" class="small">• coding rules</text>
+<text x="1195" y="475" class="small">• layer integration</text>
+
+<rect x="1365" y="315" rx="10" width="200" height="210" fill="#effbf3" stroke="#60ad76" stroke-width="2"/>
+<text x="1465" y="355" text-anchor="middle" class="box-title">verification/</text>
+<text x="1465" y="382" text-anchor="middle" class="box-sub">RTL / Golden / FPGA</text>
+<text x="1385" y="425" class="small">• RTL-vs-Golden</text>
+<text x="1385" y="450" class="small">• assertions/random</text>
+<text x="1385" y="475" class="small">• FPGA timing/CDC</text>
+</g>
+
+<!-- arrows main -->
+<path d="M205 420 H225" class="arrow"/><path d="M395 420 H415" class="arrow"/>
+<path d="M585 420 H605" class="arrow"/><path d="M775 420 H795" class="arrow"/>
+<path d="M965 420 H985" class="arrow"/><path d="M1155 420 H1175" class="arrow"/>
+<path d="M1345 420 H1365" class="arrow"/>
+
+<!-- profile/tool dashed -->
+<path d="M255 253 V282 H500 V315" class="dash"/>
+<path d="M660 253 V282 H690 V315" class="dash"/>
+<path d="M710 253 V282 H1070 V315" class="dash"/>
+
+<!-- traceability -->
+<rect x="35" y="570" rx="14" width="1530" height="145" fill="#eef6fc" stroke="#4e87b6" stroke-width="2"/>
+<text x="800" y="607" text-anchor="middle" class="band-title">traceability/</text>
+<text x="800" y="632" text-anchor="middle" class="band-sub">Evidence / Review / Decision / Freeze / Handover</text>
+<g class="small">
+<rect x="70" y="655" rx="8" width="220" height="42" fill="#fff" stroke="#8fb7d5"/><text x="180" y="681" text-anchor="middle">current — handover/state</text>
+<rect x="315" y="655" rx="8" width="220" height="42" fill="#fff" stroke="#8fb7d5"/><text x="425" y="681" text-anchor="middle">decisions — rationale</text>
+<rect x="560" y="655" rx="8" width="220" height="42" fill="#fff" stroke="#8fb7d5"/><text x="670" y="681" text-anchor="middle">coverage — traceability</text>
+<rect x="805" y="655" rx="8" width="220" height="42" fill="#fff" stroke="#8fb7d5"/><text x="915" y="681" text-anchor="middle">validation — evidence</text>
+<rect x="1050" y="655" rx="8" width="220" height="42" fill="#fff" stroke="#8fb7d5"/><text x="1160" y="681" text-anchor="middle">freeze — baselines</text>
+<rect x="1295" y="655" rx="8" width="220" height="42" fill="#fff" stroke="#8fb7d5"/><text x="1405" y="681" text-anchor="middle">reviews — gates</text>
+</g>
+
+<!-- down links -->
+<path d="M120 525 V570" class="down"/><path d="M310 525 V570" class="down"/>
+<path d="M500 525 V570" class="down"/><path d="M690 525 V570" class="down"/>
+<path d="M880 525 V570" class="down"/><path d="M1070 525 V570" class="down"/>
+<path d="M1260 525 V570" class="down"/><path d="M1465 525 V570" class="down"/>
+
+<!-- verification breakdown -->
+<rect x="35" y="745" rx="14" width="1020" height="150" fill="#fbfdff" stroke="#4e87b6" stroke-width="2"/>
+<text x="65" y="780" class="band-title">Verification breakdown</text>
+<g>
+<rect x="65" y="805" rx="8" width="165" height="65" fill="#eef8ff" stroke="#4c9bd3"/><text x="147" y="832" text-anchor="middle" class="box-title">pre_golden/</text><text x="147" y="856" text-anchor="middle" class="small">vectors / invariants</text>
+<rect x="260" y="805" rx="8" width="165" height="65" fill="#fff9e8" stroke="#dbb23a"/><text x="342" y="832" text-anchor="middle" class="box-title">golden/</text><text x="342" y="856" text-anchor="middle" class="small">regression</text>
+<rect x="455" y="805" rx="8" width="165" height="65" fill="#f4f0ff" stroke="#8976d8"/><text x="537" y="832" text-anchor="middle" class="box-title">contracts/</text><text x="537" y="856" text-anchor="middle" class="small">contract tests</text>
+<rect x="650" y="805" rx="8" width="180" height="65" fill="#fff1f1" stroke="#df7777"/><text x="740" y="832" text-anchor="middle" class="box-title">rtl/</text><text x="740" y="856" text-anchor="middle" class="small">directed / diff / SVA / random</text>
+<rect x="860" y="805" rx="8" width="165" height="65" fill="#effbf3" stroke="#60ad76"/><text x="942" y="832" text-anchor="middle" class="box-title">fpga/</text><text x="942" y="856" text-anchor="middle" class="small">timing / CDC / bringup</text>
+</g>
+<path d="M230 838 H260" class="arrow"/><path d="M425 838 H455" class="arrow"/><path d="M620 838 H650" class="arrow"/><path d="M830 838 H860" class="arrow"/>
+
+<!-- generated -->
+<rect x="1090" y="745" rx="14" width="475" height="150" fill="#fbfdff" stroke="#4e87b6" stroke-width="2"/>
+<text x="1120" y="780" class="band-title">generated/</text>
+<text x="1120" y="810" class="band-sub">Reproducible derived views — not source of truth</text>
+<text x="1120" y="842" class="small">• requirement_matrix/  • coverage_reports/</text>
+<text x="1120" y="868" class="small">• interface_docs/      • diagrams/</text>
+</svg>

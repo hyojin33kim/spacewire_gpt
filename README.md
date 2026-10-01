@@ -68,3 +68,11 @@ generated/
 ```
 
 원칙: generated 파일을 사람이 직접 수정하여 정본으로 승격하지 않습니다. 사람이 유지해야 하는 내용이 생기면 해당 source directory로 옮기고 generated output은 다시 생성합니다.
+
+---
+
+## Design Flow Diagram
+
+![SpaceWire Spec2RTL Design Flow](./docs/spacewire_spec2rtl_design_flow.svg)
+
+Detailed view: `docs/SpaceWire_Spec2RTL_Flow.md`
