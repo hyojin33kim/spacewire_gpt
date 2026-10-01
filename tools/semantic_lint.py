@@ -188,7 +188,7 @@ def main() -> int:
 
     # Check §5.4 declared coverage count.
     req54_path = ROOT / "requirements" / "5.4_encoding.yaml"
-    cov_path = ROOT / "traceability" / "5.4_encoding_coverage.yaml"
+    cov_path = ROOT / "traceability" / "coverage" / "5.4_encoding_coverage.yaml"
     req54 = docs.get(req54_path)
     cov = docs.get(cov_path)
     if isinstance(req54, dict) and isinstance(cov, dict):

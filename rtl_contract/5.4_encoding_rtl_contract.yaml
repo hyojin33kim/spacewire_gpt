@@ -1,7 +1,7 @@
 schema_version: 1
 artifact_id: RTL-CONTRACT-ENCODING-V0.1
 semantic_baseline: semantic-encoding-v0.1
-golden_validation: traceability/golden_validation_encoding_v0.1.yaml
+golden_validation: traceability/validation/golden_validation_encoding_v0.1.yaml
 status: draft_blocked
 purpose: >
   Convert validated Encoding semantics into cycle-level FPGA obligations without

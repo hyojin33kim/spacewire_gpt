@@ -1,5 +1,12 @@
-# FPGA RTL
+# RTL
 
-Flight-oriented FPGA implementation area.
+Implementation area for reviewed RTL contracts. RTL changes must preserve the semantic Golden Model as the implementation-independent oracle.
 
-RTL begins from reviewed behavior contracts and an explicit RTL contract. Device-specific and radiation/mission decisions are documented separately from protocol semantics.
+- `common/` — shared packages, FIFO/utilities and reusable primitives
+- `encoding/` — character encoding/decoding, parity and Data/Strobe-facing logic
+- `datalink/` — link FSM, credit, TX/RX FIFO and recovery
+- `network/` — Network-layer endpoint/service adaptation
+- `router/` — routing, allocation, Port 0, broadcast and multicast
+- `top/` — multi-port integration, reset and system-facing composition
+
+Implementation remains subject to the project RTL authorization gate.

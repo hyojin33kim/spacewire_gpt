@@ -2,7 +2,7 @@ schema_version: 1
 artifact_id: RTL-CONTRACT-DATALINK-V0.1
 semantic_baseline: semantic-datalink-v0.1.1
 semantic_contract: contracts/5.5_data_link.yaml
-golden_validation: traceability/golden_validation_datalink_v0.1.1.yaml
+golden_validation: traceability/validation/golden_validation_datalink_v0.1.1.yaml
 feature_profile: GOLDEN-FULL-REFERENCE-V0.1
 status: reviewed
 purpose: >

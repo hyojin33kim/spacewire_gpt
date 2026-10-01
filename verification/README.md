@@ -1,5 +1,9 @@
 # Verification
 
-Tests, invariants, negative cases, boundary cases, and later RTL-vs-Golden comparison.
+Verification is separated by lifecycle stage.
 
-Evidence should trace back to stable requirement/contract IDs.
+- `pre_golden/` — pre-Golden vectors and invariants
+- `golden/` — Golden Model regression and validation coverage
+- `contracts/` — executable RTL-contract and cross-layer checks
+- `rtl/` — RTL-directed, differential, assertion, random and coverage work
+- `fpga/` — implementation evidence for timing, CDC and hardware bring-up
